@@ -53,7 +53,8 @@ dkms.conf
 
 # Other
 
-./vscode/
+/.vscode
 .DS_Store
 /obj
 /minilibx_mms
+cub_test.c

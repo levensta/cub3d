@@ -88,7 +88,8 @@
 NAME = cub3D
 SRCS = ./src/
 FUNC =	cub3d \
-		ft_utils
+		ft_utils \
+		frame_loop
 		
 SRC = $(addprefix $(SRCS), $(addsuffix .c, $(FUNC)))
 OBJ = $(addprefix $(SRCS), $(addsuffix .o, $(FUNC)))
