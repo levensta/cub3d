@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/27 23:12:18 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/28 22:18:02 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,18 @@
 void	my_mlx_pixel_put(t_all *cub, int x, int y, int color)
 {
     char	*dst;
+	if (x < 0 || y < 0 || x >= screenWidth || y >= screenHeight)
+		return ;
 	dst = cub->win.addr + (y * cub->win.line_length + x * (cub->win.bits_per_pixel / 8));
+	// dst = cub->screen.data + (y * cub->s_width + x) * 4;
 	*(unsigned int*)dst = color;
 }
 
-int             key_hook(int keycode)
-{
-    printf("Hello from key_hook! code: %d\n", keycode);
-	return (0);
-}
+// int             key_hook(int keycode)
+// {
+//     printf("Hello from key_hook! code: %d\n", keycode);
+// 	return (0);
+// }
 
 int             key_press(int keycode, t_all *cub)
 {
@@ -91,19 +94,44 @@ int             key_press(int keycode, t_all *cub)
     	mlx_destroy_window(cub->vars.mlx, cub->vars.win);
 		exit(0);
 	}
-	if (keycode == 123) // налево
-		cub->route -= 0.1;
-	if (keycode == 124) // направо
-		cub->route += 0.1;
-	if (keycode == 13) // вперед
-		cub->plr.y0 -= sin(cub->plr.route);
-	if (keycode == 1) // назад
-		cub->plr.y0 += sin(cub->plr.route);
-	if (keycode == 0) // налево
-		cub->plr.x0 -= cos(cub->plr.route);
-	if (keycode == 2)
-		cub->plr.x0 += cos(cub->plr.route); // направо
+	if (keycode == 123) // <-
+	{
+		cub->plr.route -= 0.1;
+		printf("%f\n", cub->plr.route);
+	}
+	if (keycode == 124) // ->
+		cub->plr.route += 0.1;
+
+	if (keycode == W)
+	{
+		cub->plr.y0 -= cos(cub->plr.route * 2 * M_PI);
+		cub->plr.x0 += sin(cub->plr.route * 2 * M_PI);
+	}
+	if (keycode == S)
+	{
+		cub->plr.y0 += cos(cub->plr.route * 2 * M_PI);
+		cub->plr.x0 += sin(cub->plr.route * 2 * M_PI);
+	}
+
+
+	if (keycode == A)
+	{
+		float tmp = cub->plr.route - 0.25f;
+		ray_correct(&tmp);
+		cub->plr.y0 -= cos(tmp * 2 * M_PI);
+		cub->plr.x0 -= sin(tmp * 2 * M_PI);
+	}
+	if (keycode == D)
+	{
+		float tmp = cub->plr.route + 0.25f;
+		ray_correct(&tmp);
+		cub->plr.y0 -= sin(tmp * 2 * M_PI);
+		cub->plr.x0 -= cos(tmp * 2 * M_PI);
+	}
 	ray_correct(&cub->plr.route);
+	printf("route: %f\n", cub->plr.route);
+	printf("x: %f\n", cub->plr.x0);
+	printf("y: %f\n", cub->plr.y0);
 	return(0);
 }
 
@@ -125,16 +153,17 @@ void	ray_correct(float *ray)
 int main ()
 {
 	t_all	cub;
-	printf("_______________\n______________\n");
+	cub.plr.x0 = 2.5;
+	cub.plr.y0 = 2.5;
+	cub.plr.route = 0;
 	cub.vars.mlx = mlx_init();
 	cub.vars.win = mlx_new_window(cub.vars.mlx, screenWidth, screenHeight, "cub3D");
 	cub.win.img = mlx_new_image(cub.vars.mlx, screenWidth, screenHeight);
 	cub.win.addr = mlx_get_data_addr(cub.win.img, &cub.win.bits_per_pixel, &cub.win.line_length, \
                                  &cub.win.endian);
-	mlx_put_image_to_window(cub.vars.mlx, cub.vars.win, cub.win.img, 0, 0);
-	mlx_key_hook(cub.vars.win, key_hook, NULL);
-	mlx_hook(cub.vars.win, 2, 1L<<0, key_press, &cub);
 	mlx_loop_hook(cub.vars.mlx, frame_loop, &cub);
+	// mlx_key_hook(cub.vars.win, key_hook, NULL);
+	mlx_hook(cub.vars.win, 2, 1L<<0, key_press, &cub);
 	// mlx_hook(vars.win, 9, 1L<<4, &mouse_print, &vars);
 	mlx_loop(cub.vars.mlx);
 	return (0);
