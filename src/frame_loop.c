@@ -101,7 +101,7 @@ int	frame_loop(t_all *cub)
 					wall = 1;
 				else if (worldMap[(int)floorf(y1)][(int)floorf(x1 - 1)] == 1)
 					wall = 1;
-				printf("x: %f, y: %f, wall: %d, ray: %f, a: %f, b: %f\n", x1, y1, wall, cub->ray, a, b);
+				// printf("x: %f, y: %f, wall: %d, ray: %f, a: %f, b: %f\n", x1, y1, wall, cub->ray, a, b);
 				if (cub->ray > 0.999998)
 					exit(0);
 			}
@@ -111,7 +111,7 @@ int	frame_loop(t_all *cub)
 					wall = 1;
 				else if (worldMap[(int)floorf(y1 - 1)][(int)floorf(x1)] == 1)
 					wall = 1;
-				printf("x: %f, y: %f, wall: %d, ray: %f, a: %f, b: %f\n", x1, y1, wall, cub->ray, a, b);
+				// printf("x: %f, y: %f, wall: %d, ray: %f, a: %f, b: %f\n", x1, y1, wall, cub->ray, a, b);
 				// if (cub->ray > 0.999998)
 				// 	exit(0);
 			}
