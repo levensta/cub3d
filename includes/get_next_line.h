@@ -6,12 +6,14 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 22:58:33 by levensta          #+#    #+#             */
-/*   Updated: 2020/11/23 19:27:52 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/03 03:32:55 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+
+# define BUFFER_SIZE 1
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -28,8 +30,8 @@ typedef struct	s_gnl
 size_t			ft_strlen(const char *str);
 int				tofind_c(char *s);
 int				get_next_line(int fd, char **line);
-char			*ft_strdup(const char *s1, char *rest);
-char			*ft_strjoin(char *s1, char *s2);
+char			*gnl_strdup(const char *s1, char *rest);
+char			*gnl_strjoin(char *s1, char *s2);
 void			*ft_memset(void *dest, int c, size_t n);
 int				cursus(t_gnl *gnl, char **line, char **rest, int fd);
 

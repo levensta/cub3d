@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 15:51:07 by levensta          #+#    #+#             */
-/*   Updated: 2020/11/08 15:12:09 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/03 02:37:05 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdlib.h>
-# include <stdio.h>
 
 void			*ft_memset(void *dest, int c, size_t n);
 void			ft_bzero(void *s, size_t n);

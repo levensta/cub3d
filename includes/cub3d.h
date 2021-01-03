@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/28 21:58:22 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/03 02:37:41 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,8 @@
 # define S 1
 # define D 2
 
-# include <unistd.h>
-# include <string.h>
-# include <stdlib.h>
 # include "mlx.h"
+# include "libft.h"
 # include <math.h>
 # include <stdio.h>
 

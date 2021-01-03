@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 18:42:43 by levensta          #+#    #+#             */
-/*   Updated: 2020/11/23 19:21:02 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/03 03:34:51 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int		add_rest(char **rest, char **line)
 
 	if ((n = tofind_c(*rest)) < 0)
 	{
-		*line = ft_strjoin(*line, *rest);
+		*line = gnl_strjoin(*line, *rest);
 		free(*rest);
 		*rest = 0;
 		return (0);
@@ -26,8 +26,8 @@ int		add_rest(char **rest, char **line)
 	else
 	{
 		(*rest)[n] = '\0';
-		*line = ft_strjoin(*line, *rest);
-		*rest = ft_strdup(&((*rest)[n + 1]), *rest);
+		*line = gnl_strjoin(*line, *rest);
+		*rest = gnl_strdup(&((*rest)[n + 1]), *rest);
 	}
 	return (1);
 }
@@ -44,12 +44,12 @@ int		cursus(t_gnl *gnl, char **line, char **rest, int fd)
 		if ((gnl->n = tofind_c(gnl->buff)) > -1)
 		{
 			gnl->buff[gnl->n] = '\0';
-			*line = ft_strjoin(*line, gnl->buff);
-			*rest = ft_strdup(&gnl->buff[gnl->n + 1], *rest);
+			*line = gnl_strjoin(*line, gnl->buff);
+			*rest = gnl_strdup(&gnl->buff[gnl->n + 1], *rest);
 			break ;
 		}
 		else
-			*line = ft_strjoin(*line, gnl->buff);
+			*line = gnl_strjoin(*line, gnl->buff);
 	}
 	free(gnl->buff);
 	return (0);
@@ -63,7 +63,7 @@ int		get_next_line(int fd, char **line)
 	gnl.size = BUFFER_SIZE;
 	if (fd < 0 || gnl.size < 1 || !line || !(gnl.buff = malloc(gnl.size + 1)))
 		return (-1);
-	*line = ft_strdup("", 0);
+	*line = gnl_strdup("", 0);
 	gnl.count = 1;
 	gnl.q = 0;
 	cursus(&gnl, line, &rest, fd);

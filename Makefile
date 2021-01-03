@@ -41,9 +41,15 @@
 
 NAME = cub3D
 SRCS = ./src/
-FUNC =	cub3d \
+# FUNC =	cub3d \
 		ft_utils \
-		frame_loop
+		get_next_line \
+		get_next_line_utils \
+		frame_loop \
+
+FUNC =	parser \
+		get_next_line \
+		get_next_line_utils
 		
 SRC = $(addprefix $(SRCS), $(addsuffix .c, $(FUNC)))
 OBJ = $(addprefix $(SRCS), $(addsuffix .o, $(FUNC)))
@@ -51,14 +57,15 @@ FLAGS = -g -Wall -Werror -Wextra
 all: $(NAME)
 $(NAME): $(OBJ)
 	$(MAKE) -C ./libft/
+	$(MAKE) bonus -C ./libft/
 	$(MAKE) -C ./minilibx_opengl
-	mv ./minilibx_opengl/libmlx.a .
-	mv ./libft/libft.a .
+	cp ./minilibx_opengl/libmlx.a .
+	cp ./libft/libft.a .
 	# gcc -g -I. ./libft.a -L ./minilibx_opengl -lmlx -framework OpenGL -framework AppKit -lm $(OBJ) -o $(NAME)
-	gcc libmlx.a -I ./includes -I ./ -L ./minilibx_opengl -lmlx -framework OpenGL -framework AppKit -lm $(OBJ) -o $(NAME)
+	gcc libft.a libmlx.a -I ./includes -I ./libft -L ./ -lmlx -framework OpenGL -framework AppKit -lm $(OBJ) -o $(NAME)
 %.o: %.c
 	# gcc -o $@ -c $<
-	gcc $(FLAGS) -I ./includes -I ./ -I ./minilibx_opengl c $< -o $@
+	gcc $(FLAGS) -I ./includes -I ./libft -I ./minilibx_opengl -c $< -o $@
 clean:
 	$(MAKE) clean -C ./libft/
 	rm -f $(OBJ)

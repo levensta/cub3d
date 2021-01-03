@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 23:16:52 by levensta          #+#    #+#             */
-/*   Updated: 2020/11/23 18:43:42 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/03 03:34:56 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		tofind_c(char *s)
 	return (-1);
 }
 
-char	*ft_strdup(const char *s1, char *rest)
+char	*gnl_strdup(const char *s1, char *rest)
 {
 	size_t	i;
 	char	*s2;
@@ -58,16 +58,16 @@ char	*ft_strdup(const char *s1, char *rest)
 	return (s2);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*gnl_strjoin(char *s1, char *s2)
 {
 	char	*str;
 	int		i;
 	int		j;
 
 	if (!s1)
-		s1 = ft_strdup("", s1);
+		s1 = gnl_strdup("", s1);
 	if (!s2)
-		s2 = ft_strdup("", s2);
+		s2 = gnl_strdup("", s2);
 	i = 0;
 	j = 0;
 	if (!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
