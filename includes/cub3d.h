@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/03 02:37:41 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/05 02:06:20 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,29 @@ typedef struct  s_player {
 	float		route;
 }               t_player;
 
+typedef struct	s_map
+{
+	int			screen_width;
+	int			screen_height;
+
+	char		*north;
+	char		*south;
+	char		*east;
+	char		*west;
+	char		*sprite;
+	int			floor[3];
+	int			celling[3];
+	
+	int			is_last;
+	char		**map;
+}				t_map;
+
+
 typedef	struct	s_all {
 	t_data		win;
 	t_vars		vars;
 	t_player	plr;
+	t_map		scene;
 	float		dx;
 	float		dy;
 	float		ray;
@@ -70,5 +89,11 @@ void	my_mlx_pixel_put(t_all *cub, int x, int y, int color);
 void	ray_correct(float *ray);
 int	frame_loop(t_all *cub);
 void    clear_image(t_all *cub);
+
+void	check_is_last(t_all *cub);
+void	free_scene(t_all *cub);
+void	free_array(t_all *cub);
+char	**make_map(t_list **head, int size);
+char		**ft_split_ws(char const *s);
 
 #endif

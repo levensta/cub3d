@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/28 23:03:46 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/05 02:22:18 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	frame_loop(t_all *cub)
 					wall = 1;
 				// printf("x: %f, y: %f, wall: %d, ray: %f, a: %f, b: %f\n", x1, y1, wall, cub->ray, a, b);
 				if (cub->ray > 0.999998)
-					exit(0);
+					exit(1);
 			}
 			if (y1 - floorf(y1) < EPS)
 			{

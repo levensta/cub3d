@@ -49,7 +49,8 @@ SRCS = ./src/
 
 FUNC =	parser \
 		get_next_line \
-		get_next_line_utils
+		get_next_line_utils \
+		ft_split_whitespaces
 		
 SRC = $(addprefix $(SRCS), $(addsuffix .c, $(FUNC)))
 OBJ = $(addprefix $(SRCS), $(addsuffix .o, $(FUNC)))
