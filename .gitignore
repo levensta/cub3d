@@ -49,3 +49,4 @@ dkms.conf
 .DS_Store
 /minilibx_mms
 cub_test.c
+*.out

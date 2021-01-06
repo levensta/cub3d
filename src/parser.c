@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/05 03:58:19 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/06 04:49:01 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,58 @@
 #include "get_next_line.h"
 #include <fcntl.h>
 
-void	free_array(t_all *cub)
+void	free_path(t_all *cub)
+{
+	// if (cub->scene.north)
+	// 	free(cub->scene.north);
+	cub->scene.north = 0;
+	// if (cub->scene.south)
+	// 	free(cub->scene.south);
+	cub->scene.south = 0;
+	// if (cub->scene.west)
+	// 	free(cub->scene.west);
+	cub->scene.west = 0;
+	// if (cub->scene.east)
+	// 	free(cub->scene.east);
+	cub->scene.east = 0;
+	// if (cub->scene.sprite)
+	// 	free(cub->scene.sprite);
+	cub->scene.sprite = 0;
+}
+
+void	free_array(char **arr)
 {
 	int i;
-	i = -1;
-	while (++i < 3)
+
+	i = 0;
+	while (arr[i])
 	{
-		cub->scene.floor[i] = -1;
-		cub->scene.celling[i] = -1;
+		if (arr[i])
+			free(arr[i]);
+		arr[i] = 0;
+		i++;
 	}
-	i = -1;
-	while (cub->scene.map[++i])
-	{
-		if (cub->scene.map[i])
-			free(cub->scene.map[i]);
-		cub->scene.map[i] = 0;
-	}
+	if (arr)
+		free(arr);
+	arr = 0;
 }
 
 void	free_scene(t_all *cub)
 {
+	int i;
+	i = 0;
+	while (i < 3)
+	{
+		cub->scene.floor[i] = -1;
+		cub->scene.celling[i] = -1;
+		i++;
+	}
 	cub->scene.screen_width = 0;
 	cub->scene.screen_height = 0;
 	cub->scene.is_last = 0;
-	if (cub->scene.north)
-		free(cub->scene.north);
-	cub->scene.north = 0;
-	if (cub->scene.south)
-		free(cub->scene.south);
-	cub->scene.south = 0;
-	if (cub->scene.west)
-		free(cub->scene.west);
-	cub->scene.west = 0;
-	if (cub->scene.east)
-		free(cub->scene.east);
-	cub->scene.east = 0;
-	if (cub->scene.sprite)
-		free(cub->scene.sprite);
-	cub->scene.sprite = 0;
-	free_array(cub);
+	free_path(cub);
+	if (cub->scene.map)
+		free_array(cub->scene.map);
 }
 
 char	**make_map(t_list **head, int size)
@@ -88,9 +101,10 @@ void	get_resolution(t_all *cub, char **arr)
 		j = 0;
 		while (arr[i][j])
 		{
-			if (i >= 3 || !ft_isdigit(arr[i][j]))
+			if (i >= 3 || !ft_isdigit(arr[i][j]) || \
+			cub->scene.screen_width || cub->scene.screen_height)
 			{
-				write(1, "Error\n", 6);
+				write(1, "Error\nres", 9);
 				exit (1);
 			}
 			j++;
@@ -101,6 +115,23 @@ void	get_resolution(t_all *cub, char **arr)
 	// check_screen_size
 }
 
+char	*get_path(char *path, char **arr)
+{
+	int i;
+
+	i = 0;
+	while(arr[++i])
+	{
+		if (i >= 2 || path)
+		{
+			write(1, "Error\npath", 9);
+			exit (1);
+		}
+	}
+	return (path = ft_strdup(arr[1]));
+	// printf("%s\n", cub->scene.north);
+}
+
 int     main(int argc, char **argv)
 {
 	int		fd = open(argv[1], O_RDONLY);
@@ -109,12 +140,13 @@ int     main(int argc, char **argv)
 	t_list	*head = NULL;
 	char	**map;
 
-	// free_scene(&cub);
+	free_scene(&cub);
 	if (argc == 2)
 	{
 		while (get_next_line(fd, &line) == 1)
 			ft_lstadd_back(&head, ft_lstnew(line));
 		ft_lstadd_back(&head, ft_lstnew(line));
+		// free(line);
 		map = make_map(&head, ft_lstsize(head));
 		int	i = 0;
 		char **arr;
@@ -123,17 +155,32 @@ int     main(int argc, char **argv)
 		while (map[i])
 		{
 			check_is_last(&cub);
-			if ((arr = ft_split_ws(map[i])))
+			arr = ft_split_ws(map[i]);
+			if (arr[0])
 			{
-				if (!ft_strncmp("R", arr[0], ft_strlen(arr[0])))
+				if (!ft_strcmp("R", arr[0]))
 					get_resolution(&cub, arr);
+				else if (!ft_strcmp("NO", arr[0]))
+					cub.scene.north = get_path(cub.scene.north, arr);
+				else if (!ft_strcmp("SO", arr[0]))
+					cub.scene.south = get_path(cub.scene.south, arr);
+				else if (!ft_strcmp("WE", arr[0]))
+					cub.scene.west = get_path(cub.scene.west, arr);
+				else if (!ft_strcmp("EA", arr[0]))
+					cub.scene.east = get_path(cub.scene.east, arr);
+				else if (!ft_strcmp("S", arr[0]))
+					cub.scene.sprite = get_path(cub.scene.sprite, arr);
 
-				free(arr);
-				printf("%d\n%d\n", cub.scene.screen_width, cub.scene.screen_height);
-				return (0);
+				free_array(arr);
 			}
+			// printf("i: %d\n", i);
 			i++;
-		}
+		}	
+		printf("%d\n%d\n%s\n%s\n%s\n%s\n%s\n", cub.scene.screen_width, cub.scene.screen_height, cub.scene.north, \
+		cub.scene.south, cub.scene.west, cub.scene.east, cub.scene.sprite);
+		return (0);
 	}
 	return (0);
 }
+
+// gcc -g -Wall -Wextra -Werror src/parser.c ./src/ft_split_whitespaces.c libft/ft_strdup.c libft/ft_substr.c  libft/ft_lstnew.c libft/ft_lstsize.c ./libft/ft_lstadd_back.c ./libft/ft_atoi.c ./libft/ft_calloc.c ./libft/ft_strncmp.c ./libft/ft_bzero.c ./libft/ft_isdigit.c ./src/get_next_line.c ./src/get_next_line_utils.c -I ./includes -I ./libft -I ./minilibx_opengl

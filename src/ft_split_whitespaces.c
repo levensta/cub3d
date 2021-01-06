@@ -6,12 +6,11 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 04:09:38 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/04 22:02:25 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/06 03:00:33 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
 size_t		read_word(char const *s)
 {
@@ -81,3 +80,5 @@ char		**ft_split_ws(char const *s)
 	words[amount] = NULL;
 	return (words);
 }
+
+// gcc -Wall -Wextra -Werror ft_split_whitespaces.c -I ../libft ../libft/ft_substr.c ../libft/ft_strdup.c ../libft/ft_strlen.c  

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 15:51:07 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/03 02:37:05 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/06 04:41:15 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void			*ft_memchr(const void *s, int c, size_t n);
 int				ft_memcmp(const void *str1, const void *str2, size_t n);
 size_t			ft_strlen(const char *str);
 int				ft_strncmp(const char *str1, const char *str2, size_t n);
+int				ft_strcmp(const char *str1, const char *str2);
 size_t			ft_strlcpy(char *dest, const char *source, size_t n);
 size_t			ft_strlcat(char *dest, const char *source, size_t n);
 char			*ft_strchr(const char *str, int c);
