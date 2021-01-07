@@ -6,13 +6,28 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/06 04:49:01 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/07 05:40:48 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "get_next_line.h"
 #include <fcntl.h>
+
+void	error(int code)
+{
+	write(1, "Error\n", 6);
+	if (code == 1)
+		write(1, "Your file does not exist or file extension is not .cube\n", 56);
+	else if (code == 2)
+		write(1, "Check your screen resolution\n", 29);
+	else if (code == 3)
+		write(1, "Check your paths of textures\n", 29);
+	else if (code == 4)
+		write(1, "Check your RGB params\n", 22);
+	// очистить все, что только можно
+	exit(code);
+}
 
 void	free_path(t_all *cub)
 {
@@ -103,10 +118,7 @@ void	get_resolution(t_all *cub, char **arr)
 		{
 			if (i >= 3 || !ft_isdigit(arr[i][j]) || \
 			cub->scene.screen_width || cub->scene.screen_height)
-			{
-				write(1, "Error\nres", 9);
-				exit (1);
-			}
+				error(2);
 			j++;
 		}
 	}
@@ -123,13 +135,25 @@ char	*get_path(char *path, char **arr)
 	while(arr[++i])
 	{
 		if (i >= 2 || path)
-		{
-			write(1, "Error\npath", 9);
-			exit (1);
-		}
+			error(3);
 	}
 	return (path = ft_strdup(arr[1]));
 	// printf("%s\n", cub->scene.north);
+}
+
+void	get_color(int *rgb, char **arr)
+{
+	int		i;
+	
+	i = 0;
+	while (arr[++i])
+	{
+		if (i > 3 || rgb[i] != -1)
+			error(4);
+		rgb[i] = ft_atoi(arr[i]);
+		printf("%d,", rgb[i]);
+	}
+	// если кол-во ',' не 3 - error
 }
 
 int     main(int argc, char **argv)
@@ -143,6 +167,8 @@ int     main(int argc, char **argv)
 	free_scene(&cub);
 	if (argc == 2)
 	{
+		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1] - 4)]))
+			error(1);
 		while (get_next_line(fd, &line) == 1)
 			ft_lstadd_back(&head, ft_lstnew(line));
 		ft_lstadd_back(&head, ft_lstnew(line));
@@ -150,6 +176,7 @@ int     main(int argc, char **argv)
 		map = make_map(&head, ft_lstsize(head));
 		int	i = 0;
 		char **arr;
+		char **color;
 		// while (map[++i])
 		// 	ft_putendl_fd(map[i], 1);
 		while (map[i])
@@ -170,6 +197,10 @@ int     main(int argc, char **argv)
 					cub.scene.east = get_path(cub.scene.east, arr);
 				else if (!ft_strcmp("S", arr[0]))
 					cub.scene.sprite = get_path(cub.scene.sprite, arr);
+				else if (!ft_strcmp("F", arr[0]))
+					get_color(cub.scene.floor, color = ft_split_rgb(map[i]));
+				else if (!ft_strcmp("C", arr[0]))
+					get_color(cub.scene.celling, color = ft_split_rgb(map[i]));
 
 				free_array(arr);
 			}
@@ -183,4 +214,4 @@ int     main(int argc, char **argv)
 	return (0);
 }
 
-// gcc -g -Wall -Wextra -Werror src/parser.c ./src/ft_split_whitespaces.c libft/ft_strdup.c libft/ft_substr.c  libft/ft_lstnew.c libft/ft_lstsize.c ./libft/ft_lstadd_back.c ./libft/ft_atoi.c ./libft/ft_calloc.c ./libft/ft_strncmp.c ./libft/ft_bzero.c ./libft/ft_isdigit.c ./src/get_next_line.c ./src/get_next_line_utils.c -I ./includes -I ./libft -I ./minilibx_opengl
+// gcc -g -Wall -Wextra -Werror src/parser.c ./src/ft_split_whitespaces.c libft/ft_strdup.c libft/ft_substr.c  libft/ft_lstnew.c libft/ft_lstsize.c ./libft/ft_lstadd_back.c ./libft/ft_atoi.c ./libft/ft_calloc.c ./libft/ft_strncmp.c ./libft/ft_bzero.c ./libft/ft_isdigit.c ./src/get_next_line.c ./src/get_next_line_utils.c ./src/ft_split_rgb.c -I ./includes -I ./libft -I ./minilibx_opengl

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_whitespaces.c                             :+:      :+:    :+:   */
+/*   ft_split_rgb.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 04:09:38 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/07 04:51:44 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/07 04:47:55 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static size_t		read_word(char const *s)
 	size_t	i;
 
 	i = 0;
-	while ((s[i] != ' ' && s[i] != '\t') && s[i] != '\0')
+	while ((s[i] != ' ' && s[i] != '\t' && s[i] != ',') && s[i] != '\0')
 		i++;
 	return (i);
 }
@@ -31,7 +31,7 @@ static size_t		count_words(char const *s)
 	i = 0;
 	while (s[i] != '\0')
 	{
-		if (s[i] != ' ' && s[i] != '\t')
+		if (s[i] != ' ' && s[i] != '\t' && s[i] != ',')
 		{
 			i += read_word(&s[i]);
 			amount++;
@@ -54,7 +54,7 @@ static void		*free_words(char **words)
 	return (NULL);
 }
 
-char		**ft_split_ws(char const *s)
+char		**ft_split_rgb(char const *s)
 {
 	size_t	amount;
 	size_t	len;
@@ -68,7 +68,7 @@ char		**ft_split_ws(char const *s)
 	amount = 0;
 	while (s[len] != '\0')
 	{
-		if (s[len] != ' ' && s[len] != '\t')
+		if (s[len] != ' ' && s[len] != '\t' && s[len] != ',')
 		{
 			if (!(words[amount++] = ft_substr(s, len, read_word(&s[len]))))
 				return (free_words(words));
