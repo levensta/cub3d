@@ -6,14 +6,14 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/07 04:46:20 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/08 23:10:35 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define mapWidth 5
-# define mapHeight 5
+# define mapWidth 10
+# define mapHeight 9
 # define screenWidth 640
 # define screenHeight 480
 # define EPS 0.000001
@@ -70,10 +70,7 @@ typedef	struct	s_all {
 	t_vars		vars;
 	t_player	plr;
 	t_map		scene;
-	float		dx;
-	float		dy;
-	float		ray;
-	float		distance;
+	char **worldMap;
 }                t_all;
 
 void			ft_putchar(char c);

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/07 05:40:48 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/08 23:23:44 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,12 +148,14 @@ void	get_color(int *rgb, char **arr)
 	i = 0;
 	while (arr[++i])
 	{
-		if (i > 3 || rgb[i] != -1)
+		if (i > 3 || rgb[i - 1] != -1)
 			error(4);
-		rgb[i] = ft_atoi(arr[i]);
-		printf("%d,", rgb[i]);
+		rgb[i - 1] = ft_atoi(arr[i]);
+		if (rgb[i - 1] < 0)
+			error(4); // params отрицательные
+		printf("%d,", rgb[i - 1]);
 	}
-	// если кол-во ',' не 3 - error
+	// если кол-во ',' не 2 - error
 }
 
 int     main(int argc, char **argv)
@@ -201,6 +203,7 @@ int     main(int argc, char **argv)
 					get_color(cub.scene.floor, color = ft_split_rgb(map[i]));
 				else if (!ft_strcmp("C", arr[0]))
 					get_color(cub.scene.celling, color = ft_split_rgb(map[i]));
+				// если чего-либо нет - error
 
 				free_array(arr);
 			}

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/03 15:23:52 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/08 23:27:35 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,10 @@ void	my_mlx_pixel_put(t_all *cub, int x, int y, int color)
 
 int             key_press(int keycode, t_all *cub)
 {
+	float tx;
+	float ty;
+	float tmp = cub->plr.route + 0.25f;
+	ray_correct(&tmp);
 	if (keycode == 53)
 	{
     	mlx_destroy_window(cub->vars.mlx, cub->vars.win);
@@ -96,42 +100,41 @@ int             key_press(int keycode, t_all *cub)
 	}
 	if (keycode == 123) // <-
 	{
-		cub->plr.route -= 0.1;
-		printf("%f\n", cub->plr.route);
+		cub->plr.route -= 0.05;
+		// printf("%f\n", cub->plr.route);
 	}
 	if (keycode == 124) // ->
-		cub->plr.route += 0.1;
+		cub->plr.route += 0.05;
 
 	if (keycode == W)
 	{
-		cub->plr.y0 -= cos(cub->plr.route * 2 * M_PI);
-		cub->plr.x0 += sin(cub->plr.route * 2 * M_PI);
+		ty = cub->plr.y0 - cos(cub->plr.route * 2 * M_PI);
+		tx = cub->plr.x0 + sin(cub->plr.route * 2 * M_PI);
 	}
 	if (keycode == S)
 	{
-		cub->plr.y0 += cos(cub->plr.route * 2 * M_PI);
-		cub->plr.x0 += sin(cub->plr.route * 2 * M_PI);
+		ty = cub->plr.y0 + cos(cub->plr.route * 2 * M_PI);
+		tx = cub->plr.x0 - sin(cub->plr.route * 2 * M_PI);
 	}
-
-
-	if (keycode == A)
+	if (keycode == A) // 
 	{
-		float tmp = cub->plr.route - 0.25f;
-		ray_correct(&tmp);
-		cub->plr.y0 -= cos(tmp * 2 * M_PI);
-		cub->plr.x0 -= sin(tmp * 2 * M_PI);
+		ty = cub->plr.y0 + cos(tmp * 2 * M_PI);
+		tx = cub->plr.x0 - sin(tmp * 2 * M_PI);
 	}
 	if (keycode == D)
 	{
-		float tmp = cub->plr.route + 0.25f;
-		ray_correct(&tmp);
-		cub->plr.y0 -= sin(tmp * 2 * M_PI);
-		cub->plr.x0 -= cos(tmp * 2 * M_PI);
+		ty = cub->plr.y0 - cos(tmp * 2 * M_PI);
+		tx = cub->plr.x0 + sin(tmp * 2 * M_PI);
+	}
+	if (cub->worldMap[(int)floorf(ty)][(int)floorf(tx)] != '1')
+	{
+		cub->plr.x0 = tx;
+		cub->plr.y0 = ty;
 	}
 	ray_correct(&cub->plr.route);
-	printf("route: %f\n", cub->plr.route);
-	printf("x: %f\n", cub->plr.x0);
-	printf("y: %f\n", cub->plr.y0);
+	// printf("route: %f\n", cub->plr.route);
+	// printf("x: %f\n", cub->plr.x0);
+	// printf("y: %f\n", cub->plr.y0);
 	return(0);
 }
 
@@ -153,10 +156,32 @@ void	ray_correct(float *ray)
 int main ()
 {
 	t_all	cub;
-	cub.plr.x0 = 2.5;
-	cub.plr.y0 = 2.5;
+	cub.plr.x0 = 5.5;
+	cub.plr.y0 = 4.5;
 	cub.plr.route = 0;
 	cub.vars.mlx = mlx_init();
+	char worldMap[mapHeight][mapWidth]=
+	{
+	"1111111111",
+	"1000000001",
+	"1000000001",
+	"1000000001",
+	"1000000001",
+	"1000000001",
+	"1000000001",
+	"1000000001",
+	"1111111111"
+	};
+
+	cub.worldMap = malloc (9 * sizeof(char *));
+	int w = 0;
+	while (w < 10)
+	{
+		cub.worldMap[w] = malloc(10);
+		cub.worldMap[w] = worldMap[w];
+		w++;
+	}
+
 	cub.vars.win = mlx_new_window(cub.vars.mlx, screenWidth, screenHeight, "cub3D");
 	cub.win.img = mlx_new_image(cub.vars.mlx, screenWidth, screenHeight);
 	cub.win.addr = mlx_get_data_addr(cub.win.img, &cub.win.bits_per_pixel, &cub.win.line_length, \
