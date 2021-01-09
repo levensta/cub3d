@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/08 23:10:35 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/09 21:33:33 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef	struct	s_all {
 	t_vars		vars;
 	t_player	plr;
 	t_map		scene;
-	char **worldMap;
+	char		**worldMap;
 }                t_all;
 
 void			ft_putchar(char c);
@@ -97,6 +97,6 @@ char		**ft_split_rgb(char const *s);
 void	get_resolution(t_all *cub, char **arr);
 char	*get_path(char *path, char **arr);
 void	error(int code);
-void	get_color(int *rgb, char **arr);
+void	get_color(int *rgb, char *color);
 
 #endif

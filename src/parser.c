@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/08 23:23:44 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/09 23:44:38 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	error(int code)
 		write(1, "Check your paths of textures\n", 29);
 	else if (code == 4)
 		write(1, "Check your RGB params\n", 22);
+	else if (code == 5)
+		write(1, "Invalid map\n", 12);
 	// очистить все, что только можно
 	exit(code);
 }
@@ -106,7 +108,7 @@ void	check_is_last(t_all *cub)
 		cub->scene.is_last = 1;
 }
 void	get_resolution(t_all *cub, char **arr)
-{
+{ 
 	int i;
 	int j;
 
@@ -141,21 +143,69 @@ char	*get_path(char *path, char **arr)
 	// printf("%s\n", cub->scene.north);
 }
 
-void	get_color(int *rgb, char **arr)
+void	get_color(int *rgb, char *color)
 {
 	int		i;
+	int		commas;
+	char	**arr;
 	
+	i = -1;
+	commas = 0;
+	while (color[++i])
+	{
+		if (color[i] == ',')
+			commas++;
+	}
+	if (commas != 2)
+		error(4);
 	i = 0;
+	arr = ft_split_rgb(color);
 	while (arr[++i])
 	{
 		if (i > 3 || rgb[i - 1] != -1)
 			error(4);
 		rgb[i - 1] = ft_atoi(arr[i]);
-		if (rgb[i - 1] < 0)
-			error(4); // params отрицательные
+		if (rgb[i - 1] < 0 || rgb[i - 1] > 255)
+			error(4);
 		printf("%d,", rgb[i - 1]);
 	}
-	// если кол-во ',' не 2 - error
+}
+
+
+void	check_forbidden_symbols(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_memchr("012NSWE \t\n", &str[i], 10))
+			error(5);
+		i++;
+	}
+}
+void	get_map(t_all *cub, char **map)
+{
+	int		i;
+	int		j;
+	char	**arr;
+
+	i = 0;
+	j = 0;
+	while (map[i])
+	{
+		check_forbidden_symbols(map[i]);
+		if ((arr = ft_split_ws(map[i])))
+		{
+			while (arr[j])
+			{
+				check_walls(arr[j]);
+				j++;
+			}
+		}
+
+		i++;
+	}
 }
 
 int     main(int argc, char **argv)
@@ -174,19 +224,18 @@ int     main(int argc, char **argv)
 		while (get_next_line(fd, &line) == 1)
 			ft_lstadd_back(&head, ft_lstnew(line));
 		ft_lstadd_back(&head, ft_lstnew(line));
-		// free(line);
+		free(line);
 		map = make_map(&head, ft_lstsize(head));
 		int	i = 0;
 		char **arr;
-		char **color;
 		// while (map[++i])
 		// 	ft_putendl_fd(map[i], 1);
 		while (map[i])
 		{
-			check_is_last(&cub);
 			arr = ft_split_ws(map[i]);
 			if (arr[0])
 			{
+				check_is_last(&cub);
 				if (!ft_strcmp("R", arr[0]))
 					get_resolution(&cub, arr);
 				else if (!ft_strcmp("NO", arr[0]))
@@ -200,16 +249,17 @@ int     main(int argc, char **argv)
 				else if (!ft_strcmp("S", arr[0]))
 					cub.scene.sprite = get_path(cub.scene.sprite, arr);
 				else if (!ft_strcmp("F", arr[0]))
-					get_color(cub.scene.floor, color = ft_split_rgb(map[i]));
+					get_color(cub.scene.floor, map[i]);
 				else if (!ft_strcmp("C", arr[0]))
-					get_color(cub.scene.celling, color = ft_split_rgb(map[i]));
-				// если чего-либо нет - error
-
+					get_color(cub.scene.celling, map[i]);
+				else if (!cub.scene.is_last)
+					get_map(&cub, map);
 				free_array(arr);
 			}
-			// printf("i: %d\n", i);
 			i++;
-		}	
+		}
+
+
 		printf("%d\n%d\n%s\n%s\n%s\n%s\n%s\n", cub.scene.screen_width, cub.scene.screen_height, cub.scene.north, \
 		cub.scene.south, cub.scene.west, cub.scene.east, cub.scene.sprite);
 		return (0);
