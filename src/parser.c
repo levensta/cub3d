@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/09 23:44:38 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/10 21:36:07 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	free_scene(t_all *cub)
 	cub->scene.screen_width = 0;
 	cub->scene.screen_height = 0;
 	cub->scene.is_last = 0;
+	cub->scene.is_only_plr = 0;
 	free_path(cub);
 	if (cub->scene.map)
 		free_array(cub->scene.map);
@@ -179,33 +180,75 @@ void	check_forbidden_symbols(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (!ft_memchr("012NSWE \t\n", &str[i], 10))
+		if (!ft_memchr("012NSWE \n", str[i], 9))
 			error(5);
 		i++;
 	}
 }
-void	get_map(t_all *cub, char **map)
+
+void	check_outer_spaces(char *str)
 {
 	int		i;
 	int		j;
-	char	**arr;
+	char	*symbols;
+	
+	symbols = "02NSWE";
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		while (symbols[j])
+		{
+			if (str[i] == symbols[j] && (str[i - 1] == ' ' || str[i + 1] == ' '))
+				error(5);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	check_player(char **map, int *is_only_plr)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if ((map[i][j] == 'N' || map[i][j] == 'S' \
+			|| map[i][j] == 'W' || map[i][j] == 'E'))
+			{
+				if (*is_only_plr == 1)
+					error(5);
+				else
+					*is_only_plr = 1;
+			}
+			j++;
+		}
+		i++;
+	}
+	if (*is_only_plr == 0)
+		error(5);
+}
+
+int		get_map(t_all *cub, char **map)
+{
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
 	while (map[i])
 	{
 		check_forbidden_symbols(map[i]);
-		if ((arr = ft_split_ws(map[i])))
-		{
-			while (arr[j])
-			{
-				check_walls(arr[j]);
-				j++;
-			}
-		}
-
+		check_outer_spaces(map[i]);
 		i++;
 	}
+	check_player(map, &cub->scene.is_only_plr);
+	return (1);
 }
 
 int     main(int argc, char **argv)
@@ -252,8 +295,11 @@ int     main(int argc, char **argv)
 					get_color(cub.scene.floor, map[i]);
 				else if (!ft_strcmp("C", arr[0]))
 					get_color(cub.scene.celling, map[i]);
-				else if (!cub.scene.is_last)
-					get_map(&cub, map);
+				else if (cub.scene.is_last)
+				{
+					if (get_map(&cub, &map[i]))
+						break;
+				}
 				free_array(arr);
 			}
 			i++;

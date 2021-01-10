@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/09 21:33:33 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/10 21:34:28 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct	s_map
 	int			celling[3];
 	
 	int			is_last;
+	int			is_only_plr;
 	char		**map;
 }				t_map;
 
@@ -96,6 +97,7 @@ char		**ft_split_ws(char const *s);
 char		**ft_split_rgb(char const *s);
 void	get_resolution(t_all *cub, char **arr);
 char	*get_path(char *path, char **arr);
+int		get_map(t_all *cub, char **map);
 void	error(int code);
 void	get_color(int *rgb, char *color);
 
