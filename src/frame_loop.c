@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/08 23:13:32 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/11 23:24:50 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ int	frame_loop(t_all *cub)
 					wall = 1;
 				else if (cub->worldMap[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS) - 1] == '1')
 					wall = 1;
-				// printf("x: %f, y: %f, wall: %d, ray: %f, a: %f, b: %f\n", x1, y1, wall, ray, a, b);
 			}
 			if (y1 - floorf(y1) < EPS)
 			{
@@ -128,9 +127,6 @@ int	frame_loop(t_all *cub)
 					wall = 1;
 				else if (cub->worldMap[(int)floorf(y1 + EPS) - 1][(int)floorf(x1 + EPS)] == '1')
 					wall = 1;
-				// printf("x: %f, y: %f, wall: %d, ray: %f, a: %f, b: %f\n", x1, y1, wall, ray, a, b);
-				// if (ray > 0.999998)
-				// 	exit(0);
 			}
 
 		}
@@ -142,11 +138,27 @@ int	frame_loop(t_all *cub)
         column_h = (int)ceilf((float)column_h / distance);
 
 		int i = 0;
-		i = (screenHeight - column_h) / 2; 
+		i = (screenHeight - column_h) / 2;
+		char *img = cub->win.addr;
+		char *tex = cub->tex.addr;
+		int	 j = 0;
+		while(j < i){
+			img += cub->win.line_length;
+			j++;
+		}
+		int		h = 0;
+		int		res = cub->tex.height / column_h;
 		while (i < (screenHeight + column_h) / 2)
 		{
-			my_mlx_pixel_put(cub, x, i, 0xFF00FF);
+			// my_mlx_pixel_put(cub, x, i, 0xFF00FF);
+			img[(x * 4)] = tex[(h * 4)];
+			img[(x * 4) + 1] = tex[(h * 4) + 1];
+			img[(x * 4) + 2] = tex[(h * 4) + 2];
+			img += cub->win.line_length;
+			if ((h % res) == 0)
+				tex += cub->tex.line_length;
 			i++;
+			h++;
 		}
 		// printf("%f\n", ray);
 		ray += FOV / screenWidth;
@@ -158,8 +170,9 @@ int	frame_loop(t_all *cub)
 	mlx_mouse_get_pos(cub->vars.win, &tx, &ty);
 	// printf("x: %d, y: %d\n", tx, ty);
 	// printf("route: %f\n", cub->plr.route);
-	// printf("x: %f\n", cub->plr.x0);
+	// printf("x: %f\n", cub->pl r.x0);
 	// printf("y: %f\n", cub->plr.y0);
 	mlx_put_image_to_window(cub->vars.mlx, cub->vars.win, cub->win.img, 0, 0);
+	// mlx_put_image_to_window(cub->vars.mlx, cub->vars.win, cub->tex.img, 0, 0);
 	return (0);
 }

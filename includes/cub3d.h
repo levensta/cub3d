@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/10 21:34:28 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/11 23:16:02 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,20 @@ typedef struct	s_map
 	char		**map;
 }				t_map;
 
+typedef struct  s_tex {
+    void        *img;
+    char		*addr;
+	int			width;
+	int			height;
+	int			line_length;
+}               t_tex;
 
 typedef	struct	s_all {
 	t_data		win;
 	t_vars		vars;
 	t_player	plr;
 	t_map		scene;
+	t_tex		tex;
 	char		**worldMap;
 }                t_all;
 

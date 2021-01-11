@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/10 21:36:07 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/11 22:51:09 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	error(int code)
 		write(1, "Check your RGB params\n", 22);
 	else if (code == 5)
 		write(1, "Invalid map\n", 12);
+	else if (code == 101)
+		write(1, "You're crazy. Error of malloc\n", 30);
 	// очистить все, что только можно
 	exit(code);
 }
@@ -186,21 +188,39 @@ void	check_forbidden_symbols(char *str)
 	}
 }
 
-void	check_outer_spaces(char *str)
+
+void	check_in_str(char **map, int i, int j)
+{
+	int		m;
+	char	*symbols;
+
+	m = 0;
+	symbols = "02NSWE";
+	while (symbols[m])
+	{
+		if (map[i][j] == symbols[m] && (map[i][j - 1] == ' ' || map[i][j + 1] == ' '))
+			error(5);
+		if (map[i][j] == symbols[m] && (map[i - 1][j - 1] == ' ' \
+			|| map[i - 1][j] == ' ' || map[i - 1][j + 1] == ' '))
+			error(5);
+		if (map[i][j] == symbols[m] && (map[i + 1][j - 1] == ' ' \
+			|| map[i + 1][j] == ' ' || map[i + 1][j + 1] == ' '))
+			error(5);
+		m++;
+	}
+}
+void	check_outer_spaces(char **map)
 {
 	int		i;
 	int		j;
-	char	*symbols;
-	
-	symbols = "02NSWE";
+
 	i = 0;
-	j = 0;
-	while (str[i])
+	while (map[i])
 	{
-		while (symbols[j])
+		j = 0;
+		while (map[i][j])
 		{
-			if (str[i] == symbols[j] && (str[i - 1] == ' ' || str[i + 1] == ' '))
-				error(5);
+			check_in_str(map, i, j);
 			j++;
 		}
 		i++;
@@ -244,7 +264,7 @@ int		get_map(t_all *cub, char **map)
 	while (map[i])
 	{
 		check_forbidden_symbols(map[i]);
-		check_outer_spaces(map[i]);
+		check_outer_spaces(map);
 		i++;
 	}
 	check_player(map, &cub->scene.is_only_plr);

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/08 23:27:35 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/11 23:23:47 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,9 @@ int             key_press(int keycode, t_all *cub)
 		cub->plr.y0 = ty;
 	}
 	ray_correct(&cub->plr.route);
-	// printf("route: %f\n", cub->plr.route);
-	// printf("x: %f\n", cub->plr.x0);
-	// printf("y: %f\n", cub->plr.y0);
+	printf("route: %f\n", cub->plr.route);
+	printf("x: %f\n", cub->plr.x0);
+	printf("y: %f\n", cub->plr.y0);
 	return(0);
 }
 
@@ -166,7 +166,7 @@ int main ()
 	"1000000001",
 	"1000000001",
 	"1000000001",
-	"1000000001",
+	"100000001",
 	"1000000001",
 	"1000000001",
 	"1000000001",
@@ -181,12 +181,15 @@ int main ()
 		cub.worldMap[w] = worldMap[w];
 		w++;
 	}
+	int		i;
 
 	cub.vars.win = mlx_new_window(cub.vars.mlx, screenWidth, screenHeight, "cub3D");
 	cub.win.img = mlx_new_image(cub.vars.mlx, screenWidth, screenHeight);
 	cub.win.addr = mlx_get_data_addr(cub.win.img, &cub.win.bits_per_pixel, &cub.win.line_length, \
                                  &cub.win.endian);
 	mlx_loop_hook(cub.vars.mlx, frame_loop, &cub);
+	cub.tex.img = mlx_xpm_file_to_image(cub.vars.mlx, "./elmo.xpm", &cub.tex.width, &cub.tex.height);
+	cub.tex.addr = mlx_get_data_addr(cub.tex.img, &i, &cub.tex.line_length, &i);
 	// mlx_key_hook(cub.vars.win, key_hook, NULL);
 	mlx_hook(cub.vars.win, 2, 1L<<0, key_press, &cub);
 	// mlx_hook(vars.win, 9, 1L<<4, &mouse_print, &vars);
