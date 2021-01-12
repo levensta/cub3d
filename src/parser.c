@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/11 22:51:09 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/12 23:30:18 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,56 @@ void	error(int code)
 		write(1, "Invalid map\n", 12);
 	else if (code == 101)
 		write(1, "You're crazy. Error of malloc\n", 30);
+	//
+	else if (code == 105)
+		printf("105-105-105-105");
+	else if (code == 106)
+		printf("106-106-106-106");
+	else if (code == 107)
+		printf("107-107-107-107");
+	else if (code == 108)
+		printf("108-108-108-108");
+	else if (code == 109)
+		printf("109-109-109-109");
 	// очистить все, что только можно
 	exit(code);
 }
 
+void	reset_path(t_all *cub)
+{
+	cub->scene.north = 0;
+	cub->scene.south = 0;
+	cub->scene.west = 0;
+	cub->scene.east = 0;
+	cub->scene.sprite = 0;
+}
+
 void	free_path(t_all *cub)
 {
-	// if (cub->scene.north)
-	// 	free(cub->scene.north);
-	cub->scene.north = 0;
-	// if (cub->scene.south)
-	// 	free(cub->scene.south);
-	cub->scene.south = 0;
-	// if (cub->scene.west)
-	// 	free(cub->scene.west);
-	cub->scene.west = 0;
-	// if (cub->scene.east)
-	// 	free(cub->scene.east);
-	cub->scene.east = 0;
-	// if (cub->scene.sprite)
-	// 	free(cub->scene.sprite);
-	cub->scene.sprite = 0;
+	if (cub->scene.north)
+		free(cub->scene.north);
+	if (cub->scene.south)
+		free(cub->scene.south);
+	if (cub->scene.west)
+		free(cub->scene.west);
+	if (cub->scene.east)
+		free(cub->scene.east);
+	if (cub->scene.sprite)
+		free(cub->scene.sprite);
+	reset_path(cub);
+}
+
+void	reset_array(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i])
+	{
+		arr[i] = 0;
+		i++;
+	}
+	arr = 0;
 }
 
 void	free_array(char **arr)
@@ -61,15 +90,14 @@ void	free_array(char **arr)
 	{
 		if (arr[i])
 			free(arr[i]);
-		arr[i] = 0;
 		i++;
 	}
 	if (arr)
 		free(arr);
-	arr = 0;
+	reset_array(arr);
 }
 
-void	free_scene(t_all *cub)
+void	reset_scene(t_all *cub)
 {
 	int i;
 	i = 0;
@@ -83,9 +111,10 @@ void	free_scene(t_all *cub)
 	cub->scene.screen_height = 0;
 	cub->scene.is_last = 0;
 	cub->scene.is_only_plr = 0;
-	free_path(cub);
-	if (cub->scene.map)
-		free_array(cub->scene.map);
+	reset_path(cub);
+	// reset_array(cub->scene.world_map);
+	// if (cub->scene.world_map)
+	// 	free_array(cub->scene.world_map);
 }
 
 char	**make_map(t_list **head, int size)
@@ -110,6 +139,7 @@ void	check_is_last(t_all *cub)
 	cub->scene.celling[0] != -1)
 		cub->scene.is_last = 1;
 }
+
 void	get_resolution(t_all *cub, char **arr)
 { 
 	int i;
@@ -170,7 +200,7 @@ void	get_color(int *rgb, char *color)
 		rgb[i - 1] = ft_atoi(arr[i]);
 		if (rgb[i - 1] < 0 || rgb[i - 1] > 255)
 			error(4);
-		printf("%d,", rgb[i - 1]);
+		// printf("%d,", rgb[i - 1]); // del
 	}
 }
 
@@ -189,6 +219,27 @@ void	check_forbidden_symbols(char *str)
 }
 
 
+// void	check_in_str(char **map, int i, int j)
+// {
+// 	int		m;
+// 	char	*symbols;
+
+// 	m = 0;
+// 	symbols = "02NSWE";
+// 	while (symbols[m])
+// 	{
+// 		if (map[i][j] == symbols[m] && (map[i][j - 1] == ' ' || map[i][j + 1] == ' '))
+// 			error(105);
+// 		if (map[i][j] == symbols[m] && (map[i - 1][j - 1] == ' ' \
+// 			|| map[i - 1][j] == ' ' || map[i - 1][j + 1] == ' '))
+// 			error(106);
+// 		if (map[i][j] == symbols[m] && (map[i + 1][j - 1] == ' ' \
+// 			|| map[i + 1][j] == ' ' || map[i + 1][j + 1] == ' '))
+// 			error(107);
+// 		m++;
+// 	}
+// }
+
 void	check_in_str(char **map, int i, int j)
 {
 	int		m;
@@ -198,17 +249,19 @@ void	check_in_str(char **map, int i, int j)
 	symbols = "02NSWE";
 	while (symbols[m])
 	{
-		if (map[i][j] == symbols[m] && (map[i][j - 1] == ' ' || map[i][j + 1] == ' '))
-			error(5);
+		if (map[i][j] == symbols[m] && (map[i][j - 1] == ' ' || map[i][j + 1] == ' ' || map[i][j + 1] == '\0'))
+			error(105);
 		if (map[i][j] == symbols[m] && (map[i - 1][j - 1] == ' ' \
 			|| map[i - 1][j] == ' ' || map[i - 1][j + 1] == ' '))
-			error(5);
+			error(106);
 		if (map[i][j] == symbols[m] && (map[i + 1][j - 1] == ' ' \
-			|| map[i + 1][j] == ' ' || map[i + 1][j + 1] == ' '))
-			error(5);
+		|| map[i + 1][j] == ' ' || map[i + 1][j + 1] == ' ' || map[i + 1][0] == '\0'))
+			error(107);
 		m++;
 	}
 }
+
+
 void	check_outer_spaces(char **map)
 {
 	int		i;
@@ -242,7 +295,7 @@ void	check_player(char **map, int *is_only_plr)
 			|| map[i][j] == 'W' || map[i][j] == 'E'))
 			{
 				if (*is_only_plr == 1)
-					error(5);
+					error(108);
 				else
 					*is_only_plr = 1;
 			}
@@ -251,7 +304,52 @@ void	check_player(char **map, int *is_only_plr)
 		i++;
 	}
 	if (*is_only_plr == 0)
-		error(5);
+		error(109);
+}
+
+
+size_t	max_strlen(char **map)
+{
+	int		i;
+	size_t	max;
+
+	i = 0;
+	max = 0;
+	while (map[i])
+	{
+		if (ft_strlen(map[i]) > max)
+			max = ft_strlen(map[i]);
+		i++;
+	}
+	return (max);
+}
+
+char	*set_spaces(char *str, size_t n)
+{
+	int		i;
+	char	*s;
+	i = 0;
+	s = malloc(n * sizeof(char *) + 1);
+	ft_memset(s, ' ', n);
+	str = ft_strjoin(str, s);
+	free(s);
+	return (str);
+}
+void	make_square(char **map)
+{
+	int		i;
+	size_t	max;
+	
+	i = 0;
+	max = max_strlen(map);
+	// write(1, "\n", 1);
+	while (map[i])
+	{
+		if (ft_strlen(map[i]) < max)
+			map[i] = set_spaces(map[i], max - ft_strlen(map[i]));
+		printf("|%s|\n", map[i]);
+		i++;
+	}
 }
 
 int		get_map(t_all *cub, char **map)
@@ -261,6 +359,8 @@ int		get_map(t_all *cub, char **map)
 
 	i = 0;
 	j = 0;
+	make_square(map);
+	// printf("\n|%s|\n", map[4]);
 	while (map[i])
 	{
 		check_forbidden_symbols(map[i]);
@@ -279,7 +379,7 @@ int     main(int argc, char **argv)
 	t_list	*head = NULL;
 	char	**map;
 
-	free_scene(&cub);
+	reset_scene(&cub);
 	if (argc == 2)
 	{
 		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1] - 4)]))
@@ -287,12 +387,10 @@ int     main(int argc, char **argv)
 		while (get_next_line(fd, &line) == 1)
 			ft_lstadd_back(&head, ft_lstnew(line));
 		ft_lstadd_back(&head, ft_lstnew(line));
-		free(line);
+		// free(line);
 		map = make_map(&head, ft_lstsize(head));
 		int	i = 0;
 		char **arr;
-		// while (map[++i])
-		// 	ft_putendl_fd(map[i], 1);
 		while (map[i])
 		{
 			arr = ft_split_ws(map[i]);
@@ -318,7 +416,8 @@ int     main(int argc, char **argv)
 				else if (cub.scene.is_last)
 				{
 					if (get_map(&cub, &map[i]))
-						break;
+						free_array(arr);
+					break;
 				}
 				free_array(arr);
 			}

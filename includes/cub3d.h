@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/11 23:16:02 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/12 20:10:38 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct	s_map
 	
 	int			is_last;
 	int			is_only_plr;
-	char		**map;
+	char		**world_map;
 }				t_map;
 
 typedef struct  s_tex {
