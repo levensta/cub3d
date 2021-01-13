@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/11 23:23:47 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/13 22:21:59 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ int main ()
 	"1000000001",
 	"1000000001",
 	"1000000001",
-	"100000001",
+	"1000000001",
 	"1000000001",
 	"1000000001",
 	"1000000001",
@@ -190,6 +190,7 @@ int main ()
 	mlx_loop_hook(cub.vars.mlx, frame_loop, &cub);
 	cub.tex.img = mlx_xpm_file_to_image(cub.vars.mlx, "./elmo.xpm", &cub.tex.width, &cub.tex.height);
 	cub.tex.addr = mlx_get_data_addr(cub.tex.img, &i, &cub.tex.line_length, &i);
+	printf("%d\n", cub.tex.height);
 	// mlx_key_hook(cub.vars.win, key_hook, NULL);
 	mlx_hook(cub.vars.win, 2, 1L<<0, key_press, &cub);
 	// mlx_hook(vars.win, 9, 1L<<4, &mouse_print, &vars);

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_rgb.c                                     :+:      :+:    :+:   */
+/*   get_color.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/04 04:09:38 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/07 04:47:55 by levensta         ###   ########.fr       */
+/*   Created: 2021/01/13 23:10:04 by levensta          #+#    #+#             */
+/*   Updated: 2021/01/13 23:11:22 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "cub3d.h"
 
-static size_t		read_word(char const *s)
+static size_t	read_word(char const *s)
 {
 	size_t	i;
 
@@ -22,7 +22,7 @@ static size_t		read_word(char const *s)
 	return (i);
 }
 
-static size_t		count_words(char const *s)
+static size_t	count_words(char const *s)
 {
 	size_t amount;
 	size_t i;
@@ -54,7 +54,7 @@ static void		*free_words(char **words)
 	return (NULL);
 }
 
-char		**ft_split_rgb(char const *s)
+static char		**ft_split_rgb(char const *s)
 {
 	size_t	amount;
 	size_t	len;
@@ -81,4 +81,29 @@ char		**ft_split_rgb(char const *s)
 	return (words);
 }
 
-// gcc -Wall -Wextra -Werror ft_split_whitespaces.c -I ../libft ../libft/ft_substr.c ../libft/ft_strdup.c ../libft/ft_strlen.c  
+void		get_color(int *rgb, char *color)
+{
+	int		i;
+	int		commas;
+	char	**arr;
+	
+	i = -1;
+	commas = 0;
+	while (color[++i])
+	{
+		if (color[i] == ',')
+			commas++;
+	}
+	if (commas != 2)
+		error(4);
+	i = 0;
+	arr = ft_split_rgb(color);
+	while (arr[++i])
+	{
+		if (i > 3 || rgb[i - 1] != -1)
+			error(4);
+		rgb[i - 1] = ft_atoi(arr[i]);
+		if (rgb[i - 1] < 0 || rgb[i - 1] > 255)
+			error(4);
+	}
+}

@@ -50,4 +50,3 @@ dkms.conf
 /minilibx_mms
 cub_test.c
 *.out
-tanf.c

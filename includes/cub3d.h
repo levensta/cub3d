@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/12 20:10:38 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/13 23:18:06 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,18 @@ void	ray_correct(float *ray);
 int	frame_loop(t_all *cub);
 void    clear_image(t_all *cub);
 
-void	check_is_last(t_all *cub);
-void	free_scene(t_all *cub);
-void	free_path(t_all *cub);
-void	free_array(char **arr);
 char	**make_map(t_list **head, int size);
-char		**ft_split_ws(char const *s);
-char		**ft_split_rgb(char const *s);
-void	get_resolution(t_all *cub, char **arr);
+void	reset_scene(t_all *cub);
+void	reset_array(char **arr);
+void	reset_path(t_all *cub);
+void	free_array(char **arr);
+void	free_path(t_all *cub);
+char	**ft_split_ws(char const *s);
 char	*get_path(char *path, char **arr);
+void	get_resolution(t_all *cub, char **arr);
+void	get_color(int *rgb, char *color);
 int		get_map(t_all *cub, char **map);
 void	error(int code);
-void	get_color(int *rgb, char *color);
+void			make_square(char **map);
 
 #endif

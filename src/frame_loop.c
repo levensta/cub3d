@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/11 23:24:50 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/13 22:43:44 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,16 +147,19 @@ int	frame_loop(t_all *cub)
 			j++;
 		}
 		int		h = 0;
+		int		n = 0;
 		int		res = cub->tex.height / column_h;
 		while (i < (screenHeight + column_h) / 2)
 		{
 			// my_mlx_pixel_put(cub, x, i, 0xFF00FF);
-			img[(x * 4)] = tex[(h * 4)];
-			img[(x * 4) + 1] = tex[(h * 4) + 1];
-			img[(x * 4) + 2] = tex[(h * 4) + 2];
+			img[(x * 4)] = tex[(n * 4)];
+			img[(x * 4) + 1] = tex[(n * 4) + 1];
+			img[(x * 4) + 2] = tex[(n * 4) + 2];
 			img += cub->win.line_length;
-			if ((h % res) == 0)
+			if (res > 0 && h < cub->tex.height && (h % res) == 0)
 				tex += cub->tex.line_length;
+			if (i + 1 == screenHeight)
+				break ;
 			i++;
 			h++;
 		}

@@ -52,7 +52,13 @@ FUNC =	parser \
 		get_next_line \
 		get_next_line_utils \
 		ft_split_whitespaces \
-		ft_split_rgb
+		clear \
+		error \
+		get_resolution \
+		get_color \
+		get_path \
+		get_map \
+		make_square
 		
 SRC = $(addprefix $(SRCS), $(addsuffix .c, $(FUNC)))
 OBJ = $(addprefix $(SRCS), $(addsuffix .o, $(FUNC)))
