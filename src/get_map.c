@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/13 23:20:37 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/16 20:05:34 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,21 @@ static void	check_in_str(char **map, char const *s, int i, int j)
 	m = 0;
 	while (s[m])
 	{
-		if (map[i][0] == '0' || map[i][0] == '2' || (map[i][j] == s[m] && (map[i][j - 1] == ' ' || \
-			map[i][j + 1] == ' ' || map[i][j + 1] == 0)))
+		if (map[i][0] == '0' || map[i][0] == '2' || (map[i][j] == s[m] \
+		&& (map[i][j - 1] == ' ' || map[i][j + 1] == ' ' || !map[i][j + 1])))
 			error(5);
 		if (i > 0)
 		{
-			if (map[i][j] == s[m] && (map[i - 1][0] == 0 || (map[i - 1][j - 1] == ' ' \
-				|| map[i - 1][j] == ' ' || map[i - 1][j + 1] == ' ')))
+			if (map[i][j] == s[m] && (!map[i - 1][0] || \
+			(map[i - 1][j - 1] == ' ' || map[i - 1][j] == ' ' \
+			|| map[i - 1][j + 1] == ' ')))
 				error(5);
 		}
 		else if (s[m] == map[i][j])
 			error(5);
-		if (map[i][j] == s[m] && (map[i + 1] == 0 || (map[i + 1][j - 1] == ' ' \
-			|| map[i + 1][j] == ' ' || map[i + 1][j + 1] == ' ')))
-				error(5);
+		if (map[i][j] == s[m] && (!map[i + 1] || (map[i + 1][j - 1] == ' ' \
+		|| map[i + 1][j] == ' ' || map[i + 1][j + 1] == ' ')))
+			error(5);
 		m++;
 	}
 }
@@ -95,7 +96,7 @@ static void	check_player(char **map, int *is_only_plr)
 		error(5);
 }
 
-int			get_map(t_all *cub, char **map)
+char		**get_map(t_all *cub, char **map)
 {
 	int		i;
 	int		j;
@@ -110,5 +111,6 @@ int			get_map(t_all *cub, char **map)
 		i++;
 	}
 	check_player(map, &cub->scene.is_only_plr);
-	return (1);
+	cub->scene.is_world_map = 1;
+	return (map);
 }

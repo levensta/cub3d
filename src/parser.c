@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/13 23:14:22 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/16 20:02:47 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@ void	check_is_last(t_all *cub)
 	cub->scene.west && cub->scene.sprite && cub->scene.floor[0] != -1 && \
 	cub->scene.celling[0] != -1)
 		cub->scene.is_last = 1;
+}
+
+void	check_all(t_all *cub)
+{
+	if (!cub->scene.screen_height || !cub->scene.screen_width || \
+	!cub->scene.north || !cub->scene.south || !cub->scene.east || \
+	!cub->scene.west || !cub->scene.sprite || cub->scene.floor[0] == -1 || \
+	cub->scene.celling[0] == -1 || !cub->scene.is_world_map)
+		error(5);
 }
 
 char	**make_map(t_list **head, int size)
@@ -81,17 +90,29 @@ int     main(int argc, char **argv)
 					get_color(cub.scene.celling, map[i]);
 				else if (cub.scene.is_last)
 				{
-					if (get_map(&cub, &map[i]))
+					if ((cub.scene.world_map = get_map(&cub, &map[i])))
 						free_array(arr);
 					break;
 				}
+				else
+					error(5);
 				free_array(arr);
 			}
 			i++;
 		}
+		// int m = 0;
+		// while (cub.scene.world_map[m])
+		// {
+		// 	printf("%s\n", cub.scene.world_map[m]);
+		// 	m++;
+		// }
+		check_all(&cub);
 
 		printf("%d\n%d\n%s\n%s\n%s\n%s\n%s\n", cub.scene.screen_width, cub.scene.screen_height, cub.scene.north, \
 		cub.scene.south, cub.scene.west, cub.scene.east, cub.scene.sprite);
+		free_array(map);
+		// free(line);
+		free(head);
 		return (0);
 	}
 	return (0);

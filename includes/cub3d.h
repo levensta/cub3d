@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/13 23:18:06 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/16 22:26:40 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # define mapHeight 9
 # define screenWidth 640
 # define screenHeight 480
+# define MAC_WIDTH 2560
+# define MAC_HEIGHT 1440
 # define EPS 0.000001
 # define FOV 60.0f/360.0f
 # define W 13
@@ -57,11 +59,12 @@ typedef struct	s_map
 	char		*east;
 	char		*west;
 	char		*sprite;
-	int			floor[3];
+	int			floor[3]; // переименовать
 	int			celling[3];
 	
 	int			is_last;
 	int			is_only_plr;
+	int			is_world_map;
 	char		**world_map;
 }				t_map;
 
@@ -71,6 +74,7 @@ typedef struct  s_tex {
 	int			width;
 	int			height;
 	int			line_length;
+	int         bits_per_pixel;
 }               t_tex;
 
 typedef	struct	s_all {
@@ -91,7 +95,7 @@ int				get_r(int trgb);
 int				get_g(int trgb);
 int				get_b(int trgb);
 int				invert_trgb(int trgb);
-void	my_mlx_pixel_put(t_all *cub, int x, int y, int color);
+void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color);
 void	ray_correct(float *ray);
 int	frame_loop(t_all *cub);
 void    clear_image(t_all *cub);
@@ -106,7 +110,7 @@ char	**ft_split_ws(char const *s);
 char	*get_path(char *path, char **arr);
 void	get_resolution(t_all *cub, char **arr);
 void	get_color(int *rgb, char *color);
-int		get_map(t_all *cub, char **map);
+char	**get_map(t_all *cub, char **map);
 void	error(int code);
 void			make_square(char **map);
 

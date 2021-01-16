@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/13 22:43:44 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/16 22:46:52 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	frame_loop(t_all *cub)
 	float 	a;
 	float	b;
 
+	int		is_x = 0;
+
 
 	float		dx;
 	float		dy;
@@ -63,7 +65,6 @@ int	frame_loop(t_all *cub)
 		while (!wall)
 		{
 			// printf("%f\n", ray);
-			// убрать dx, dy из структуры
 			if (ray <= 0.5)
 				dx = ceilf(x1 + EPS) - x1;
 			else
@@ -120,6 +121,7 @@ int	frame_loop(t_all *cub)
 					wall = 1;
 				else if (cub->worldMap[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS) - 1] == '1')
 					wall = 1;
+				is_x = 1;
 			}
 			if (y1 - floorf(y1) < EPS)
 			{
@@ -127,50 +129,57 @@ int	frame_loop(t_all *cub)
 					wall = 1;
 				else if (cub->worldMap[(int)floorf(y1 + EPS) - 1][(int)floorf(x1 + EPS)] == '1')
 					wall = 1;
+				is_x = 0;
 			}
 
 		}
+//
+		float			hit;
+		unsigned int	color;
+		if (is_x)
+		{
+			if (ray >= 0 && ray < 0.5f) // west
+				hit = y1 - floorf(y1);
+			else
+			 	hit = ceilf(y1) - y1; // east
+		}
+		else
+		{
+			if (ray >= 0.25f && ray < 0.75f) // no
+				hit = ceilf(x1) - x1;
+			else // south
+				hit = x1 - floorf(x1);
+		}
+//
+
 		distance = sqrtf(powf(cub->plr.x0 - x1, 2) + powf(cub->plr.y0 - y1, 2));
 		distance = distance * cosf(absf(cub->plr.route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
 
 		column_h = screenHeight / 2;
         column_h = (float)column_h / tanf((FOV * 360.0f / 2.0f) * (M_PI / 180.0f));
         column_h = (int)ceilf((float)column_h / distance);
-
+//
 		int i = 0;
+		float j = 0;
 		i = (screenHeight - column_h) / 2;
-		char *img = cub->win.addr;
-		char *tex = cub->tex.addr;
-		int	 j = 0;
-		while(j < i){
-			img += cub->win.line_length;
-			j++;
-		}
-		int		h = 0;
-		int		n = 0;
-		int		res = cub->tex.height / column_h;
+		hit *= cub->tex.width;
 		while (i < (screenHeight + column_h) / 2)
 		{
-			// my_mlx_pixel_put(cub, x, i, 0xFF00FF);
-			img[(x * 4)] = tex[(n * 4)];
-			img[(x * 4) + 1] = tex[(n * 4) + 1];
-			img[(x * 4) + 2] = tex[(n * 4) + 2];
-			img += cub->win.line_length;
-			if (res > 0 && h < cub->tex.height && (h % res) == 0)
-				tex += cub->tex.line_length;
-			if (i + 1 == screenHeight)
-				break ;
+			color = *(unsigned int*)(cub->tex.addr + ((int)j * cub->tex.line_length + (int)hit * (cub->tex.bits_per_pixel / 8)));
+			my_mlx_pixel_put(cub, x, i, color);
 			i++;
-			h++;
+			j += (float)cub->tex.height / (float)column_h;
 		}
+//
 		// printf("%f\n", ray);
 		ray += FOV / screenWidth;
 		// printf("%f\n", ray);
 		x++;
 	}
-	int tx;
-	int ty;
-	mlx_mouse_get_pos(cub->vars.win, &tx, &ty);
+	// int tx;
+	// int ty;
+	// mlx_mouse_get_pos(cub->vars.win, &tx, &ty);
+
 	// printf("x: %d, y: %d\n", tx, ty);
 	// printf("route: %f\n", cub->plr.route);
 	// printf("x: %f\n", cub->pl r.x0);

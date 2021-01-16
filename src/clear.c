@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_reset.c                                       :+:      :+:    :+:   */
+/*   clear.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:01:25 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/13 23:03:09 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/16 20:04:52 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	reset_scene(t_all *cub)
 	cub->scene.screen_height = 0;
 	cub->scene.is_last = 0;
 	cub->scene.is_only_plr = 0;
+	cub->scene.is_world_map = 0;
 	reset_path(cub);
 	// reset_array(cub->scene.world_map);
 	// if (cub->scene.world_map)

@@ -6,11 +6,12 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:10:04 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/13 23:11:22 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/16 19:43:34 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include "libft.h"
 
 static size_t	read_word(char const *s)
 {
@@ -94,16 +95,17 @@ void		get_color(int *rgb, char *color)
 		if (color[i] == ',')
 			commas++;
 	}
-	if (commas != 2)
-		error(4);
 	i = 0;
 	arr = ft_split_rgb(color);
 	while (arr[++i])
 	{
-		if (i > 3 || rgb[i - 1] != -1)
+		if (rgb[i - 1] != -1)
 			error(4);
 		rgb[i - 1] = ft_atoi(arr[i]);
 		if (rgb[i - 1] < 0 || rgb[i - 1] > 255)
 			error(4);
 	}
+	if (!arr || commas != 2 || i != 4)
+		error(4);
+	free_array(arr);
 }

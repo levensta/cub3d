@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 18:25:54 by levensta          #+#    #+#             */
-/*   Updated: 2020/11/23 22:44:01 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/16 19:23:14 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		ft_atoi(const char *str)
 		i++;
 	else if (str[i] == '-' && ++i)
 		check_symbol = -1;
-	while (str[i] >= '0' && str[i] <= '9')
+	while (ft_isdigit(str[i]))
 	{
 		nb = (nb * 10) + (str[i] - '0');
 		amount += (nb == 0) ? 0 : 1;
@@ -38,5 +38,5 @@ int		ft_atoi(const char *str)
 			return ((check_symbol > 0) ? -1 : 0);
 		i++;
 	}
-	return (nb * check_symbol);
+	return ((!ft_isdigit(str[i]) && str[i]) ? -1 : nb * check_symbol);
 }
