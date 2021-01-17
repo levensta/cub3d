@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/16 22:26:40 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/17 22:12:06 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 # define A 0
 # define S 1
 # define D 2
+# define LEFT 123
+# define RIGHT 124
+# define ESC 53
 
 # include "mlx.h"
 # include "libft.h"
@@ -77,12 +80,23 @@ typedef struct  s_tex {
 	int         bits_per_pixel;
 }               t_tex;
 
+typedef struct  s_keys {
+	char		key_a;
+	char		key_s;
+	char		key_d;
+	char		key_w;
+	char		key_left;
+	char		key_right;
+	char		key_esc;
+}				t_keys;
+
 typedef	struct	s_all {
+	t_keys		keys;
 	t_data		win;
 	t_vars		vars;
 	t_player	plr;
 	t_map		scene;
-	t_tex		tex;
+	t_tex		txt[4];
 	char		**worldMap;
 }                t_all;
 

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/16 20:02:47 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/17 16:13:09 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,16 @@ char	**make_map(t_list **head, int size)
 
 int     main(int argc, char **argv)
 {
-	int		fd = open(argv[1], O_RDONLY);
+	int		fd;
 	t_all	cub;
 	char	*line = NULL;
 	t_list	*head = NULL;
 	char	**map;
 
-	reset_scene(&cub);
+	if ((fd = open(argv[1], O_RDONLY)) == -1)
+		error(5);
+	close(fd);
+	clear_scene(&cub);
 	if (argc == 2)
 	{
 		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1] - 4)]))
@@ -62,6 +65,7 @@ int     main(int argc, char **argv)
 		while (get_next_line(fd, &line) == 1)
 			ft_lstadd_back(&head, ft_lstnew(line));
 		ft_lstadd_back(&head, ft_lstnew(line));
+		close(fd);
 		// free(line);
 		map = make_map(&head, ft_lstsize(head));
 		int	i = 0;

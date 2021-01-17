@@ -6,11 +6,122 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/16 22:46:52 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/17 22:35:07 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int	count_column(float x, float y, float route, float ray)
+{
+	float	distance;
+	int		column_h;
+	
+	distance = 0;
+	distance = sqrtf(powf(x, 2) + powf(y, 2));
+	distance = distance * cosf(fabs(route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
+
+	column_h = screenHeight / 2;
+	column_h = (float)column_h / tanf((FOV * 360.0f / 2.0f) * (M_PI / 180.0f));
+	column_h = (int)ceilf((float)column_h / distance);
+	return (column_h);
+}
+
+void	draw_ceil(t_all *cub, int x, int column_h)
+{
+		int		color;
+		float	j;
+		int i;
+
+		i = (screenHeight - column_h) / 2;
+		color = 0x1E91D6;
+		j = -1;
+		while (j++ < i)
+			my_mlx_pixel_put(cub, x, j, color);
+}
+
+void	draw_texture_no(t_all *cub, int x, int column_h, float hit)
+{
+	unsigned int	color;
+	float			j;
+	int				i;
+
+	i = (screenHeight - column_h) / 2;
+	j = 0;
+	hit *= cub->txt[0].width;
+	while (i < (screenHeight + column_h) / 2)
+	{
+		color = *(unsigned int*)(cub->txt[0].addr + ((int)j * cub->txt[0].line_length + (int)hit * (cub->txt[0].bits_per_pixel / 8)));
+		my_mlx_pixel_put(cub, x, i, color);
+		i++;
+		j += (float)cub->txt[0].height / (float)column_h;
+	}
+}
+
+void	draw_texture_so(t_all *cub, int x, int column_h, float hit)
+{
+	unsigned int	color;
+	float			j;
+	int				i;
+
+	i = (screenHeight - column_h) / 2;
+	j = 0;
+	hit *= cub->txt[1].width;
+	while (i < (screenHeight + column_h) / 2)
+	{
+		color = *(unsigned int*)(cub->txt[1].addr + ((int)j * cub->txt[1].line_length + (int)hit * (cub->txt[1].bits_per_pixel / 8)));
+		my_mlx_pixel_put(cub, x, i, color);
+		i++;
+		j += (float)cub->txt[1].height / (float)column_h;
+	}
+}
+
+void	draw_texture_we(t_all *cub, int x, int column_h, float hit)
+{
+	unsigned int	color;
+	float			j;
+	int				i;
+
+	i = (screenHeight - column_h) / 2;
+	j = 0;
+	hit *= cub->txt[2].width;
+	while (i < (screenHeight + column_h) / 2)
+	{
+		color = *(unsigned int*)(cub->txt[2].addr + ((int)j * cub->txt[2].line_length + (int)hit * (cub->txt[2].bits_per_pixel / 8)));
+		my_mlx_pixel_put(cub, x, i, color);
+		i++;
+		j += (float)cub->txt[2].height / (float)column_h;
+	}
+}
+
+void	draw_texture_ea(t_all *cub, int x, int column_h, float hit)
+{
+	unsigned int	color;
+	float			j;
+	int				i;
+
+	i = (screenHeight - column_h) / 2;
+	j = 0;
+	hit *= cub->txt[3].width;
+	while (i < (screenHeight + column_h) / 2)
+	{
+		color = *(unsigned int*)(cub->txt[3].addr + ((int)j * cub->txt[3].line_length + (int)hit * (cub->txt[3].bits_per_pixel / 8)));
+		my_mlx_pixel_put(cub, x, i, color);
+		i++;
+		j += (float)cub->txt[3].height / (float)column_h;
+	}
+}
+
+void	draw_floor(t_all *cub, int x, int column_h)
+{
+	int j;
+	int color;
+
+	j = (screenHeight + column_h) / 2 - 1;
+	color = 0x4CB963;
+	while (j++ < screenHeight)
+		my_mlx_pixel_put(cub, x, j, color);
+}
 
 float	absf(float f)
 {
@@ -19,17 +130,17 @@ float	absf(float f)
 	return (f);
 }
 
-void    clear_image(t_all *cub)
+void	clear_image(t_all *cub)
 {
-    int x;
-    int y;
-    x = -1;
-    while (++x < screenWidth)
-    {
-        y = -1;
-        while (++y < screenHeight)
-            my_mlx_pixel_put(cub, x, y, 0);
-    }
+	int x;
+	int y;
+	x = -1;
+	while (++x < screenWidth)
+	{
+		y = -1;
+		while (++y < screenHeight)
+			my_mlx_pixel_put(cub, x, y, 0);
+	}
 }
 
 int	frame_loop(t_all *cub)
@@ -43,15 +154,13 @@ int	frame_loop(t_all *cub)
 	float 	a;
 	float	b;
 
-	int		is_x = 0;
+	char	is_x = 0;
 
 
 	float		dx;
 	float		dy;
 	float		ray;
-	float		distance;
 	//x and y start position
-	distance = 0;
     ray = cub->plr.route - FOV/2;
 	clear_image(cub);
 	ray_correct(&ray);
@@ -134,42 +243,48 @@ int	frame_loop(t_all *cub)
 
 		}
 //
-		float			hit;
-		unsigned int	color;
+		// float			hit;
+		// unsigned int	color;
+		char			is_west = 0;
+		char			is_north = 0;
 		if (is_x)
 		{
 			if (ray >= 0 && ray < 0.5f) // west
-				hit = y1 - floorf(y1);
+			{
+				draw_texture_we(cub, x, column_h, y1 - floorf(y1));
+				// hit = y1 - floorf(y1);
+				is_west = 1;
+			}
 			else
-			 	hit = ceilf(y1) - y1; // east
+			{
+				draw_texture_ea(cub, x, column_h, ceilf(y1) - y1);
+				// hit = ceilf(y1) - y1; // east
+				is_west = 0;
+			}
 		}
 		else
 		{
-			if (ray >= 0.25f && ray < 0.75f) // no
-				hit = ceilf(x1) - x1;
+			if (ray >= 0.25f && ray < 0.75f) // north
+			{
+				draw_texture_no(cub, x, column_h, ceilf(x1) - x1);
+				// hit = ceilf(x1) - x1;
+				is_north = 1;
+			}
 			else // south
-				hit = x1 - floorf(x1);
+			{
+				draw_texture_so(cub, x, column_h, x1 - floorf(x1));
+				// hit = x1 - floorf(x1);
+				is_north = 0;
+			}
 		}
-//
 
-		distance = sqrtf(powf(cub->plr.x0 - x1, 2) + powf(cub->plr.y0 - y1, 2));
-		distance = distance * cosf(absf(cub->plr.route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
+		column_h = count_column(cub->plr.x0 - x1, \
+		cub->plr.y0 - y1, cub->plr.route, ray);
 
-		column_h = screenHeight / 2;
-        column_h = (float)column_h / tanf((FOV * 360.0f / 2.0f) * (M_PI / 180.0f));
-        column_h = (int)ceilf((float)column_h / distance);
-//
-		int i = 0;
-		float j = 0;
-		i = (screenHeight - column_h) / 2;
-		hit *= cub->tex.width;
-		while (i < (screenHeight + column_h) / 2)
-		{
-			color = *(unsigned int*)(cub->tex.addr + ((int)j * cub->tex.line_length + (int)hit * (cub->tex.bits_per_pixel / 8)));
-			my_mlx_pixel_put(cub, x, i, color);
-			i++;
-			j += (float)cub->tex.height / (float)column_h;
-		}
+		draw_ceil(cub, x, column_h);
+		// hit *= cub->txt[].width;
+		draw_floor(cub, x, column_h);
+
 //
 		// printf("%f\n", ray);
 		ray += FOV / screenWidth;

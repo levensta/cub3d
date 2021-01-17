@@ -6,13 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:01:25 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/16 20:04:52 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/17 16:49:24 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	reset_path(t_all *cub)
+void	clear_path(t_all *cub)
 {
 	cub->scene.north = 0;
 	cub->scene.south = 0;
@@ -33,10 +33,10 @@ void	free_path(t_all *cub)
 		free(cub->scene.east);
 	if (cub->scene.sprite)
 		free(cub->scene.sprite);
-	reset_path(cub);
+	clear_path(cub);
 }
 
-void	reset_array(char **arr)
+void	clear_array(char **arr)
 {
 	int i;
 
@@ -62,10 +62,10 @@ void	free_array(char **arr)
 	}
 	if (arr)
 		free(arr);
-	reset_array(arr);
+	clear_array(arr);
 }
 
-void	reset_scene(t_all *cub)
+void	clear_scene(t_all *cub)
 {
 	int i;
 	i = 0;
@@ -80,7 +80,7 @@ void	reset_scene(t_all *cub)
 	cub->scene.is_last = 0;
 	cub->scene.is_only_plr = 0;
 	cub->scene.is_world_map = 0;
-	reset_path(cub);
+	clear_path(cub);
 	// reset_array(cub->scene.world_map);
 	// if (cub->scene.world_map)
 	// 	free_array(cub->scene.world_map);

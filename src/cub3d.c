@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/16 22:44:52 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/17 23:19:18 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,44 +87,50 @@ void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color)
 // 	return (0);
 // }
 
-int             key_press(int keycode, t_all *cub)
+int             loop(t_all *cub)
 {
 	float tx;
 	float ty;
 	float tmp = cub->plr.route + 0.25f;
+	float	speed = 15;
 	ray_correct(&tmp);
-	if (keycode == 53)
+	if (cub->keys.key_esc)
 	{
+    	mlx_destroy_image(cub->vars.mlx, cub->txt[0].img);
+    	mlx_destroy_image(cub->vars.mlx, cub->txt[1].img);
+    	mlx_destroy_image(cub->vars.mlx, cub->txt[2].img);
+    	mlx_destroy_image(cub->vars.mlx, cub->txt[3].img);
+    	mlx_destroy_image(cub->vars.mlx, cub->win.img);
     	mlx_destroy_window(cub->vars.mlx, cub->vars.win);
 		exit(0);
 	}
-	if (keycode == 123) // <-
+	if (cub->keys.key_left) // <-
 	{
-		cub->plr.route -= 0.05;
+		cub->plr.route -= 0.0050f;
 		// printf("%f\n", cub->plr.route);
 	}
-	if (keycode == 124) // ->
-		cub->plr.route += 0.05;
+	if (cub->keys.key_right) // ->
+		cub->plr.route += 0.0050f;
 
-	if (keycode == W)
+	if (cub->keys.key_w)
 	{
-		ty = cub->plr.y0 - cos(cub->plr.route * 2 * M_PI) / 2;
-		tx = cub->plr.x0 + sin(cub->plr.route * 2 * M_PI) / 2;
+		ty = cub->plr.y0 - cos(cub->plr.route * 2 * M_PI) / speed;
+		tx = cub->plr.x0 + sin(cub->plr.route * 2 * M_PI) / speed;
 	}
-	if (keycode == S)
+	if (cub->keys.key_s)
 	{
-		ty = cub->plr.y0 + cos(cub->plr.route * 2 * M_PI) / 2;
-		tx = cub->plr.x0 - sin(cub->plr.route * 2 * M_PI) / 2;
+		ty = cub->plr.y0 + cos(cub->plr.route * 2 * M_PI) / speed;
+		tx = cub->plr.x0 - sin(cub->plr.route * 2 * M_PI) / speed;
 	}
-	if (keycode == A) // 
+	if (cub->keys.key_a) // 
 	{
-		ty = cub->plr.y0 + cos(tmp * 2 * M_PI) / 2;
-		tx = cub->plr.x0 - sin(tmp * 2 * M_PI) / 2;
+		ty = cub->plr.y0 + cos(tmp * 2 * M_PI) / speed;
+		tx = cub->plr.x0 - sin(tmp * 2 * M_PI) / speed;
 	}
-	if (keycode == D)
+	if (cub->keys.key_d)
 	{
-		ty = cub->plr.y0 - cos(tmp * 2 * M_PI) / 2;
-		tx = cub->plr.x0 + sin(tmp * 2 * M_PI) / 2;
+		ty = cub->plr.y0 - cos(tmp * 2 * M_PI) / speed;
+		tx = cub->plr.x0 + sin(tmp * 2 * M_PI) / speed;
 	}
 	if (cub->worldMap[(int)floorf(ty)][(int)floorf(tx)] != '1')
 	{
@@ -132,18 +138,14 @@ int             key_press(int keycode, t_all *cub)
 		cub->plr.y0 = ty;
 	}
 	ray_correct(&cub->plr.route);
-	printf("route: %f\n", cub->plr.route);
-	printf("x: %f\n", cub->plr.x0);
-	printf("y: %f\n", cub->plr.y0);
+	if (cub->keys.key_a || cub->keys.key_d || cub->keys.key_s || cub->keys.key_w || \
+	cub->keys.key_left || cub->keys.key_right)
+		frame_loop(cub);
+	// printf("route: %f\n", cub->plr.route);
+	// printf("x: %f\n", cub->plr.x0);
+	// printf("y: %f\n", cub->plr.y0);
 	return(0);
 }
-
-// int             mouse_print(int keycode, t_vars *vars)
-// {
-// 	(void)keycode;
-// 	vars->win = mlx_mouse_hide();
-// 	return(0);
-// }
 
 void	ray_correct(float *ray)
 {
@@ -151,6 +153,94 @@ void	ray_correct(float *ray)
 		*ray += 1;
     while (*ray >= 1)
 		*ray -= 1;
+}
+
+void	texture_init(t_all *cub)
+{
+	int i;
+	int k;
+
+	char *textures[4] =
+	{
+		"./elmo.xpm",
+		"./kermit.xpm",
+		"./bert.xpm",
+		"./cookie.xpm"
+	};
+	k = 0;
+	while (k < 4)
+	{
+		cub->txt[k].img = mlx_xpm_file_to_image(cub->vars.mlx, textures[k], \
+		&(cub->txt[k].width), &(cub->txt[k].height));
+		cub->txt[k].addr = mlx_get_data_addr(cub->txt[k].img, \
+		&(cub->txt[k].bits_per_pixel), &(cub->txt[k].line_length), &i);
+		k++;
+	}
+
+
+	// cub->txt_so.img = mlx_xpm_file_to_image(cub->vars.mlx, "./kermit.xpm", \
+	// &(cub->txt_so.width), &(cub->txt_so.height));
+	// cub->txt_so.addr = mlx_get_data_addr(cub->txt_so.img, \
+	// &(cub->txt_so.bits_per_pixel), &(cub->txt_so.line_length), &i);
+
+	// cub->txt_we.img = mlx_xpm_file_to_image(cub->vars.mlx, "./bert.xpm", \
+	// &(cub->txt_we.width), &(cub->txt_we.height));
+	// cub->txt_we.addr = mlx_get_data_addr(cub->txt_we.img, \
+	// &(cub->txt_we.bits_per_pixel), &(cub->txt_we.line_length), &i);
+
+	// cub->txt_ea.img = mlx_xpm_file_to_image(cub->vars.mlx, "./cookie.xpm", \
+	// &(cub->txt_ea.width), &(cub->txt_ea.height));
+	// cub->txt_ea.addr = mlx_get_data_addr(cub->txt_ea.img, \
+	// &(cub->txt_ea.bits_per_pixel), &(cub->txt_ea.line_length), &i);
+}
+
+int             key_release(int keycode, t_all *cub)
+{
+	if (keycode == A)
+		cub->keys.key_a = 0;
+	if (keycode == D)
+		cub->keys.key_d = 0;
+	if (keycode == S)
+		cub->keys.key_s = 0;
+	if (keycode == W)
+		cub->keys.key_w = 0;
+	if (keycode == LEFT)
+		cub->keys.key_left = 0;
+	if (keycode == RIGHT)
+		cub->keys.key_right = 0;
+	if (keycode == ESC)
+		cub->keys.key_esc = 0;
+	return (0);
+}
+
+int             key_press(int keycode, t_all *cub)
+{
+	if (keycode == A)
+		cub->keys.key_a = 1;
+	if (keycode == D)
+		cub->keys.key_d = 1;
+	if (keycode == S)
+		cub->keys.key_s = 1;
+	if (keycode == W)
+		cub->keys.key_w = 1;
+	if (keycode == LEFT)
+		cub->keys.key_left = 1;
+	if (keycode == RIGHT)
+		cub->keys.key_right = 1;
+	if (keycode == ESC)
+		cub->keys.key_esc = 1;
+	return (0);
+}
+
+void	key_null(t_all *cub)
+{
+	cub->keys.key_a = 0;
+	cub->keys.key_d = 0;
+	cub->keys.key_s = 0;
+	cub->keys.key_w = 0;
+	cub->keys.key_left = 0;
+	cub->keys.key_right = 0;
+	cub->keys.key_esc = 0;
 }
 
 int main ()
@@ -181,18 +271,20 @@ int main ()
 		cub.worldMap[w] = worldMap[w];
 		w++;
 	}
-	int		i;
+	// int		i;
 
 	cub.vars.win = mlx_new_window(cub.vars.mlx, screenWidth, screenHeight, "cub3D");
 	cub.win.img = mlx_new_image(cub.vars.mlx, screenWidth, screenHeight);
 	cub.win.addr = mlx_get_data_addr(cub.win.img, &(cub.win.bits_per_pixel), &(cub.win.line_length), \
                                  &(cub.win.endian));
-	mlx_loop_hook(cub.vars.mlx, frame_loop, &cub);
-
-	cub.tex.img = mlx_xpm_file_to_image(cub.vars.mlx, "./elmo.xpm", &(cub.tex.width), &(cub.tex.height));
-	cub.tex.addr = mlx_get_data_addr(cub.tex.img, &(cub.tex.bits_per_pixel), &(cub.tex.line_length), &i);
+	mlx_loop_hook(cub.vars.mlx, loop, &cub);
+	texture_init(&cub);
+	key_null(&cub);
 	// mlx_key_hook(cub.vars.win, key_hook, NULL);
+	// frame_loop(&cub);
+	frame_loop(&cub);
 	mlx_hook(cub.vars.win, 2, 1L<<0, key_press, &cub);
+	mlx_hook(cub.vars.win, 3, 1L<<1, key_release, &cub);
 	// mlx_hook(vars.win, 9, 1L<<4, &mouse_print, &vars);
 	mlx_loop(cub.vars.mlx);
 	return (0);
