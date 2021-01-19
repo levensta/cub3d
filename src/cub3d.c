@@ -6,18 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/17 23:19:18 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/19 23:42:14 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-// int	deal_key(int key)
-// {
-// 	ft_putchar('X');
-// 	mlx_pixel_put(g_mlx_ptr, g_win_ptr, 250, 250, 0xFFFFFF);
-// 	return (0);
-// }
+#include "get_next_line.h"
+#include <fcntl.h>
 
 // void line(t_data *data, int x1, int x2, int y1, int y2, int color)
 // {
@@ -81,18 +76,11 @@ void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color)
 	*(unsigned int*)dst = color;
 }
 
-// int             key_hook(int keycode)
-// {
-//     printf("Hello from key_hook! code: %d\n", keycode);
-// 	return (0);
-// }
-
 int             loop(t_all *cub)
 {
 	float tx;
 	float ty;
 	float tmp = cub->plr.route + 0.25f;
-	float	speed = 15;
 	ray_correct(&tmp);
 	if (cub->keys.key_esc)
 	{
@@ -114,25 +102,25 @@ int             loop(t_all *cub)
 
 	if (cub->keys.key_w)
 	{
-		ty = cub->plr.y0 - cos(cub->plr.route * 2 * M_PI) / speed;
-		tx = cub->plr.x0 + sin(cub->plr.route * 2 * M_PI) / speed;
+		ty = cub->plr.y0 - cos(cub->plr.route * 2 * M_PI) / SPEED;
+		tx = cub->plr.x0 + sin(cub->plr.route * 2 * M_PI) / SPEED;
 	}
 	if (cub->keys.key_s)
 	{
-		ty = cub->plr.y0 + cos(cub->plr.route * 2 * M_PI) / speed;
-		tx = cub->plr.x0 - sin(cub->plr.route * 2 * M_PI) / speed;
+		ty = cub->plr.y0 + cos(cub->plr.route * 2 * M_PI) / SPEED;
+		tx = cub->plr.x0 - sin(cub->plr.route * 2 * M_PI) / SPEED;
 	}
-	if (cub->keys.key_a) // 
+	if (cub->keys.key_a)
 	{
-		ty = cub->plr.y0 + cos(tmp * 2 * M_PI) / speed;
-		tx = cub->plr.x0 - sin(tmp * 2 * M_PI) / speed;
+		ty = cub->plr.y0 + cos(tmp * 2 * M_PI) / SPEED;
+		tx = cub->plr.x0 - sin(tmp * 2 * M_PI) / SPEED;
 	}
 	if (cub->keys.key_d)
 	{
-		ty = cub->plr.y0 - cos(tmp * 2 * M_PI) / speed;
-		tx = cub->plr.x0 + sin(tmp * 2 * M_PI) / speed;
+		ty = cub->plr.y0 - cos(tmp * 2 * M_PI) / SPEED;
+		tx = cub->plr.x0 + sin(tmp * 2 * M_PI) / SPEED;
 	}
-	if (cub->worldMap[(int)floorf(ty)][(int)floorf(tx)] != '1')
+	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(tx)] != '1')
 	{
 		cub->plr.x0 = tx;
 		cub->plr.y0 = ty;
@@ -155,7 +143,7 @@ void	ray_correct(float *ray)
 		*ray -= 1;
 }
 
-void	texture_init(t_all *cub)
+void	textures_init(t_all *cub)
 {
 	int i;
 	int k;
@@ -243,50 +231,78 @@ void	key_null(t_all *cub)
 	cub->keys.key_esc = 0;
 }
 
-int main ()
+int rendering(t_all *cub)
+{
+	// cub->plr.x0 = 5.5;
+	// cub->plr.y0 = 4.5;
+	cub->plr.route = 0;
+	cub->vars.mlx = mlx_init();
+	// char worldMap[mapHeight][mapWidth]=
+	// {
+	// "1111111111",
+	// "1000000001",
+	// "1000000001",
+	// "1000000001",
+	// "1000000001",
+	// "1000000001",
+	// "1000000001",
+	// "1000000001",
+	// "1111111111"
+	// };
+
+	// cub->worldMap = malloc (9 * sizeof(char *));
+	// int w = 0;
+	// while (w < 10)
+	// {
+	// 	cub->worldMap[w] = malloc(10);
+	// 	cub->worldMap[w] = worldMap[w];
+	// 	w++;
+	// }
+	cub->vars.win = mlx_new_window(cub->vars.mlx, screenWidth, screenHeight, "cub3D");
+	cub->win.img = mlx_new_image(cub->vars.mlx, screenWidth, screenHeight);
+	cub->win.addr = mlx_get_data_addr(cub->win.img, &(cub->win.bits_per_pixel), &(cub->win.line_length), \
+                                 &(cub->win.endian));
+	textures_init(cub);
+	key_null(cub);
+	// mlx_key_hook(cub->vars.win, key_hook, NULL);
+	// frame_loop(&cub);
+	frame_loop(cub);
+	mlx_loop_hook(cub->vars.mlx, loop, cub);
+	mlx_hook(cub->vars.win, 2, 1L<<0, key_press, cub);
+	mlx_hook(cub->vars.win, 3, 1L<<1, key_release, cub);
+	// mlx_hook(vars.win, 9, 1L<<4, &mouse_print, &vars);
+	mlx_loop(cub->vars.mlx);
+	return (0);
+}
+
+int     main(int argc, char **argv)
 {
 	t_all	cub;
-	cub.plr.x0 = 5.5;
-	cub.plr.y0 = 4.5;
-	cub.plr.route = 0;
-	cub.vars.mlx = mlx_init();
-	char worldMap[mapHeight][mapWidth]=
-	{
-	"1111111111",
-	"1000000001",
-	"1000000001",
-	"1000000001",
-	"1000000001",
-	"1000000001",
-	"1000000001",
-	"1000000001",
-	"1111111111"
-	};
+	char	*line = NULL;
+	t_list	*head = NULL;
+	char	**map;
 
-	cub.worldMap = malloc (9 * sizeof(char *));
-	int w = 0;
-	while (w < 10)
+	if ((cub.fd = open(argv[1], O_RDONLY)) == -1)
+		error(5);
+	clear_scene(&cub);
+	if (argc == 2)
 	{
-		cub.worldMap[w] = malloc(10);
-		cub.worldMap[w] = worldMap[w];
-		w++;
+		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1] - 4)]))
+			error(1);
+		while (get_next_line(cub.fd, &line) == 1)
+			ft_lstadd_back(&head, ft_lstnew(line));
+		ft_lstadd_back(&head, ft_lstnew(line));
+		map = make_map(&head, ft_lstsize(head));
+		parser(&cub, map);
+		check_all(&cub);
+		printf("%d\n%d\n%s\n%s\n%s\n%s\n%s\n", cub.scene.screen_width, cub.scene.screen_height, cub.scene.north, \
+		cub.scene.south, cub.scene.west, cub.scene.east, cub.scene.sprite);
+		rendering(&cub);
+		free_array(map);
+		// free(line);
+		free(head);
+		close(cub.fd);
 	}
-	// int		i;
-
-	cub.vars.win = mlx_new_window(cub.vars.mlx, screenWidth, screenHeight, "cub3D");
-	cub.win.img = mlx_new_image(cub.vars.mlx, screenWidth, screenHeight);
-	cub.win.addr = mlx_get_data_addr(cub.win.img, &(cub.win.bits_per_pixel), &(cub.win.line_length), \
-                                 &(cub.win.endian));
-	mlx_loop_hook(cub.vars.mlx, loop, &cub);
-	texture_init(&cub);
-	key_null(&cub);
-	// mlx_key_hook(cub.vars.win, key_hook, NULL);
-	// frame_loop(&cub);
-	frame_loop(&cub);
-	mlx_hook(cub.vars.win, 2, 1L<<0, key_press, &cub);
-	mlx_hook(cub.vars.win, 3, 1L<<1, key_release, &cub);
-	// mlx_hook(vars.win, 9, 1L<<4, &mouse_print, &vars);
-	mlx_loop(cub.vars.mlx);
 	return (0);
 }
 // (232 - r) / 150

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:01:25 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/17 16:49:24 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/19 21:07:45 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	clear_scene(t_all *cub)
 	cub->scene.is_last = 0;
 	cub->scene.is_only_plr = 0;
 	cub->scene.is_world_map = 0;
+	cub->column_h = 0;
 	clear_path(cub);
 	// reset_array(cub->scene.world_map);
 	// if (cub->scene.world_map)

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/16 20:05:34 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/19 23:09:45 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	check_outer_spaces(char **map)
 	}
 }
 
-static void	check_player(char **map, int *is_only_plr)
+static void	check_player(char **map, t_all *cub)
 {
 	int i;
 	int j;
@@ -83,16 +83,19 @@ static void	check_player(char **map, int *is_only_plr)
 			if ((map[i][j] == 'N' || map[i][j] == 'S' \
 			|| map[i][j] == 'W' || map[i][j] == 'E'))
 			{
-				if (*is_only_plr == 1)
+				if (cub->scene.is_only_plr == 1)
 					error(5);
 				else
-					*is_only_plr = 1;
+					cub->scene.is_only_plr = 1;
+				cub->plr.x0 = j + 0.5f;
+				cub->plr.y0 = i + 0.5f;
 			}
 			j++;
 		}
 		i++;
+		cub->scene.map_height = i;
 	}
-	if (*is_only_plr == 0)
+	if (cub->scene.is_only_plr == 0)
 		error(5);
 }
 
@@ -110,7 +113,7 @@ char		**get_map(t_all *cub, char **map)
 		check_outer_spaces(map);
 		i++;
 	}
-	check_player(map, &cub->scene.is_only_plr);
+	check_player(map, cub);
 	cub->scene.is_world_map = 1;
 	return (map);
 }

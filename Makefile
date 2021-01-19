@@ -2,22 +2,19 @@ NAME = cub3D
 SRCS = ./src/
 
 FUNC =	cub3d \
-		ft_utils \
 		get_next_line \
 		get_next_line_utils \
+		ft_split_whitespaces \
+		clear \
+		error \
+		get_resolution \
+		get_color \
+		get_path \
+		get_map \
+		make_square \
+		ft_utils \
 		frame_loop \
-
-# FUNC =	parser \
-# 		get_next_line \
-# 		get_next_line_utils \
-# 		ft_split_whitespaces \
-# 		clear \
-# 		error \
-# 		get_resolution \
-# 		get_color \
-# 		get_path \
-# 		get_map \
-# 		make_square
+		parser
 		
 SRC = $(addprefix $(SRCS), $(addsuffix .c, $(FUNC)))
 OBJ = $(addprefix $(SRCS), $(addsuffix .o, $(FUNC)))

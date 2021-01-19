@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/17 22:12:06 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/19 23:24:50 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define screenHeight 480
 # define MAC_WIDTH 2560
 # define MAC_HEIGHT 1440
+# define SPEED 15
 # define EPS 0.000001
 # define FOV 60.0f/360.0f
 # define W 13
@@ -65,10 +66,11 @@ typedef struct	s_map
 	int			floor[3]; // переименовать
 	int			celling[3];
 	
-	int			is_last;
-	int			is_only_plr;
-	int			is_world_map;
+	char		is_last;
+	char		is_only_plr;
+	char		is_world_map;
 	char		**world_map;
+	int			map_height;
 }				t_map;
 
 typedef struct  s_tex {
@@ -97,7 +99,8 @@ typedef	struct	s_all {
 	t_player	plr;
 	t_map		scene;
 	t_tex		txt[4];
-	char		**worldMap;
+	int			column_h;
+	int			fd;
 }                t_all;
 
 void			ft_putchar(char c);
@@ -114,10 +117,13 @@ void	ray_correct(float *ray);
 int	frame_loop(t_all *cub);
 void    clear_image(t_all *cub);
 
+void	parser(t_all *cub, char **map);
+int		rendering(t_all *cub);
+void	check_all(t_all *cub);
 char	**make_map(t_list **head, int size);
-void	reset_scene(t_all *cub);
-void	reset_array(char **arr);
-void	reset_path(t_all *cub);
+void	clear_scene(t_all *cub);
+void	clear_array(char **arr);
+void	clear_path(t_all *cub);
 void	free_array(char **arr);
 void	free_path(t_all *cub);
 char	**ft_split_ws(char const *s);

@@ -6,11 +6,34 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/17 22:35:07 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/19 23:44:17 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+// int		map_width(char *map)
+// {
+// 	int x;
+// 	int i;
+
+// 	x = 0;
+// 	i = 0;
+// 	while(map[i])
+// 	{
+// 		if (ft_memchr("10NWSE2", map[i], 7))
+// 			x++;
+// 		i++;
+// 	}
+// 	return (x);
+// }
+
+float	absf(float f)
+{
+	if (f < 0)
+		f *= -1;
+	return (f);
+}
 
 int	count_column(float x, float y, float route, float ray)
 {
@@ -19,7 +42,7 @@ int	count_column(float x, float y, float route, float ray)
 	
 	distance = 0;
 	distance = sqrtf(powf(x, 2) + powf(y, 2));
-	distance = distance * cosf(fabs(route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
+	distance = distance * cosf(absf(route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
 
 	column_h = screenHeight / 2;
 	column_h = (float)column_h / tanf((FOV * 360.0f / 2.0f) * (M_PI / 180.0f));
@@ -40,75 +63,26 @@ void	draw_ceil(t_all *cub, int x, int column_h)
 			my_mlx_pixel_put(cub, x, j, color);
 }
 
-void	draw_texture_no(t_all *cub, int x, int column_h, float hit)
+void	draw_texture(t_all *cub, int x, float hit, int n)
 {
 	unsigned int	color;
 	float			j;
 	int				i;
 
-	i = (screenHeight - column_h) / 2;
+	if (cub->column_h > screenHeight)
+		printf("%d\n", cub->column_h);
+	i = (screenHeight - cub->column_h) / 2;
 	j = 0;
-	hit *= cub->txt[0].width;
-	while (i < (screenHeight + column_h) / 2)
+	hit *= cub->txt[n].width;
+	while (i < (screenHeight + cub->column_h) / 2)
 	{
-		color = *(unsigned int*)(cub->txt[0].addr + ((int)j * cub->txt[0].line_length + (int)hit * (cub->txt[0].bits_per_pixel / 8)));
-		my_mlx_pixel_put(cub, x, i, color);
+		if (x >= 0 && i >= 0 && x < screenWidth && i < screenHeight) 
+		{
+			color = *(unsigned int*)(cub->txt[n].addr + ((int)j * cub->txt[n].line_length + (int)hit * (cub->txt[n].bits_per_pixel / 8)));
+			my_mlx_pixel_put(cub, x, i, color);
+		}
 		i++;
-		j += (float)cub->txt[0].height / (float)column_h;
-	}
-}
-
-void	draw_texture_so(t_all *cub, int x, int column_h, float hit)
-{
-	unsigned int	color;
-	float			j;
-	int				i;
-
-	i = (screenHeight - column_h) / 2;
-	j = 0;
-	hit *= cub->txt[1].width;
-	while (i < (screenHeight + column_h) / 2)
-	{
-		color = *(unsigned int*)(cub->txt[1].addr + ((int)j * cub->txt[1].line_length + (int)hit * (cub->txt[1].bits_per_pixel / 8)));
-		my_mlx_pixel_put(cub, x, i, color);
-		i++;
-		j += (float)cub->txt[1].height / (float)column_h;
-	}
-}
-
-void	draw_texture_we(t_all *cub, int x, int column_h, float hit)
-{
-	unsigned int	color;
-	float			j;
-	int				i;
-
-	i = (screenHeight - column_h) / 2;
-	j = 0;
-	hit *= cub->txt[2].width;
-	while (i < (screenHeight + column_h) / 2)
-	{
-		color = *(unsigned int*)(cub->txt[2].addr + ((int)j * cub->txt[2].line_length + (int)hit * (cub->txt[2].bits_per_pixel / 8)));
-		my_mlx_pixel_put(cub, x, i, color);
-		i++;
-		j += (float)cub->txt[2].height / (float)column_h;
-	}
-}
-
-void	draw_texture_ea(t_all *cub, int x, int column_h, float hit)
-{
-	unsigned int	color;
-	float			j;
-	int				i;
-
-	i = (screenHeight - column_h) / 2;
-	j = 0;
-	hit *= cub->txt[3].width;
-	while (i < (screenHeight + column_h) / 2)
-	{
-		color = *(unsigned int*)(cub->txt[3].addr + ((int)j * cub->txt[3].line_length + (int)hit * (cub->txt[3].bits_per_pixel / 8)));
-		my_mlx_pixel_put(cub, x, i, color);
-		i++;
-		j += (float)cub->txt[3].height / (float)column_h;
+		j += (float)cub->txt[n].height / (float)cub->column_h;
 	}
 }
 
@@ -121,13 +95,6 @@ void	draw_floor(t_all *cub, int x, int column_h)
 	color = 0x4CB963;
 	while (j++ < screenHeight)
 		my_mlx_pixel_put(cub, x, j, color);
-}
-
-float	absf(float f)
-{
-	if (f < 0)
-		f *= -1;
-	return (f);
 }
 
 void	clear_image(t_all *cub)
@@ -149,7 +116,7 @@ int	frame_loop(t_all *cub)
 	int		x = 0;
 	float	x1;
 	float	y1;
-	int		column_h;
+	// int		column_h = 0;
 	int		wall = 0;
 	float 	a;
 	float	b;
@@ -223,20 +190,21 @@ int	frame_loop(t_all *cub)
 
 
 			if (x1 < 0 || y1 < 0 || y1 > mapHeight || x1 > mapWidth)
+			// || y1 > cub->scene.map_height || x1 > map_width(cub->scene.world_map[(int)floorf(y1)])
 				wall = 1;
 			if (x1 - floorf(x1) < EPS)
 			{
-				if (cub->worldMap[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS)] == '1')
+				if (cub->scene.world_map[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS)] == '1')
 					wall = 1;
-				else if (cub->worldMap[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS) - 1] == '1')
+				else if (cub->scene.world_map[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS) - 1] == '1')
 					wall = 1;
 				is_x = 1;
 			}
 			if (y1 - floorf(y1) < EPS)
 			{
-				if (cub->worldMap[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS)] == '1')
+				if (cub->scene.world_map[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS)] == '1')
 					wall = 1;
-				else if (cub->worldMap[(int)floorf(y1 + EPS) - 1][(int)floorf(x1 + EPS)] == '1')
+				else if (cub->scene.world_map[(int)floorf(y1 + EPS) - 1][(int)floorf(x1 + EPS)] == '1')
 					wall = 1;
 				is_x = 0;
 			}
@@ -247,43 +215,42 @@ int	frame_loop(t_all *cub)
 		// unsigned int	color;
 		char			is_west = 0;
 		char			is_north = 0;
+		cub->column_h = count_column(cub->plr.x0 - x1, \
+		cub->plr.y0 - y1, cub->plr.route, ray);
 		if (is_x)
 		{
-			if (ray >= 0 && ray < 0.5f) // west
+			if (ray >= 0 && ray < 0.5f) // east
 			{
-				draw_texture_we(cub, x, column_h, y1 - floorf(y1));
+				draw_texture(cub, x, y1 - floorf(y1), 3);
 				// hit = y1 - floorf(y1);
 				is_west = 1;
 			}
 			else
 			{
-				draw_texture_ea(cub, x, column_h, ceilf(y1) - y1);
-				// hit = ceilf(y1) - y1; // east
+				draw_texture(cub, x, ceilf(y1) - y1, 2);
+				// hit = ceilf(y1) - y1; // west
 				is_west = 0;
 			}
 		}
 		else
 		{
-			if (ray >= 0.25f && ray < 0.75f) // north
+			if (ray >= 0.25f && ray < 0.75f) // south
 			{
-				draw_texture_no(cub, x, column_h, ceilf(x1) - x1);
+				draw_texture(cub, x, ceilf(x1) - x1, 1);
 				// hit = ceilf(x1) - x1;
 				is_north = 1;
 			}
-			else // south
+			else // north
 			{
-				draw_texture_so(cub, x, column_h, x1 - floorf(x1));
+				draw_texture(cub, x, x1 - floorf(x1), 0);
 				// hit = x1 - floorf(x1);
 				is_north = 0;
 			}
 		}
 
-		column_h = count_column(cub->plr.x0 - x1, \
-		cub->plr.y0 - y1, cub->plr.route, ray);
-
-		draw_ceil(cub, x, column_h);
+		draw_ceil(cub, x, cub->column_h);
 		// hit *= cub->txt[].width;
-		draw_floor(cub, x, column_h);
+		draw_floor(cub, x, cub->column_h);
 
 //
 		// printf("%f\n", ray);
@@ -303,3 +270,15 @@ int	frame_loop(t_all *cub)
 	// mlx_put_image_to_window(cub->vars.mlx, cub->vars.win, cub->tex.img, 0, 0);
 	return (0);
 }
+
+//      111111111111           
+//      100000000001           
+//      111100011111           
+//         10001     1111      
+// 1111111110001     1001      
+// 1000000000001     1001111111
+// 1111111111001     1000000001
+//          1001     1001111111
+// 1111111111001111111001      
+// 100000000000000000N001      
+// 1111111111111111111111      
