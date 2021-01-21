@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:13:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/13 23:13:22 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/21 23:33:49 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 char	*get_path(char *path, char **arr)
 {
 	int i;
+	int fd;
 
 	i = 0;
 	while(arr[++i])
@@ -22,5 +23,9 @@ char	*get_path(char *path, char **arr)
 		if (i >= 2 || path)
 			error(3);
 	}
+	fd = open(arr[1], O_RDONLY);
+	if (fd == -1)
+		error(3);
+	close(fd);
 	return (path = ft_strdup(arr[1]));
 }

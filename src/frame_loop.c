@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/19 23:44:17 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/21 21:48:15 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,16 @@ float	absf(float f)
 	return (f);
 }
 
-int	count_column(float x, float y, float route, float ray)
+int	count_column(float x, float y, t_all *cub, float ray)
 {
 	float	distance;
 	int		column_h;
 	
 	distance = 0;
 	distance = sqrtf(powf(x, 2) + powf(y, 2));
-	distance = distance * cosf(absf(route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
+	distance = distance * cosf(absf(cub->plr.route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
 
-	column_h = screenHeight / 2;
+	column_h = cub->scene.screen_height / 2;
 	column_h = (float)column_h / tanf((FOV * 360.0f / 2.0f) * (M_PI / 180.0f));
 	column_h = (int)ceilf((float)column_h / distance);
 	return (column_h);
@@ -56,7 +56,7 @@ void	draw_ceil(t_all *cub, int x, int column_h)
 		float	j;
 		int i;
 
-		i = (screenHeight - column_h) / 2;
+		i = (cub->scene.screen_height - column_h) / 2;
 		color = 0x1E91D6;
 		j = -1;
 		while (j++ < i)
@@ -68,19 +68,22 @@ void	draw_texture(t_all *cub, int x, float hit, int n)
 	unsigned int	color;
 	float			j;
 	int				i;
+	int				max;
 
-	if (cub->column_h > screenHeight)
-		printf("%d\n", cub->column_h);
-	i = (screenHeight - cub->column_h) / 2;
+	i = (cub->scene.screen_height - cub->column_h) / 2;
 	j = 0;
-	hit *= cub->txt[n].width;
-	while (i < (screenHeight + cub->column_h) / 2)
+	max = (cub->scene.screen_height + cub->column_h) / 2;
+	if (i < 0)
 	{
-		if (x >= 0 && i >= 0 && x < screenWidth && i < screenHeight) 
-		{
-			color = *(unsigned int*)(cub->txt[n].addr + ((int)j * cub->txt[n].line_length + (int)hit * (cub->txt[n].bits_per_pixel / 8)));
-			my_mlx_pixel_put(cub, x, i, color);
-		}
+		j = ((float)cub->txt[n].height / (float)cub->column_h) * (-i);
+		i = 0;
+		max = cub->scene.screen_height;
+	}
+	hit *= cub->txt[n].width;
+	while (i < max)
+	{
+		color = *(unsigned int*)(cub->txt[n].addr + ((int)j * cub->txt[n].line_length + (int)hit * (cub->txt[n].bits_per_pixel / 8)));
+		my_mlx_pixel_put(cub, x, i, color);
 		i++;
 		j += (float)cub->txt[n].height / (float)cub->column_h;
 	}
@@ -91,9 +94,9 @@ void	draw_floor(t_all *cub, int x, int column_h)
 	int j;
 	int color;
 
-	j = (screenHeight + column_h) / 2 - 1;
+	j = (cub->scene.screen_height + column_h) / 2 - 1;
 	color = 0x4CB963;
-	while (j++ < screenHeight)
+	while (j++ < cub->scene.screen_height)
 		my_mlx_pixel_put(cub, x, j, color);
 }
 
@@ -102,10 +105,10 @@ void	clear_image(t_all *cub)
 	int x;
 	int y;
 	x = -1;
-	while (++x < screenWidth)
+	while (++x < cub->scene.screen_width)
 	{
 		y = -1;
-		while (++y < screenHeight)
+		while (++y < cub->scene.screen_height)
 			my_mlx_pixel_put(cub, x, y, 0);
 	}
 }
@@ -131,7 +134,7 @@ int	frame_loop(t_all *cub)
     ray = cub->plr.route - FOV/2;
 	clear_image(cub);
 	ray_correct(&ray);
-    while (x < screenWidth)
+    while (x < cub->scene.screen_width)
     {
 		wall = 0;
 		x1 = cub->plr.x0;
@@ -216,7 +219,7 @@ int	frame_loop(t_all *cub)
 		char			is_west = 0;
 		char			is_north = 0;
 		cub->column_h = count_column(cub->plr.x0 - x1, \
-		cub->plr.y0 - y1, cub->plr.route, ray);
+		cub->plr.y0 - y1, cub, ray);
 		if (is_x)
 		{
 			if (ray >= 0 && ray < 0.5f) // east
@@ -254,7 +257,7 @@ int	frame_loop(t_all *cub)
 
 //
 		// printf("%f\n", ray);
-		ray += FOV / screenWidth;
+		ray += FOV / cub->scene.screen_width;
 		// printf("%f\n", ray);
 		x++;
 	}

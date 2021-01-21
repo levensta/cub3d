@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/19 23:09:45 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/21 21:43:29 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,17 @@ static void	check_outer_spaces(char **map)
 	}
 }
 
+void		set_route(float *route, char c)
+{
+	if (c == 'N')
+		*route = 0;
+	else if (c == 'E')
+		*route = 0.25f;
+	else if (c == 'S')
+		*route = 0.5f;
+	else if (c == 'W')
+		*route = 0.75f;
+}
 static void	check_player(char **map, t_all *cub)
 {
 	int i;
@@ -89,6 +100,7 @@ static void	check_player(char **map, t_all *cub)
 					cub->scene.is_only_plr = 1;
 				cub->plr.x0 = j + 0.5f;
 				cub->plr.y0 = i + 0.5f;
+				set_route(&cub->plr.route, map[i][j]);
 			}
 			j++;
 		}

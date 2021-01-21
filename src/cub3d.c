@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/19 23:42:14 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/21 23:27:59 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@
 void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color)
 {
     char	*dst;
-	if (x < 0 || y < 0 || x >= screenWidth || y >= screenHeight)
+	if (x < 0 || y < 0 || x >= cub->scene.screen_width || y >= cub->scene.screen_height)
 		return ;
 	dst = cub->win.addr + (y * cub->win.line_length + x * (cub->win.bits_per_pixel / 8));
 	// dst = cub->screen.data + (y * cub->s_width + x) * 4;
@@ -120,11 +120,10 @@ int             loop(t_all *cub)
 		ty = cub->plr.y0 - cos(tmp * 2 * M_PI) / SPEED;
 		tx = cub->plr.x0 + sin(tmp * 2 * M_PI) / SPEED;
 	}
-	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(tx)] != '1')
-	{
-		cub->plr.x0 = tx;
+	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '1')
 		cub->plr.y0 = ty;
-	}
+	if (cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '1')
+		cub->plr.x0 = tx;
 	ray_correct(&cub->plr.route);
 	if (cub->keys.key_a || cub->keys.key_d || cub->keys.key_s || cub->keys.key_w || \
 	cub->keys.key_left || cub->keys.key_right)
@@ -146,24 +145,29 @@ void	ray_correct(float *ray)
 void	textures_init(t_all *cub)
 {
 	int i;
-	int k;
+	int	k;
+	int	j;
+	int	q;
+	cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.north, \
+	&(cub->txt[0].width), &(cub->txt[0].height));
+	cub->txt[0].addr = mlx_get_data_addr(cub->txt[0].img, \
+	&(cub->txt[0].bits_per_pixel), &(cub->txt[0].line_length), &i);
 
-	char *textures[4] =
-	{
-		"./elmo.xpm",
-		"./kermit.xpm",
-		"./bert.xpm",
-		"./cookie.xpm"
-	};
-	k = 0;
-	while (k < 4)
-	{
-		cub->txt[k].img = mlx_xpm_file_to_image(cub->vars.mlx, textures[k], \
-		&(cub->txt[k].width), &(cub->txt[k].height));
-		cub->txt[k].addr = mlx_get_data_addr(cub->txt[k].img, \
-		&(cub->txt[k].bits_per_pixel), &(cub->txt[k].line_length), &i);
-		k++;
-	}
+	cub->txt[1].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.south, \
+	&(cub->txt[1].width), &(cub->txt[1].height));
+	cub->txt[1].addr = mlx_get_data_addr(cub->txt[1].img, \
+	&(cub->txt[1].bits_per_pixel), &(cub->txt[1].line_length), &k);
+
+	cub->txt[2].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.west, \
+	&(cub->txt[2].width), &(cub->txt[2].height));
+	cub->txt[2].addr = mlx_get_data_addr(cub->txt[2].img, \
+	&(cub->txt[2].bits_per_pixel), &(cub->txt[2].line_length), &j);
+
+	cub->txt[3].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.east, \
+	&(cub->txt[3].width), &(cub->txt[3].height));
+	cub->txt[3].addr = mlx_get_data_addr(cub->txt[3].img, \
+	&(cub->txt[3].bits_per_pixel), &(cub->txt[3].line_length), &q);
+}
 
 
 	// cub->txt_so.img = mlx_xpm_file_to_image(cub->vars.mlx, "./kermit.xpm", \
@@ -180,7 +184,7 @@ void	textures_init(t_all *cub)
 	// &(cub->txt_ea.width), &(cub->txt_ea.height));
 	// cub->txt_ea.addr = mlx_get_data_addr(cub->txt_ea.img, \
 	// &(cub->txt_ea.bits_per_pixel), &(cub->txt_ea.line_length), &i);
-}
+// }
 
 int             key_release(int keycode, t_all *cub)
 {
@@ -233,36 +237,12 @@ void	key_null(t_all *cub)
 
 int rendering(t_all *cub)
 {
-	// cub->plr.x0 = 5.5;
-	// cub->plr.y0 = 4.5;
-	cub->plr.route = 0;
 	cub->vars.mlx = mlx_init();
-	// char worldMap[mapHeight][mapWidth]=
-	// {
-	// "1111111111",
-	// "1000000001",
-	// "1000000001",
-	// "1000000001",
-	// "1000000001",
-	// "1000000001",
-	// "1000000001",
-	// "1000000001",
-	// "1111111111"
-	// };
-
-	// cub->worldMap = malloc (9 * sizeof(char *));
-	// int w = 0;
-	// while (w < 10)
-	// {
-	// 	cub->worldMap[w] = malloc(10);
-	// 	cub->worldMap[w] = worldMap[w];
-	// 	w++;
-	// }
-	cub->vars.win = mlx_new_window(cub->vars.mlx, screenWidth, screenHeight, "cub3D");
-	cub->win.img = mlx_new_image(cub->vars.mlx, screenWidth, screenHeight);
+	cub->vars.win = mlx_new_window(cub->vars.mlx, cub->scene.screen_width, cub->scene.screen_height, "cub3D");
+	cub->win.img = mlx_new_image(cub->vars.mlx, cub->scene.screen_width, cub->scene.screen_height);
 	cub->win.addr = mlx_get_data_addr(cub->win.img, &(cub->win.bits_per_pixel), &(cub->win.line_length), \
                                  &(cub->win.endian));
-	textures_init(cub);
+	// textures_init(cub);
 	key_null(cub);
 	// mlx_key_hook(cub->vars.win, key_hook, NULL);
 	// frame_loop(&cub);

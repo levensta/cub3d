@@ -1,18 +1,14 @@
 R 1920 2507
-NO          ./path_to_the_north_texture
-SO ./path_to_the_south_texture
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
-
-S ./path_to_the_sprite_texture
+NO  ./elmo.xpm
+SO ./kermit.xpm
+WE ./bert.xpm
+EA ./cookie.xpm
 
 F    			220,   100,   10
-
-
 C     225,     30, 5
 
 1111111111
-10000000N1
+10000000S1
 1000000001
 1000000001
 1000000001

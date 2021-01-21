@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/19 23:24:50 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/21 23:32:27 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define CUB3D_H
 # define mapWidth 10
 # define mapHeight 9
-# define screenWidth 640
-# define screenHeight 480
 # define MAC_WIDTH 2560
 # define MAC_HEIGHT 1440
 # define SPEED 15
@@ -32,6 +30,7 @@
 # include "mlx.h"
 # include "libft.h"
 # include <math.h>
+# include <fcntl.h>
 # include <stdio.h>
 
 typedef struct  s_vars {
@@ -98,7 +97,7 @@ typedef	struct	s_all {
 	t_vars		vars;
 	t_player	plr;
 	t_map		scene;
-	t_tex		txt[4];
+	t_tex		txt[4]; // 5
 	int			column_h;
 	int			fd;
 }                t_all;
