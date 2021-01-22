@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/21 21:48:15 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/22 23:45:30 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,15 @@ int	count_column(float x, float y, t_all *cub, float ray)
 
 void	draw_ceil(t_all *cub, int x, int column_h)
 {
-		int		color;
 		float	j;
 		int i;
 
+		if (column_h < 0)
+			column_h = 0;
 		i = (cub->scene.screen_height - column_h) / 2;
-		color = 0x1E91D6;
 		j = -1;
 		while (j++ < i)
-			my_mlx_pixel_put(cub, x, j, color);
+			my_mlx_pixel_put(cub, x, j, cub->scene.ceiling);
 }
 
 void	draw_texture(t_all *cub, int x, float hit, int n)
@@ -92,12 +92,12 @@ void	draw_texture(t_all *cub, int x, float hit, int n)
 void	draw_floor(t_all *cub, int x, int column_h)
 {
 	int j;
-	int color;
 
+	if (column_h < 0)
+		column_h = 0;
 	j = (cub->scene.screen_height + column_h) / 2 - 1;
-	color = 0x4CB963;
 	while (j++ < cub->scene.screen_height)
-		my_mlx_pixel_put(cub, x, j, color);
+		my_mlx_pixel_put(cub, x, j, cub->scene.flooring);
 }
 
 void	clear_image(t_all *cub)

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:01:25 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/19 21:07:45 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/22 23:20:10 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ void	clear_scene(t_all *cub)
 	i = 0;
 	while (i < 3)
 	{
-		cub->scene.floor[i] = -1;
-		cub->scene.celling[i] = -1;
+		cub->scene.flooring = -1;
+		cub->scene.ceiling = -1;
 		i++;
 	}
 	cub->scene.screen_width = 0;
@@ -81,6 +81,8 @@ void	clear_scene(t_all *cub)
 	cub->scene.is_only_plr = 0;
 	cub->scene.is_world_map = 0;
 	cub->column_h = 0;
+	cub->scene.map_height = 0;
+	cub->fd = 0;
 	clear_path(cub);
 	// reset_array(cub->scene.world_map);
 	// if (cub->scene.world_map)

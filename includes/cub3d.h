@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/21 23:32:27 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/22 22:59:28 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ typedef struct	s_map
 	char		*east;
 	char		*west;
 	char		*sprite;
-	int			floor[3]; // переименовать
-	int			celling[3];
+	int			flooring; // переименовать
+	int			ceiling;
 	
 	char		is_last;
 	char		is_only_plr;

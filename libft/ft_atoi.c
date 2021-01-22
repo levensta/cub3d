@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 18:25:54 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/16 19:23:14 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/22 23:42:58 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ int		ft_atoi(const char *str)
 	|| str[i] == '\v' || str[i] == '\r' || str[i] == '\f')
 		i++;
 	if (str[i] == '+')
-		i++;
+		return (-1);
 	else if (str[i] == '-' && ++i)
-		check_symbol = -1;
+		return (-1);
 	while (ft_isdigit(str[i]))
 	{
 		nb = (nb * 10) + (str[i] - '0');

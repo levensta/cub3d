@@ -6,13 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/21 21:43:29 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/22 23:24:54 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void	check_forbidden_symbols(char *str)
+static void	check_forbidden_chars(char *str)
 {
 	int	i;
 
@@ -20,7 +20,7 @@ static void	check_forbidden_symbols(char *str)
 	while (str[i])
 	{
 		if (!ft_memchr("012NSWE \n", str[i], 9))
-			error(5);
+			error(6);
 		i++;
 	}
 }
@@ -95,7 +95,7 @@ static void	check_player(char **map, t_all *cub)
 			|| map[i][j] == 'W' || map[i][j] == 'E'))
 			{
 				if (cub->scene.is_only_plr == 1)
-					error(5);
+					error(7);
 				else
 					cub->scene.is_only_plr = 1;
 				cub->plr.x0 = j + 0.5f;
@@ -108,7 +108,7 @@ static void	check_player(char **map, t_all *cub)
 		cub->scene.map_height = i;
 	}
 	if (cub->scene.is_only_plr == 0)
-		error(5);
+		error(7);
 }
 
 char		**get_map(t_all *cub, char **map)
@@ -121,7 +121,7 @@ char		**get_map(t_all *cub, char **map)
 	make_square(map);
 	while (map[i])
 	{
-		check_forbidden_symbols(map[i]);
+		check_forbidden_chars(map[i]);
 		check_outer_spaces(map);
 		i++;
 	}

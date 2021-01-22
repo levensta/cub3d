@@ -1,9 +1,9 @@
-R 1920 2507
+R 640 480
 NO  ./elmo.xpm
 SO ./kermit.xpm
 WE ./bert.xpm
-EA ./cookie.xpm
-
+EA     ./cookie.xpm
+ 
 F    			220,   100,   10
 C     225,     30, 5
 

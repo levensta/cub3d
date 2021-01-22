@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:10:04 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/19 21:27:24 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/22 23:13:09 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ static char		**ft_split_rgb(char const *s)
 void		get_color(int *rgb, char *color)
 {
 	int		i;
+	int		tmp[3];
 	int		commas;
 	char	**arr;
 	
@@ -99,12 +100,13 @@ void		get_color(int *rgb, char *color)
 	arr = ft_split_rgb(color);
 	while (arr[++i])
 	{
-		if (rgb[i - 1] != -1)
+		if (*rgb != -1)
 			error(4);
-		rgb[i - 1] = ft_atoi(arr[i]);
-		if (rgb[i - 1] < 0 || rgb[i - 1] > 255)
+		tmp[i - 1] = ft_atoi(arr[i]);
+		if (tmp[i - 1] < 0 || tmp[i - 1] > 255)
 			error(4);
 	}
+	*rgb = create_trgb(0, tmp[0], tmp[1], tmp[2]);
 	if (!arr || commas != 2 || i != 4)
 		error(4);
 	free_array(arr);

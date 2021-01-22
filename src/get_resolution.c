@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:12:20 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/19 21:17:46 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/22 23:40:30 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	check_screen_size(int *width, int *height)
 {
 	if (*width > MAC_WIDTH)
-		*width = MAC_HEIGHT;
+		*width = MAC_WIDTH;
 	if (*width < 320)
 		*width = 320;
 	if (*height > MAC_HEIGHT)
@@ -44,5 +44,6 @@ void		get_resolution(t_all *cub, char **arr)
 		error(2);
 	cub->scene.screen_width = ft_atoi(arr[1]);
 	cub->scene.screen_height = ft_atoi(arr[2]);
+	printf("%d, %d\n", cub->scene.screen_width, cub->scene.screen_height);
 	check_screen_size(&(cub->scene.screen_width), &(cub->scene.screen_height));
 }

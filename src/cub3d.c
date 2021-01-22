@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/21 23:27:59 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/22 21:32:10 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,15 +242,12 @@ int rendering(t_all *cub)
 	cub->win.img = mlx_new_image(cub->vars.mlx, cub->scene.screen_width, cub->scene.screen_height);
 	cub->win.addr = mlx_get_data_addr(cub->win.img, &(cub->win.bits_per_pixel), &(cub->win.line_length), \
                                  &(cub->win.endian));
-	// textures_init(cub);
+	textures_init(cub);
 	key_null(cub);
-	// mlx_key_hook(cub->vars.win, key_hook, NULL);
-	// frame_loop(&cub);
 	frame_loop(cub);
 	mlx_loop_hook(cub->vars.mlx, loop, cub);
 	mlx_hook(cub->vars.win, 2, 1L<<0, key_press, cub);
 	mlx_hook(cub->vars.win, 3, 1L<<1, key_release, cub);
-	// mlx_hook(vars.win, 9, 1L<<4, &mouse_print, &vars);
 	mlx_loop(cub->vars.mlx);
 	return (0);
 }
@@ -262,11 +259,11 @@ int     main(int argc, char **argv)
 	t_list	*head = NULL;
 	char	**map;
 
-	if ((cub.fd = open(argv[1], O_RDONLY)) == -1)
-		error(5);
 	clear_scene(&cub);
 	if (argc == 2)
 	{
+		if ((cub.fd = open(argv[1], O_RDONLY)) == -1)
+			error(100);
 		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1] - 4)]))
 			error(1);
 		while (get_next_line(cub.fd, &line) == 1)
