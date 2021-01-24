@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/24 04:45:53 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/24 09:44:24 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ typedef struct  s_tex {
 }               t_tex;
 
 typedef struct	s_sprite {
-	int 		x;
-	int			y;
+	float 		x;
+	float		y;
 	float		distance;
 } 				t_sprite;
 
@@ -109,6 +109,7 @@ typedef	struct	s_all {
 	float		ray;
 	int			fd;
 	int			num_spr;
+	int			x;
 }                t_all;
 
 void			ft_putchar(char c);

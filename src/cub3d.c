@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/24 03:28:12 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/24 12:21:33 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int             loop(t_all *cub)
     	mlx_destroy_image(cub->vars.mlx, cub->txt[1].img);
     	mlx_destroy_image(cub->vars.mlx, cub->txt[2].img);
     	mlx_destroy_image(cub->vars.mlx, cub->txt[3].img);
+    	mlx_destroy_image(cub->vars.mlx, cub->txt[4].img);
     	mlx_destroy_image(cub->vars.mlx, cub->win.img);
     	mlx_destroy_window(cub->vars.mlx, cub->vars.win);
 		exit(0);
@@ -68,9 +69,11 @@ int             loop(t_all *cub)
 		ty = cub->plr.y0 - cos(tmp * 2 * M_PI) / SPEED;
 		tx = cub->plr.x0 + sin(tmp * 2 * M_PI) / SPEED;
 	}
-	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '1')
+	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '1' )
+	// &&	cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '2')
 		cub->plr.y0 = ty;
-	if (cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '1')
+	if (cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '1' )
+	// &&	cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '2')
 		cub->plr.x0 = tx;
 	ray_correct(&cub->plr.route);
 	if (cub->keys.key_a || cub->keys.key_d || cub->keys.key_s || cub->keys.key_w || \
@@ -227,8 +230,10 @@ int     main(int argc, char **argv)
 		cub.scene.south, cub.scene.west, cub.scene.east, cub.scene.sprite);
 		rendering(&cub);
 		free_array(map);
-		// free(line);
+		free(line);
+		free(cub.vars.mlx);
 		free(head);
+		free(cub.sprite);
 		close(cub.fd);
 	}
 	return (0);
