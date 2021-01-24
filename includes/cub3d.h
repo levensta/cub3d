@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/22 22:59:28 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/24 04:45:53 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,12 @@ typedef struct  s_tex {
 	int         bits_per_pixel;
 }               t_tex;
 
+typedef struct	s_sprite {
+	int 		x;
+	int			y;
+	float		distance;
+} 				t_sprite;
+
 typedef struct  s_keys {
 	char		key_a;
 	char		key_s;
@@ -97,9 +103,12 @@ typedef	struct	s_all {
 	t_vars		vars;
 	t_player	plr;
 	t_map		scene;
-	t_tex		txt[4]; // 5
+	t_tex		txt[5];
+	t_sprite	*sprite;
 	int			column_h;
+	float		ray;
 	int			fd;
+	int			num_spr;
 }                t_all;
 
 void			ft_putchar(char c);

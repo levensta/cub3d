@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/22 23:45:30 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/24 04:46:28 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,21 @@ float	absf(float f)
 	return (f);
 }
 
-int	count_column(float x, float y, t_all *cub, float ray)
+float	count_distance(float x, float y, float route, float ray)
+{
+	float distance;
+
+	distance = sqrtf(powf(x, 2) + powf(y, 2));
+	distance = distance * cosf(absf(route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
+	return (distance);
+}
+
+int	count_column(float x, float y, t_all *cub)
 {
 	float	distance;
 	int		column_h;
 	
-	distance = 0;
-	distance = sqrtf(powf(x, 2) + powf(y, 2));
-	distance = distance * cosf(absf(cub->plr.route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
-
+	distance = count_distance(x, y, cub->plr.route, cub->ray);
 	column_h = cub->scene.screen_height / 2;
 	column_h = (float)column_h / tanf((FOV * 360.0f / 2.0f) * (M_PI / 180.0f));
 	column_h = (int)ceilf((float)column_h / distance);
@@ -64,6 +70,32 @@ void	draw_ceil(t_all *cub, int x, int column_h)
 }
 
 void	draw_texture(t_all *cub, int x, float hit, int n)
+{
+	unsigned int	color;
+	float			j;
+	int				i;
+	int				max;
+
+	i = (cub->scene.screen_height - cub->column_h) / 2;
+	j = 0;
+	max = (cub->scene.screen_height + cub->column_h) / 2;
+	if (i < 0)
+	{
+		j = ((float)cub->txt[n].height / (float)cub->column_h) * (-i);
+		i = 0;
+		max = cub->scene.screen_height;
+	}
+	hit *= cub->txt[n].width;
+	while (i < max)
+	{
+		color = *(unsigned int*)(cub->txt[n].addr + ((int)j * cub->txt[n].line_length + (int)hit * (cub->txt[n].bits_per_pixel / 8)));
+		my_mlx_pixel_put(cub, x, i, color);
+		i++;
+		j += (float)cub->txt[n].height / (float)cub->column_h;
+	}
+}
+
+void	draw_sprite(t_all *cub, int x, float hit, int n)
 {
 	unsigned int	color;
 	float			j;
@@ -113,14 +145,82 @@ void	clear_image(t_all *cub)
 	}
 }
 
+int		find_repeat_spr(t_all *cub, int x1, int y1, char side)
+{
+	int i;
+
+	i = 0;
+	if (side == 'W')
+		x1 -= 1;
+	if (side == 'S')
+		y1 -= 1;
+	while (i < cub->num_spr)
+	{
+		if (cub->sprite[i].x == x1 && cub->sprite[i].y == y1)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	sort_sprites(t_all *cub)
+{
+	t_sprite tmp;
+	int		i;
+	int		j;
+	char	flag;
+
+	i = 0;
+	while (i < cub->num_spr)
+	{
+		flag = 1;
+		j = 0;
+		while (j < cub->num_spr - (i + 1))
+		{
+			if (cub->sprite[j].distance < cub->sprite[j + 1].distance)
+			{
+				flag = 0;
+				tmp = cub->sprite[j];
+				cub->sprite[j] = cub->sprite[j + 1];
+				cub->sprite[j + 1] = tmp;
+			}
+			j++;
+		}
+		if (flag)
+			break;
+		i++;
+	}
+}
+void	find_sprite(t_all *cub, float x1, float y1, char side)
+{
+	int i;
+
+	i = 0;
+	if (find_repeat_spr(cub, (int)floorf(x1), (int)floorf(y1), side))
+		return ;
+	cub->sprite[cub->num_spr].x = (int)floorf(x1);
+	cub->sprite[cub->num_spr].y = (int)floorf(y1);
+	if (side == 'W')
+		cub->sprite[cub->num_spr].x -= 1;
+	if (side == 'S')
+		cub->sprite[cub->num_spr].y -= 1;
+	cub->sprite[cub->num_spr].distance = count_distance(cub->plr.x0 - x1, cub->plr.y0 - y1, cub->plr.route, cub->ray);
+	cub->num_spr++;
+	sort_sprites(cub);
+	while(i < cub->num_spr)
+	{
+		draw_sprite(cub, x, );
+		i++;
+	}
+}
+
 int	frame_loop(t_all *cub)
 {
 
 	int		x = 0;
 	float	x1;
 	float	y1;
-	// int		column_h = 0;
-	int		wall = 0;
+	char	wall = 0;
 	float 	a;
 	float	b;
 
@@ -129,39 +229,47 @@ int	frame_loop(t_all *cub)
 
 	float		dx;
 	float		dy;
-	float		ray;
-	//x and y start position
-    ray = cub->plr.route - FOV/2;
+    cub->ray = cub->plr.route - FOV/2;
 	clear_image(cub);
-	ray_correct(&ray);
+	ray_correct(&cub->ray);
+	int		i;
+	i = 0;
+	while (i < cub->num_spr)
+	{
+		cub->sprite[i].x = 0;
+		cub->sprite[i].y = 0;
+		cub->sprite[i].distance = 0;
+		i++;
+	}
+	cub->num_spr = 0;
     while (x < cub->scene.screen_width)
     {
 		wall = 0;
 		x1 = cub->plr.x0;
 		y1 = cub->plr.y0;
-		ray_correct(&ray);
+		ray_correct(&cub->ray);
 		// printf("-------_______-----\n");
 		while (!wall)
 		{
-			// printf("%f\n", ray);
-			if (ray <= 0.5)
+			// printf("%f\n", cub->ray);
+			if (cub->ray <= 0.5)
 				dx = ceilf(x1 + EPS) - x1;
 			else
 				dx = x1 - floorf(x1 - EPS);
-			if (ray >= 0.25 && ray < 0.75)
+			if (cub->ray >= 0.25 && cub->ray < 0.75)
 				dy = ceilf(y1 + EPS) - y1;
 			else   
 				dy = y1 - floorf(y1 - EPS);
 
-			if ((ray >= 0.25 && ray < 0.5) || (ray >= 0.75 && ray < 1))
+			if ((cub->ray >= 0.25 && cub->ray < 0.5) || (cub->ray >= 0.75 && cub->ray < 1))
 			{
-				a = tanf(fmodf(ray, 0.25f) * 2 * M_PI) * dx;
-				b = tanf(M_PI_2 - fmodf(ray, 0.25f) * 2 * M_PI) * dy;
+				a = tanf(fmodf(cub->ray, 0.25f) * 2 * M_PI) * dx;
+				b = tanf(M_PI_2 - fmodf(cub->ray, 0.25f) * 2 * M_PI) * dy;
 			}
 			else
 			{
-				a = tanf(M_PI_2 - fmodf(ray, 0.25f) * 2 * M_PI) * dx;
-				b = tanf(fmodf(ray, 0.25f) * 2 * M_PI) * dy;
+				a = tanf(M_PI_2 - fmodf(cub->ray, 0.25f) * 2 * M_PI) * dx;
+				b = tanf(fmodf(cub->ray, 0.25f) * 2 * M_PI) * dy;
 			}
 			float c;
 			float d;
@@ -170,22 +278,22 @@ int	frame_loop(t_all *cub)
 			d = sqrtf(dy * dy + b * b);
 			if (d < c)
 			{
-				if (ray <= 0.5)
+				if (cub->ray <= 0.5)
 					x1 += b;
 				else
 					x1 -= b;
-				if (ray >= 0.25 && ray < 0.75)
+				if (cub->ray >= 0.25 && cub->ray < 0.75)
 					y1 = ceilf(y1 + EPS);
 				else
 					y1 = floorf(y1 - EPS);
 			}
 			else
 			{
-				if (ray <= 0.5)
+				if (cub->ray <= 0.5)
 					x1 = ceilf(x1 + EPS);
 				else
 					x1 = floorf(x1 - EPS);
-				if (ray >= 0.25 && ray < 0.75)
+				if (cub->ray >= 0.25 && cub->ray < 0.75)
 					y1 += a;
 				else
 					y1 -= a;
@@ -201,6 +309,10 @@ int	frame_loop(t_all *cub)
 					wall = 1;
 				else if (cub->scene.world_map[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS) - 1] == '1')
 					wall = 1;
+				if (cub->scene.world_map[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS)] == '2')
+					find_sprite(cub, x1, y1, 0);
+				if (cub->scene.world_map[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS) - 1] == '2')
+					find_sprite(cub, x1, y1, 'W');
 				is_x = 1;
 			}
 			if (y1 - floorf(y1) < EPS)
@@ -209,68 +321,44 @@ int	frame_loop(t_all *cub)
 					wall = 1;
 				else if (cub->scene.world_map[(int)floorf(y1 + EPS) - 1][(int)floorf(x1 + EPS)] == '1')
 					wall = 1;
+				if (cub->scene.world_map[(int)floorf(y1 + EPS)][(int)floorf(x1 + EPS)] == '2')
+					find_sprite(cub, x1, y1, 0);
+				if (cub->scene.world_map[(int)floorf(y1 + EPS) - 1][(int)floorf(x1 + EPS)] == '2')
+					find_sprite(cub, x1, y1, 'S');
 				is_x = 0;
 			}
 
 		}
 //
-		// float			hit;
-		// unsigned int	color;
-		char			is_west = 0;
-		char			is_north = 0;
 		cub->column_h = count_column(cub->plr.x0 - x1, \
-		cub->plr.y0 - y1, cub, ray);
+		cub->plr.y0 - y1, cub);
 		if (is_x)
 		{
-			if (ray >= 0 && ray < 0.5f) // east
-			{
+			if (cub->ray >= 0 && cub->ray < 0.5f) // east
 				draw_texture(cub, x, y1 - floorf(y1), 3);
-				// hit = y1 - floorf(y1);
-				is_west = 1;
-			}
 			else
-			{
-				draw_texture(cub, x, ceilf(y1) - y1, 2);
-				// hit = ceilf(y1) - y1; // west
-				is_west = 0;
-			}
+				draw_texture(cub, x, ceilf(y1) - y1, 2); // west
 		}
 		else
 		{
-			if (ray >= 0.25f && ray < 0.75f) // south
-			{
+			if (cub->ray >= 0.25f && cub->ray < 0.75f) // south
 				draw_texture(cub, x, ceilf(x1) - x1, 1);
-				// hit = ceilf(x1) - x1;
-				is_north = 1;
-			}
 			else // north
-			{
 				draw_texture(cub, x, x1 - floorf(x1), 0);
-				// hit = x1 - floorf(x1);
-				is_north = 0;
-			}
 		}
-
 		draw_ceil(cub, x, cub->column_h);
-		// hit *= cub->txt[].width;
 		draw_floor(cub, x, cub->column_h);
 
 //
-		// printf("%f\n", ray);
-		ray += FOV / cub->scene.screen_width;
-		// printf("%f\n", ray);
+		cub->ray += FOV / cub->scene.screen_width;
 		x++;
 	}
-	// int tx;
-	// int ty;
-	// mlx_mouse_get_pos(cub->vars.win, &tx, &ty);
 
 	// printf("x: %d, y: %d\n", tx, ty);
 	// printf("route: %f\n", cub->plr.route);
 	// printf("x: %f\n", cub->pl r.x0);
 	// printf("y: %f\n", cub->plr.y0);
 	mlx_put_image_to_window(cub->vars.mlx, cub->vars.win, cub->win.img, 0, 0);
-	// mlx_put_image_to_window(cub->vars.mlx, cub->vars.win, cub->tex.img, 0, 0);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/22 23:24:54 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/24 04:45:39 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,22 @@ static void	check_player(char **map, t_all *cub)
 		error(7);
 }
 
+int		count_sprites(char *str)
+{
+	int i;
+	int count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '2')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 char		**get_map(t_all *cub, char **map)
 {
 	int		i;
@@ -118,13 +134,17 @@ char		**get_map(t_all *cub, char **map)
 
 	i = 0;
 	j = 0;
+	cub->num_spr = 0;
 	make_square(map);
 	while (map[i])
 	{
 		check_forbidden_chars(map[i]);
 		check_outer_spaces(map);
+		cub->num_spr += count_sprites(map[i]);
 		i++;
 	}
+	cub->sprite = malloc(sizeof(t_sprite) * cub->num_spr);
+	cub->num_spr = 0;
 	check_player(map, cub);
 	cub->scene.is_world_map = 1;
 	return (map);

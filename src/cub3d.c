@@ -6,65 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/22 21:32:10 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/24 03:28:12 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "get_next_line.h"
 #include <fcntl.h>
-
-// void line(t_data *data, int x1, int x2, int y1, int y2, int color)
-// {
-//     const int deltaX = abs(x2 - x1);
-//     const int deltaY = abs(y2 - y1);
-//     const int signX = x1 < x2 ? 1 : -1;
-//     const int signY = y1 < y2 ? 1 : -1;
-//     int error = deltaX - deltaY;
-//     my_mlx_pixel_put(data, x2, y2, color);
-//     while(x1 != x2 || y1 != y2) 
-//    {
-//         my_mlx_pixel_put(data, x1, y1, color);
-//         int error2 = error * 2;
-//         if(error2 > -deltaY) 
-//         {
-//             error -= deltaY;
-//             x1 += signX;
-//         }
-//         if(error2 < deltaX) 
-//         {
-//             error += deltaX;
-//             y1 += signY;
-//         }
-//     }
-// }
-
-// void	circle(t_data *data, int x1, int y1, int R, int color)
-// {
-//    int x = 0;
-//    int y = R;
-//    int delta = 1 - 2 * R;
-//    int error = 0;
-//    while (y >= 0)
-//    {
-// 	   my_mlx_pixel_put(data, x1 + x, y1 + y, color);
-// 	   my_mlx_pixel_put(data, x1 + x, y1 - y, color);
-//        my_mlx_pixel_put(data, x1 - x, y1 + y, color);
-//        my_mlx_pixel_put(data, x1 - x, y1 - y, color);
-//        error = 2 * (delta + y) - 1;
-//        if ((delta < 0) && (error <= 0))
-// 	   {
-//            delta += 2 * ++x + 1;
-//            continue ;
-// 	   }
-//        if ((delta > 0) && (error > 0))
-// 	   {
-//            delta -= 2 * --y + 1;
-//            continue ;
-// 	   }
-//        delta += 2 * (++x - --y);
-//    }
-// }
 
 void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color)
 {
@@ -145,9 +93,7 @@ void	ray_correct(float *ray)
 void	textures_init(t_all *cub)
 {
 	int i;
-	int	k;
-	int	j;
-	int	q;
+
 	cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.north, \
 	&(cub->txt[0].width), &(cub->txt[0].height));
 	cub->txt[0].addr = mlx_get_data_addr(cub->txt[0].img, \
@@ -156,17 +102,22 @@ void	textures_init(t_all *cub)
 	cub->txt[1].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.south, \
 	&(cub->txt[1].width), &(cub->txt[1].height));
 	cub->txt[1].addr = mlx_get_data_addr(cub->txt[1].img, \
-	&(cub->txt[1].bits_per_pixel), &(cub->txt[1].line_length), &k);
+	&(cub->txt[1].bits_per_pixel), &(cub->txt[1].line_length), &i);
 
 	cub->txt[2].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.west, \
 	&(cub->txt[2].width), &(cub->txt[2].height));
 	cub->txt[2].addr = mlx_get_data_addr(cub->txt[2].img, \
-	&(cub->txt[2].bits_per_pixel), &(cub->txt[2].line_length), &j);
+	&(cub->txt[2].bits_per_pixel), &(cub->txt[2].line_length), &i);
 
 	cub->txt[3].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.east, \
 	&(cub->txt[3].width), &(cub->txt[3].height));
 	cub->txt[3].addr = mlx_get_data_addr(cub->txt[3].img, \
-	&(cub->txt[3].bits_per_pixel), &(cub->txt[3].line_length), &q);
+	&(cub->txt[3].bits_per_pixel), &(cub->txt[3].line_length), &i);
+
+	cub->txt[4].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.sprite, \
+	&(cub->txt[4].width), &(cub->txt[4].height));
+	cub->txt[4].addr = mlx_get_data_addr(cub->txt[4].img, \
+	&(cub->txt[4].bits_per_pixel), &(cub->txt[4].line_length), &i);
 }
 
 

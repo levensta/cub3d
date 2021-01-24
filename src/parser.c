@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/22 23:29:15 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/24 03:24:50 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@ void	check_is_last(t_all *cub)
 {
 	if (cub->scene.screen_height && cub->scene.screen_width && \
 	cub->scene.north && cub->scene.south && cub->scene.east && \
-	cub->scene.west && cub->scene.flooring != -1 && \
+	cub->scene.west && cub->scene.sprite && cub->scene.flooring != -1 && \
 	cub->scene.ceiling != -1)
 		cub->scene.is_last = 1;
-		//  && cub->scene.sprite
 }
 
 void	check_all(t_all *cub)
@@ -27,9 +26,8 @@ void	check_all(t_all *cub)
 	printf("%d, %d\n", cub->scene.ceiling, cub->scene.flooring);
 	if (!cub->scene.screen_height || !cub->scene.screen_width || \
 	!cub->scene.north || !cub->scene.south || !cub->scene.east || \
-	!cub->scene.west || cub->scene.flooring == -1 || \
+	!cub->scene.west || !cub->scene.sprite || cub->scene.flooring == -1 || \
 	cub->scene.ceiling == -1 || !cub->scene.is_world_map)
-	//  || !cub->scene.sprite
 		error(8);
 }
 
@@ -59,8 +57,8 @@ int		checkers(t_all *cub, char **map, char **arr, int i)
 		cub->scene.west = get_path(cub->scene.west, arr);
 	else if (!ft_strcmp("EA", arr[0]))
 		cub->scene.east = get_path(cub->scene.east, arr);
-	// else if (!ft_strcmp("S", arr[0]))
-	// 	get_path(&cub->scene.sprite, arr);
+	else if (!ft_strcmp("S", arr[0]))
+		cub->scene.sprite = get_path(cub->scene.sprite, arr);
 	else if (!ft_strcmp("F", arr[0]))
 		get_color(&cub->scene.flooring, map[i]);
 	else if (!ft_strcmp("C", arr[0]))
