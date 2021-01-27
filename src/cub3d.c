@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/24 12:21:33 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/27 21:34:08 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,19 @@ void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color)
 	*(unsigned int*)dst = color;
 }
 
+int				escape(t_all *cub)
+{
+	mlx_destroy_image(cub->vars.mlx, cub->txt[0].img);
+	mlx_destroy_image(cub->vars.mlx, cub->txt[1].img);
+	mlx_destroy_image(cub->vars.mlx, cub->txt[2].img);
+	mlx_destroy_image(cub->vars.mlx, cub->txt[3].img);
+	mlx_destroy_image(cub->vars.mlx, cub->txt[4].img);
+	mlx_destroy_image(cub->vars.mlx, cub->win.img);
+	mlx_destroy_window(cub->vars.mlx, cub->vars.win);
+	exit(0);
+	return (0);
+}
+
 int             loop(t_all *cub)
 {
 	float tx;
@@ -31,16 +44,7 @@ int             loop(t_all *cub)
 	float tmp = cub->plr.route + 0.25f;
 	ray_correct(&tmp);
 	if (cub->keys.key_esc)
-	{
-    	mlx_destroy_image(cub->vars.mlx, cub->txt[0].img);
-    	mlx_destroy_image(cub->vars.mlx, cub->txt[1].img);
-    	mlx_destroy_image(cub->vars.mlx, cub->txt[2].img);
-    	mlx_destroy_image(cub->vars.mlx, cub->txt[3].img);
-    	mlx_destroy_image(cub->vars.mlx, cub->txt[4].img);
-    	mlx_destroy_image(cub->vars.mlx, cub->win.img);
-    	mlx_destroy_window(cub->vars.mlx, cub->vars.win);
-		exit(0);
-	}
+		escape(cub);
 	if (cub->keys.key_left) // <-
 	{
 		cub->plr.route -= 0.0050f;
@@ -189,8 +193,9 @@ void	key_null(t_all *cub)
 	cub->keys.key_esc = 0;
 }
 
-int rendering(t_all *cub)
+int rendering(t_all *cub, int argc)
 {
+	(void)argc;
 	cub->vars.mlx = mlx_init();
 	cub->vars.win = mlx_new_window(cub->vars.mlx, cub->scene.screen_width, cub->scene.screen_height, "cub3D");
 	cub->win.img = mlx_new_image(cub->vars.mlx, cub->scene.screen_width, cub->scene.screen_height);
@@ -199,9 +204,12 @@ int rendering(t_all *cub)
 	textures_init(cub);
 	key_null(cub);
 	frame_loop(cub);
+	// if (argc == 3)
+	// 	save_bmp(cub);
 	mlx_loop_hook(cub->vars.mlx, loop, cub);
 	mlx_hook(cub->vars.win, 2, 1L<<0, key_press, cub);
 	mlx_hook(cub->vars.win, 3, 1L<<1, key_release, cub);
+	mlx_hook(cub->vars.win, 17, 1L<<17, escape, cub);
 	mlx_loop(cub->vars.mlx);
 	return (0);
 }
@@ -214,11 +222,12 @@ int     main(int argc, char **argv)
 	char	**map;
 
 	clear_scene(&cub);
-	if (argc == 2)
+	if (argc > 1 && argc < 4)
 	{
 		if ((cub.fd = open(argv[1], O_RDONLY)) == -1)
 			error(100);
-		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1] - 4)]))
+		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1] - 4)]) \
+			|| (argc == 3 && ft_strcmp("--save", argv[2])))
 			error(1);
 		while (get_next_line(cub.fd, &line) == 1)
 			ft_lstadd_back(&head, ft_lstnew(line));
@@ -228,7 +237,7 @@ int     main(int argc, char **argv)
 		check_all(&cub);
 		printf("%d\n%d\n%s\n%s\n%s\n%s\n%s\n", cub.scene.screen_width, cub.scene.screen_height, cub.scene.north, \
 		cub.scene.south, cub.scene.west, cub.scene.east, cub.scene.sprite);
-		rendering(&cub);
+		rendering(&cub, argc);
 		free_array(map);
 		free(line);
 		free(cub.vars.mlx);

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:13:43 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/22 21:33:23 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/27 21:33:03 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	error(int code)
 {
 	ft_putstr_fd("Error\n", 1);
 	if (code == 1)
-		ft_putstr_fd("File extension is not .cube\n", 1);
+		ft_putstr_fd("Invalid arguments\n", 1);
 	else if (code == 2)
 		ft_putstr_fd("Check your screen resolution\n", 1);
 	else if (code == 3)

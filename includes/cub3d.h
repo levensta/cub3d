@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/24 09:44:24 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/27 21:16:10 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int	frame_loop(t_all *cub);
 void    clear_image(t_all *cub);
 
 void	parser(t_all *cub, char **map);
-int		rendering(t_all *cub);
+int rendering(t_all *cub, int argc);
 void	check_all(t_all *cub);
 char	**make_map(t_list **head, int size);
 void	clear_scene(t_all *cub);
@@ -142,5 +142,6 @@ void	get_color(int *rgb, char *color);
 char	**get_map(t_all *cub, char **map);
 void	error(int code);
 void			make_square(char **map);
+int				escape(t_all *cub);
 
 #endif

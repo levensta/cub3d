@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:10:04 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/22 23:13:09 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/24 22:59:54 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void		get_color(int *rgb, char *color)
 	arr = ft_split_rgb(color);
 	while (arr[++i])
 	{
-		if (*rgb != -1)
+		if (*rgb != -1 || ft_strlen(arr[i]) > 3)
 			error(4);
 		tmp[i - 1] = ft_atoi(arr[i]);
 		if (tmp[i - 1] < 0 || tmp[i - 1] > 255)
