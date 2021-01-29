@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/27 19:36:23 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/28 19:10:23 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,6 @@ char		**get_map(t_all *cub, char **map)
 		i++;
 	}
 	cub->sprite = malloc(sizeof(t_sprite) * cub->num_spr);
-	cub->num_spr = 0;
 	check_player(map, cub);
 	cub->scene.is_world_map = 1;
 	return (map);

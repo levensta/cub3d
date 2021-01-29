@@ -12,8 +12,12 @@ FUNC =	cub3d \
 		get_path \
 		get_map \
 		make_square \
-		ft_utils \
+		color_utils \
+		image_utils \
+		sprite_utils \
 		frame_loop \
+		drawing \
+		keys \
 		parser
 		
 SRC = $(addprefix $(SRCS), $(addsuffix .c, $(FUNC)))
@@ -27,6 +31,7 @@ $(NAME): $(OBJ)
 	cp ./minilibx_opengl/libmlx.a .
 	cp ./libft/libft.a .
 	gcc libft.a libmlx.a -I ./includes -I ./libft -L ./ -lmlx -framework OpenGL -framework AppKit -lm $(OBJ) -o $(NAME)
+	mv $(OBJ) ./obj
 %.o: %.c
 	gcc $(FLAGS) -I ./includes -I ./libft -I ./minilibx_opengl -c $< -o $@
 clean:

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/27 21:16:10 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/29 23:15:44 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # define mapHeight 9
 # define MAC_WIDTH 2560
 # define MAC_HEIGHT 1440
-# define SPEED 15
 # define EPS 0.000001
 # define FOV 60.0f/360.0f
 # define W 13
@@ -120,11 +119,23 @@ int				get_t(int trgb);
 int				get_r(int trgb);
 int				get_g(int trgb);
 int				get_b(int trgb);
-int				invert_trgb(int trgb);
-void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color);
-void	ray_correct(float *ray);
-int	frame_loop(t_all *cub);
-void    clear_image(t_all *cub);
+void			my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color);
+void			ray_correct(float *ray);
+void			clear_image(t_all *cub);
+int				count_column(float x, float y, t_all *cub);
+float			count_distance(float x, float y, float route, float ray);
+void			draw_ceil(t_all *cub, int column_h);
+void			draw_floor(t_all *cub, int column_h);
+void			draw_texture(t_all *cub, float hit, int size, int n);
+void			draw_sprite(t_all *cub, t_sprite sprite, float x1, float y1);
+void			find_sprite(t_all *cub, int x1, int y1);
+void			find_dists(t_all *cub);
+void			sort_sprites(t_all *cub);
+int				frame_loop(t_all *cub);
+void			key_null(t_all *cub);
+int             key_press(int keycode, t_all *cub);
+int             key_release(int keycode, t_all *cub);
+int				escape(t_all *cub);
 
 void	parser(t_all *cub, char **map);
 int rendering(t_all *cub, int argc);
