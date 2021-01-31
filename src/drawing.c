@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:34:56 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/29 22:49:00 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/31 22:01:37 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,24 +68,50 @@ void        draw_sprite(t_all *cub, t_sprite sprite, float x1, float y1)
     t_sprite ang;
     t_sprite dist;
     t_sprite dp;
-    int     tx;
-    int     size;
+    float     tx;
+    float     size;
 
 	y1 = y1 + 0;
 	x1 = x1 + 0;
     ang.x = cub->plr.route + 0.25f;
-    if (ang.x > 1.0f)
-        ang.x -= 1.0f;
+	ray_correct(&ang.x);
     ang.x *= (2 * M_PI);
-    dist.y = (cub->scene.screen_width / 2) / tan(((60.0f * M_PI / 180.0f) / 2));
-    dp.x = cub->plr.x0 - (sprite.x + 0.5f);
-    dp.y = cub->plr.y0 - (sprite.y + 0.5f);
-    ang.y = atan2(dp.y, dp.x) - ang.x; // абсолютное направление от игрока до спрайта
+    dist.y = (cub->scene.screen_width / 2) / tanf(((60.0f * M_PI / 180.0f) / 2));
+    dp.x = cub->plr.x0 - (sprite.x);
+    dp.y = cub->plr.y0 - (sprite.y);
+    ang.y = atan2f(dp.y, dp.x) - ang.x; // абсолютное направление от игрока до спрайта
     size = dist.y / (cosf(ang.y) * sprite.distance); // ширина и высота спрайта (квадратный)
-    tx = cub->scene.screen_width / 2 + tan(ang.y) * dist.y - size / 2; // точка пересечения луча со спрайтом
-  if (size <= 0 || tx >= cub->scene.screen_width \
-	|| cub->x < tx || cub->x >= tx + size)
-        return ;
-	if (sprite.distance <= sqrtf(powf(x1 - cub->plr.x0, 2) + powf(y1 - cub->plr.y0, 2)))
+    tx = cub->scene.screen_width / 2 + tanf(ang.y) * dist.y - size / (2); // точка пересечения луча со спрайтом
+	// printf("tan: %f, atan2: %f\n", tanf(ang.y) * dist.y - size / (2), atan2f(dp.y, dp.x) - ang.x);
+  	if (size <= 0)
+	{
+		// printf("size <= 0\n");
+		return ;
+	}
+	 if (cub->x >= tx + size)
+	{
+		// printf("cub->x >= tx + size\n");
+		return ;
+	}
+	else if (cub->x < tx)
+	{
+		// printf("cub->x < tx\n");
+		return ;
+	}
+	else if (tx > cub->scene.screen_width)
+	{
+		// printf("tx > cub->scene.screen_width\n");
+		return ;
+	}
+	float tmp;
+	tmp = sqrtf(powf(cub->plr.x0 - x1, 2) + powf(cub->plr.y0 - y1, 2));
+	tmp *= cosf(fabsf(cub->plr.route * 360.0f - cub->ray * 360.0f) * (M_PI / 180.0f));
+	if (sprite.distance <= tmp)
     	draw_texture(cub, (cub->x - tx) / (float)size, size, 4);
 }
+
+//size = (cub->scene.screen_width / 2) / tan(((60.0f * M_PI / 180.0f) / 2)) / (cosf(ang.y) * sprite.distance); 
+
+
+//sprite.screen_size = (SCALE / sprite.distance) * (all->mapinfo->xrendersize / 2) / tan(FOV / 2);
+

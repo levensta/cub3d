@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:28:21 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/29 22:47:00 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/31 18:59:46 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color)
 
 void	ray_correct(float *ray)
 {
-	while (*ray < 0)
+	while (*ray < 0.0f)
 		*ray += 1;
-    while (*ray >= 1)
+    while (*ray >= 1.0f)
 		*ray -= 1;
 }
 
@@ -48,7 +48,7 @@ float	count_distance(float x, float y, float route, float ray)
 	float distance;
 
 	distance = sqrtf(powf(x, 2) + powf(y, 2));
-	distance = distance * cosf(fabsf(route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
+	distance *= cosf(fabsf(route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
 	return (distance);
 }
 

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/28 19:10:23 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/31 17:55:01 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,22 +109,6 @@ static void	check_player(char **map, t_all *cub)
 	}
 	if (cub->scene.is_only_plr == 0)
 		error(7);
-}
-
-int		count_sprites(char *str)
-{
-	int i;
-	int count;
-
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		if (str[i] == '2')
-			count++;
-		i++;
-	}
-	return (count);
 }
 
 char		**get_map(t_all *cub, char **map)

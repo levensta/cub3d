@@ -6,14 +6,12 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/29 23:15:44 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/31 18:35:27 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define mapWidth 10
-# define mapHeight 9
 # define MAC_WIDTH 2560
 # define MAC_HEIGHT 1440
 # define EPS 0.000001
@@ -128,6 +126,7 @@ void			draw_ceil(t_all *cub, int column_h);
 void			draw_floor(t_all *cub, int column_h);
 void			draw_texture(t_all *cub, float hit, int size, int n);
 void			draw_sprite(t_all *cub, t_sprite sprite, float x1, float y1);
+int				count_sprites(char *str);
 void			find_sprite(t_all *cub, int x1, int y1);
 void			find_dists(t_all *cub);
 void			sort_sprites(t_all *cub);
@@ -138,7 +137,7 @@ int             key_release(int keycode, t_all *cub);
 int				escape(t_all *cub);
 
 void	parser(t_all *cub, char **map);
-int rendering(t_all *cub, int argc);
+int 	rendering(t_all *cub, int argc);
 void	check_all(t_all *cub);
 char	**make_map(t_list **head, int size);
 void	clear_scene(t_all *cub);

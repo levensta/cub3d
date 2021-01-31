@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:13:43 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/27 21:33:03 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/31 20:33:34 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	error(int code)
 	else if (code == 4)
 		ft_putstr_fd("Check your RGB params\n", 1);
 	else if (code == 5)
-		ft_putstr_fd("Invalid map5555\n", 1);
+		ft_putstr_fd("Invalid map\n", 1);
 	else if (code == 6)
 		ft_putstr_fd("Your map contains a forbidden characters\n", 1);
 	else if (code == 7)

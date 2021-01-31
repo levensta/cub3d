@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/29 22:56:02 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/31 21:15:16 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ int	frame_loop(t_all *cub)
     cub->ray = cub->plr.route - FOV/2;
 	// clear_image(cub);
 	ray_correct(&cub->ray);
-	
+	// printf("%f\n", cub->plr.route);
     while (cub->x < cub->scene.screen_width)
     {
-		wall = 0;
 		cub->num_spr = 0;
+		wall = 0;
 		x1 = cub->plr.x0;
 		y1 = cub->plr.y0;
 		ray_correct(&cub->ray);
@@ -75,12 +75,17 @@ int	frame_loop(t_all *cub)
 				a = tanf(M_PI_2 - fmodf(cub->ray, 0.25f) * 2 * M_PI) * dx;
 				b = tanf(fmodf(cub->ray, 0.25f) * 2 * M_PI) * dy;
 			}
-			float c;
-			float d;
+			// float c;
+			// float d;
 
-			c = sqrtf(dx * dx + a * a);
-			d = sqrtf(dy * dy + b * b);
-			if (d < c)
+			// c = sqrtf(dx * dx + a * a);
+			// d = sqrtf(dy * dy + b * b);
+			// float c1;
+			// float d1;
+
+			// c1 = hypotf(dx, a);
+			// d1 = hypotf(dy, b);
+			if (hypotf(dy, b) < hypotf(dx, a))
 			{
 				if (cub->ray <= 0.5)
 					x1 += b;
@@ -104,8 +109,8 @@ int	frame_loop(t_all *cub)
 			}
 
 
-			if (x1 < 0 || y1 < 0 || y1 > mapHeight || x1 > mapWidth)
-			// || y1 > cub->scene.map_height || x1 > map_width(cub->scene.world_map[(int)floorf(y1)])
+			if (x1 < 0 || y1 < 0 || y1 >= cub->scene.map_height || \
+			x1 >= ft_strlen(cub->scene.world_map[(int)floorf(y1)]))
 				wall = 1;
 			if (x1 - floorf(x1) < EPS)
 			{
@@ -153,34 +158,23 @@ int	frame_loop(t_all *cub)
 		draw_ceil(cub, cub->column_h);
 		draw_floor(cub, cub->column_h);
 		int w = 0;
-		int x;
-		int y;
-		mlx_mouse_get_pos(cub->vars.win, &x, &y);
 		find_dists(cub);
 		sort_sprites(cub);
+
 		while (w < cub->num_spr)
 		{
+			// printf("%f, %f\n", cub->sprite[w].x, cub->sprite[w].y);
 			draw_sprite(cub, cub->sprite[w], x1, y1);
-			cub->sprite[w].x = 0;
-			cub->sprite[w].y = 0;
-			cub->sprite[w].distance = 0;
+			// cub->sprite[w].x = 0;
+			// cub->sprite[w].y = 0;
+			// cub->sprite[w].distance = 0;
 			w++;
 		}
+
 		cub->ray += FOV / cub->scene.screen_width;
 		cub->x++;
 	}
 	mlx_put_image_to_window(cub->vars.mlx, cub->vars.win, cub->win.img, 0, 0);
 	return (0);
 }
-
-//      111111111111           
-//      100000000001           
-//      111100011111           
-//         10001     1111      
-// 1111111110001     1001      
-// 1000000000001     1001111111
-// 1111111111001     1000000001
-//          1001     1001111111
-// 1111111111001111111001      
-// 100000000000000000N001      
-// 1111111111111111111111      
+ 

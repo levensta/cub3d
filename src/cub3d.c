@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/29 23:21:16 by levensta         ###   ########.fr       */
+/*   Updated: 2021/01/31 17:29:55 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 
 int             event_loop(t_all *cub)
 {
-	float	speed = 15.0f;
 	float	tx = cub->plr.x0;
 	float	ty = cub->plr.y0;
 	float	tmp = cub->plr.route + 0.25f;
+	float	speed = 15.0f;
 	ray_correct(&tmp);
 	if (cub->keys.key_esc)
 		escape(cub);
@@ -59,6 +59,7 @@ int             event_loop(t_all *cub)
 	ray_correct(&cub->plr.route);
 	if (cub->keys.key_a || cub->keys.key_d || cub->keys.key_s || cub->keys.key_w || \
 	cub->keys.key_left || cub->keys.key_right)
+		// mlx_do_sync(cub->vars.mlx);
 		frame_loop(cub);
 	return(0);
 }
@@ -91,6 +92,7 @@ void	textures_init(t_all *cub)
 	&(cub->txt[4].width), &(cub->txt[4].height));
 	cub->txt[4].addr = mlx_get_data_addr(cub->txt[4].img, \
 	&(cub->txt[4].bits_per_pixel), &(cub->txt[4].line_length), &i);
+	mlx_do_sync(cub->vars.mlx);
 }
 
 int rendering(t_all *cub, int argc)
