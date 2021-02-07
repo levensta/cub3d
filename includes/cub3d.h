@@ -6,12 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/31 18:35:27 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/07 22:09:30 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
+# define BONUS 0
 # define MAC_WIDTH 2560
 # define MAC_HEIGHT 1440
 # define EPS 0.000001
@@ -38,7 +39,7 @@ typedef struct  s_vars {
 typedef struct  s_data {
     void        *img;
     char        *addr;
-    int         bits_per_pixel;
+    int         bpp;
     int         line_length;
     int         endian;
 }               t_data;
@@ -51,15 +52,12 @@ typedef struct  s_player {
 
 typedef struct	s_map
 {
-	int			screen_width;
-	int			screen_height;
-
 	char		*north;
 	char		*south;
 	char		*east;
 	char		*west;
 	char		*sprite;
-	int			flooring; // переименовать
+	int			flooring;
 	int			ceiling;
 	
 	char		is_last;
@@ -75,13 +73,14 @@ typedef struct  s_tex {
 	int			width;
 	int			height;
 	int			line_length;
-	int         bits_per_pixel;
+	int         bpp;
 }               t_tex;
 
 typedef struct	s_sprite {
 	float 		x;
 	float		y;
 	float		distance;
+	float		angle;
 } 				t_sprite;
 
 typedef struct  s_keys {
@@ -94,6 +93,13 @@ typedef struct  s_keys {
 	char		key_esc;
 }				t_keys;
 
+typedef struct  s_cost {
+	int			a;
+	int			w;
+	int			s;
+	int			d;
+}				t_cost;
+
 typedef	struct	s_all {
 	t_keys		keys;
 	t_data		win;
@@ -101,12 +107,17 @@ typedef	struct	s_all {
 	t_player	plr;
 	t_map		scene;
 	t_tex		txt[5];
+	t_tex		bmp;
 	t_sprite	*sprite;
+	int			s_width;
+	int			s_height;
 	int			column_h;
 	float		ray;
 	int			fd;
 	int			num_spr;
+	float		*dists;
 	int			x;
+	char		save;
 }                t_all;
 
 void			ft_putchar(char c);
@@ -121,11 +132,11 @@ void			my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color);
 void			ray_correct(float *ray);
 void			clear_image(t_all *cub);
 int				count_column(float x, float y, t_all *cub);
-float			count_distance(float x, float y, float route, float ray);
 void			draw_ceil(t_all *cub, int column_h);
 void			draw_floor(t_all *cub, int column_h);
 void			draw_texture(t_all *cub, float hit, int size, int n);
 void			draw_sprite(t_all *cub, t_sprite sprite, float x1, float y1);
+void	ft_sprite(t_all *cub);
 int				count_sprites(char *str);
 void			find_sprite(t_all *cub, int x1, int y1);
 void			find_dists(t_all *cub);
@@ -135,9 +146,11 @@ void			key_null(t_all *cub);
 int             key_press(int keycode, t_all *cub);
 int             key_release(int keycode, t_all *cub);
 int				escape(t_all *cub);
+void		draw_sprite2(t_all *cub, int size, int start, float dist);
+int		save_bmp(t_all *cub);
 
 void	parser(t_all *cub, char **map);
-int 	rendering(t_all *cub, int argc);
+int 	rendering(t_all *cub);
 void	check_all(t_all *cub);
 char	**make_map(t_list **head, int size);
 void	clear_scene(t_all *cub);
@@ -150,8 +163,7 @@ char	*get_path(char *path, char **arr);
 void	get_resolution(t_all *cub, char **arr);
 void	get_color(int *rgb, char *color);
 char	**get_map(t_all *cub, char **map);
-void	error(int code);
+void	error(char *str);
 void			make_square(char **map);
-int				escape(t_all *cub);
 
 #endif

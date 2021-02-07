@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:13:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/21 23:33:49 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/07 19:16:37 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ char	*get_path(char *path, char **arr)
 	while(arr[++i])
 	{
 		if (i >= 2 || path)
-			error(3);
+			error("Check your paths of textures");
 	}
 	fd = open(arr[1], O_RDONLY);
 	if (fd == -1)
-		error(3);
+		error("Check your paths of textures");
 	close(fd);
 	return (path = ft_strdup(arr[1]));
 }

@@ -6,25 +6,26 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:42:05 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/31 18:31:17 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/07 19:53:29 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// static int	find_repeat_spr(t_all *cub, int x1, int y1)
-// {
-// 	int i;
+static int	find_repeat_spr(t_all *cub, int x1, int y1)
+{
+	int i;
 
-// 	i = 0;
-// 	while (i < cub->num_spr)
-// 	{
-// 		if ((int)cub->sprite[i].x == x1 && (int)cub->sprite[i].y == y1)
-// 			return (1);
-// 		i++;
-// 	}
-// 	return (0);
-// }
+	i = 0;
+	while (i < cub->num_spr)
+	{
+		if ((int)floorf(cub->sprite[i].x) == x1 \
+		&& (int)floorf(cub->sprite[i].y) == y1)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 int		count_sprites(char *str)
 {
@@ -44,11 +45,8 @@ int		count_sprites(char *str)
 
 void		find_sprite(t_all *cub, int x1, int y1)
 {
-	int i;
-
-	i = 0;
-	// if (find_repeat_spr(cub, x1, y1))
-	// 	return ;
+	if (find_repeat_spr(cub, x1, y1))
+		return ;
 	cub->sprite[cub->num_spr].x = (float)x1 + 0.5f;
 	cub->sprite[cub->num_spr].y = (float)y1 + 0.5f;
 	cub->num_spr++;
@@ -65,7 +63,7 @@ void		find_dists(t_all *cub)
 	{
 		x1 = cub->sprite[i].x;
 		y1 = cub->sprite[i].y;
-		cub->sprite[i].distance = sqrtf(powf(cub->plr.x0 - x1, 2) + powf(cub->plr.y0 - y1, 2));
+		cub->sprite[i].distance = sqrtf(powf(x1 - cub->plr.x0, 2) + powf(y1 - cub->plr.y0, 2));
 	}
 }
 
@@ -97,4 +95,3 @@ void		sort_sprites(t_all *cub)
 		i++;
 	}
 }
-

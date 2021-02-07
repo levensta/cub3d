@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/31 17:29:55 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/07 22:04:43 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,43 +71,52 @@ void	textures_init(t_all *cub)
 	cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.north, \
 	&(cub->txt[0].width), &(cub->txt[0].height));
 	cub->txt[0].addr = mlx_get_data_addr(cub->txt[0].img, \
-	&(cub->txt[0].bits_per_pixel), &(cub->txt[0].line_length), &i);
+	&(cub->txt[0].bpp), &(cub->txt[0].line_length), &i);
 
 	cub->txt[1].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.south, \
 	&(cub->txt[1].width), &(cub->txt[1].height));
 	cub->txt[1].addr = mlx_get_data_addr(cub->txt[1].img, \
-	&(cub->txt[1].bits_per_pixel), &(cub->txt[1].line_length), &i);
+	&(cub->txt[1].bpp), &(cub->txt[1].line_length), &i);
 
 	cub->txt[2].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.west, \
 	&(cub->txt[2].width), &(cub->txt[2].height));
 	cub->txt[2].addr = mlx_get_data_addr(cub->txt[2].img, \
-	&(cub->txt[2].bits_per_pixel), &(cub->txt[2].line_length), &i);
+	&(cub->txt[2].bpp), &(cub->txt[2].line_length), &i);
 
 	cub->txt[3].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.east, \
 	&(cub->txt[3].width), &(cub->txt[3].height));
 	cub->txt[3].addr = mlx_get_data_addr(cub->txt[3].img, \
-	&(cub->txt[3].bits_per_pixel), &(cub->txt[3].line_length), &i);
+	&(cub->txt[3].bpp), &(cub->txt[3].line_length), &i);
 
 	cub->txt[4].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.sprite, \
 	&(cub->txt[4].width), &(cub->txt[4].height));
 	cub->txt[4].addr = mlx_get_data_addr(cub->txt[4].img, \
-	&(cub->txt[4].bits_per_pixel), &(cub->txt[4].line_length), &i);
-	mlx_do_sync(cub->vars.mlx);
+	&(cub->txt[4].bpp), &(cub->txt[4].line_length), &i);
 }
 
-int rendering(t_all *cub, int argc)
+int rendering(t_all *cub)
 {
-	(void)argc;
+	cub->dists = malloc(sizeof(float) * cub->s_width);
 	cub->vars.mlx = mlx_init();
-	cub->vars.win = mlx_new_window(cub->vars.mlx, cub->scene.screen_width, cub->scene.screen_height, "cub3D");
-	cub->win.img = mlx_new_image(cub->vars.mlx, cub->scene.screen_width, cub->scene.screen_height);
-	cub->win.addr = mlx_get_data_addr(cub->win.img, &(cub->win.bits_per_pixel), &(cub->win.line_length), \
+	cub->vars.win = mlx_new_window(cub->vars.mlx, cub->s_width, cub->s_height, "cub3D");
+	cub->win.img = mlx_new_image(cub->vars.mlx, cub->s_width, cub->s_height);
+	cub->win.addr = mlx_get_data_addr(cub->win.img, &(cub->win.bpp), &(cub->win.line_length), \
                                  &(cub->win.endian));
+
+		// cub->bmp.addr = mlx_get_data_addr(cub->bmp.img, &(cub->bmp.bpp), \
+		// &(cub->bmp.line_length), &e);
 	textures_init(cub);
 	key_null(cub);
 	frame_loop(cub);
-	// if (argc == 3)
-	// 	save_bmp(cub);
+	if (cub->save)
+	{
+		int e;
+		cub->bmp.width = cub->s_width;
+		cub->bmp.height = cub->s_height;
+		cub->bmp.img = mlx_new_image(cub->vars.mlx, cub->s_width, cub->s_height);
+		cub->bmp.addr = mlx_get_data_addr(cub->bmp.img, &(cub->bmp.bpp), &(cub->s_width), &e);
+		save_bmp(cub);
+	}
 	mlx_loop_hook(cub->vars.mlx, event_loop, cub);
 	mlx_hook(cub->vars.win, 2, 1L<<0, key_press, cub);
 	mlx_hook(cub->vars.win, 3, 1L<<1, key_release, cub);
@@ -127,19 +136,20 @@ int     main(int argc, char **argv)
 	if (argc > 1 && argc < 4)
 	{
 		if ((cub.fd = open(argv[1], O_RDONLY)) == -1)
-			error(100);
+			error("Such file does not exist");
 		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1] - 4)]) \
 			|| (argc == 3 && ft_strcmp("--save", argv[2])))
-			error(1);
+			error("Invalid arguments");
+		if (argc == 3)
+			cub.save = 1;
 		while (get_next_line(cub.fd, &line) == 1)
 			ft_lstadd_back(&head, ft_lstnew(line));
 		ft_lstadd_back(&head, ft_lstnew(line));
 		map = make_map(&head, ft_lstsize(head));
 		parser(&cub, map);
 		check_all(&cub);
-		printf("%d\n%d\n%s\n%s\n%s\n%s\n%s\n", cub.scene.screen_width, cub.scene.screen_height, cub.scene.north, \
-		cub.scene.south, cub.scene.west, cub.scene.east, cub.scene.sprite);
-		rendering(&cub, argc);
+		rendering(&cub);
+		
 		free_array(map);
 		free(line);
 		free(cub.vars.mlx);
@@ -149,6 +159,3 @@ int     main(int argc, char **argv)
 	}
 	return (0);
 }
-// (232 - r) / 150
-// Если требуется за 30 итераций пройти от числа 10 до 60. Шаг = (60-10)/30=5/3
-// gccw -I /usr/local/include cub3d.c ft_utils.c -L /usr/local/lib -lmlx -framework OpenGL -framework AppKit

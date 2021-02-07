@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:10:04 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/24 22:59:54 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/07 19:45:35 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,13 @@ void		get_color(int *rgb, char *color)
 	while (arr[++i])
 	{
 		if (*rgb != -1 || ft_strlen(arr[i]) > 3)
-			error(4);
+			error("Check your RGB params");
 		tmp[i - 1] = ft_atoi(arr[i]);
 		if (tmp[i - 1] < 0 || tmp[i - 1] > 255)
-			error(4);
+			error("Check your RGB params");
 	}
 	*rgb = create_trgb(0, tmp[0], tmp[1], tmp[2]);
 	if (!arr || commas != 2 || i != 4)
-		error(4);
+		error("Check your RGB params");
 	free_array(arr);
 }

@@ -18,7 +18,8 @@ FUNC =	cub3d \
 		frame_loop \
 		drawing \
 		keys \
-		parser
+		parser \
+		save_bmp
 		
 SRC = $(addprefix $(SRCS), $(addsuffix .c, $(FUNC)))
 OBJ = $(addprefix $(SRCS), $(addsuffix .o, $(FUNC)))

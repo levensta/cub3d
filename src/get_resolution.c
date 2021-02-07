@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:12:20 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/24 22:58:56 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/07 20:15:27 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,17 @@ void		get_resolution(t_all *cub, char **arr)
 		while (arr[i][j])
 		{
 			if (!ft_isdigit(arr[i][j]))
-				error(2);
+				error("Check your screen resolution");
 			j++;
 		}
 	}
-	if (i != 3 || cub->scene.screen_width || cub->scene.screen_height)
-		error(2);
-	if (ft_strlen(arr[1]) > 4 || ft_strlen(arr[2]) > 4)
-		error(2);
-	cub->scene.screen_width = ft_atoi(arr[1]);
-	cub->scene.screen_height = ft_atoi(arr[2]);
-	printf("%d, %d\n", cub->scene.screen_width, cub->scene.screen_height);
-	check_screen_size(&(cub->scene.screen_width), &(cub->scene.screen_height));
+	if (i != 3 || cub->s_width || cub->s_height)
+		error("Check your screen resolution");
+	if (!cub->save)
+		if (ft_strlen(arr[1]) > 4 || ft_strlen(arr[2]) > 4)
+			error("Check your screen resolution");
+	cub->s_width = ft_atoi(arr[1]);
+	cub->s_height = ft_atoi(arr[2]);
+	if (!cub->save)
+		check_screen_size(&(cub->s_width), &(cub->s_height));
 }
-
-// 1111111111111111111111111
-// 1222200000222200000000001
-// 1222200000222200000000001
-// 1222200000222200000000001
-// 1222200000222200000000001
-// 1222200000222200000000001
-// 1222200000222200000N00001
-// 1222200000222200000000001
-// 1222200000222200000000001
-// 1222200000222200000000001
-// 1222200000222200000000001
-// 1222200000222200000000001
-// 1222200000222200000000001
-// 1111111111111111111111111

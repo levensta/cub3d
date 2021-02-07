@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/31 17:55:01 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/07 19:18:43 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	check_forbidden_chars(char *str)
 	while (str[i])
 	{
 		if (!ft_memchr("012NSWE \n", str[i], 9))
-			error(6);
+			error("Your map contains a forbidden characters");
 		i++;
 	}
 }
@@ -34,19 +34,19 @@ static void	check_in_str(char **map, char const *s, int i, int j)
 	{
 		if (map[i][0] == '0' || map[i][0] == '2' || (map[i][j] == s[m] \
 		&& (map[i][j - 1] == ' ' || map[i][j + 1] == ' ' || !map[i][j + 1])))
-			error(5);
+			error("Check your RGB params");
 		if (i > 0)
 		{
 			if (map[i][j] == s[m] && (!map[i - 1][0] || \
 			(map[i - 1][j - 1] == ' ' || map[i - 1][j] == ' ' \
 			|| map[i - 1][j + 1] == ' ')))
-				error(5);
+				error("Check your RGB params");
 		}
 		else if (s[m] == map[i][j])
-			error(5);
+			error("Check your RGB params");
 		if (map[i][j] == s[m] && (!map[i + 1] || (map[i + 1][j - 1] == ' ' \
 		|| map[i + 1][j] == ' ' || map[i + 1][j + 1] == ' ')))
-			error(5);
+			error("Check your RGB params");
 		m++;
 	}
 }
@@ -95,7 +95,7 @@ static void	check_player(char **map, t_all *cub)
 			|| map[i][j] == 'W' || map[i][j] == 'E'))
 			{
 				if (cub->scene.is_only_plr == 1)
-					error(7);
+					error("Your map must be contain only one player");
 				else
 					cub->scene.is_only_plr = 1;
 				cub->plr.x0 = j + 0.5f;
@@ -108,7 +108,7 @@ static void	check_player(char **map, t_all *cub)
 		cub->scene.map_height = i;
 	}
 	if (cub->scene.is_only_plr == 0)
-		error(7);
+		error("Your map must be contain only one player");
 }
 
 char		**get_map(t_all *cub, char **map)

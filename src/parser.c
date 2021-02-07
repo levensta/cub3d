@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/24 03:24:50 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/07 20:15:27 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	check_is_last(t_all *cub)
 {
-	if (cub->scene.screen_height && cub->scene.screen_width && \
+	if (cub->s_height && cub->s_width && \
 	cub->scene.north && cub->scene.south && cub->scene.east && \
 	cub->scene.west && cub->scene.sprite && cub->scene.flooring != -1 && \
 	cub->scene.ceiling != -1)
@@ -23,12 +23,11 @@ void	check_is_last(t_all *cub)
 
 void	check_all(t_all *cub)
 {
-	printf("%d, %d\n", cub->scene.ceiling, cub->scene.flooring);
-	if (!cub->scene.screen_height || !cub->scene.screen_width || \
+	if (!cub->s_height || !cub->s_width || \
 	!cub->scene.north || !cub->scene.south || !cub->scene.east || \
 	!cub->scene.west || !cub->scene.sprite || cub->scene.flooring == -1 || \
 	cub->scene.ceiling == -1 || !cub->scene.is_world_map)
-		error(8);
+		error("Your map is incomplete");
 }
 
 char	**make_map(t_list **head, int size)
@@ -70,7 +69,7 @@ int		checkers(t_all *cub, char **map, char **arr, int i)
 		return (1);
 	}
 	else
-		error(5);
+		error("Check your RGB params");
 	return (0);
 }
 
@@ -93,8 +92,6 @@ void	parser(t_all *cub, char **map)
 		i++;
 	}
 }
-
-// gcc -g -Wall -Wextra -Werror src/parser.c ./src/ft_split_whitespaces.c libft/ft_strdup.c libft/ft_substr.c  libft/ft_lstnew.c libft/ft_lstsize.c ./libft/ft_lstadd_back.c ./libft/ft_atoi.c ./libft/ft_calloc.c ./libft/ft_strncmp.c ./libft/ft_bzero.c ./libft/ft_isdigit.c ./src/get_next_line.c ./src/get_next_line_utils.c ./src/ft_split_rgb.c -I ./includes -I ./libft -I ./minilibx_opengl
 
 //      111111111111
 //      100000000001

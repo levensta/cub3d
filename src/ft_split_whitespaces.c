@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 04:09:38 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/07 04:51:44 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/07 19:45:28 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,3 @@ char		**ft_split_ws(char const *s)
 	words[amount] = NULL;
 	return (words);
 }
-
-// gcc -Wall -Wextra -Werror ft_split_whitespaces.c -I ../libft ../libft/ft_substr.c ../libft/ft_strdup.c ../libft/ft_strlen.c  

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:28:21 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/31 18:59:46 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/07 20:15:27 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color)
 {
     char	*dst;
-	if (x < 0 || y < 0 || x >= cub->scene.screen_width || y >= cub->scene.screen_height)
+	if (x < 0 || y < 0 || x >= cub->s_width || y >= cub->s_height)
 		return ;
-	dst = cub->win.addr + (y * cub->win.line_length + x * (cub->win.bits_per_pixel / 8));
+	dst = cub->win.addr + (y * cub->win.line_length + x * (cub->win.bpp / 8));
 	// dst = cub->screen.data + (y * cub->s_width + x) * 4;
 	*(unsigned int*)dst = color;
 }
@@ -35,31 +35,23 @@ void	clear_image(t_all *cub)
 	int x;
 	int y;
 	x = -1;
-	while (++x < cub->scene.screen_width)
+	while (++x < cub->s_width)
 	{
 		y = -1;
-		while (++y < cub->scene.screen_height)
+		while (++y < cub->s_height)
 			my_mlx_pixel_put(cub, x, y, 0);
 	}
 }
 
-float	count_distance(float x, float y, float route, float ray)
-{
-	float distance;
-
-	distance = sqrtf(powf(x, 2) + powf(y, 2));
-	distance *= cosf(fabsf(route * 360.0f - ray * 360.0f) * (M_PI / 180.0f));
-	return (distance);
-}
-
 int	count_column(float x, float y, t_all *cub)
 {
-	float	distance;
 	int		column_h;
 	
-	distance = count_distance(x, y, cub->plr.route, cub->ray);
-	column_h = cub->scene.screen_height / 2;
+	cub->dists[cub->x] = sqrtf(powf(x, 2) + powf(y, 2));
+	cub->dists[cub->x] *= cosf(fabsf(cub->plr.route * 360.0f - cub->ray * 360.0f) \
+	* (M_PI / 180.0f));
+	column_h = cub->s_width / 2;
 	column_h = (float)column_h / tanf((FOV * 360.0f / 2.0f) * (M_PI / 180.0f));
-	column_h = (int)ceilf((float)column_h / distance);
+	column_h = (int)ceilf((float)column_h / cub->dists[cub->x]);
 	return (column_h);
 }
