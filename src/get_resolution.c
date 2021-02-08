@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:12:20 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 20:15:27 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/08 21:48:50 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,10 @@ void		get_resolution(t_all *cub, char **arr)
 		error("Check your screen resolution");
 	if (!cub->save)
 		if (ft_strlen(arr[1]) > 4 || ft_strlen(arr[2]) > 4)
-			error("Check your screen resolution");
+			check_screen_size(&(cub->s_width), &(cub->s_height));;
 	cub->s_width = ft_atoi(arr[1]);
 	cub->s_height = ft_atoi(arr[2]);
 	if (!cub->save)
 		check_screen_size(&(cub->s_width), &(cub->s_height));
+	printf("%d %d\n", cub->s_width, cub->s_height);
 }

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 22:04:43 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/08 21:44:37 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,27 +71,27 @@ void	textures_init(t_all *cub)
 	cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.north, \
 	&(cub->txt[0].width), &(cub->txt[0].height));
 	cub->txt[0].addr = mlx_get_data_addr(cub->txt[0].img, \
-	&(cub->txt[0].bpp), &(cub->txt[0].line_length), &i);
+	&(cub->txt[0].bpp), &(cub->txt[0].ll), &i);
 
 	cub->txt[1].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.south, \
 	&(cub->txt[1].width), &(cub->txt[1].height));
 	cub->txt[1].addr = mlx_get_data_addr(cub->txt[1].img, \
-	&(cub->txt[1].bpp), &(cub->txt[1].line_length), &i);
+	&(cub->txt[1].bpp), &(cub->txt[1].ll), &i);
 
 	cub->txt[2].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.west, \
 	&(cub->txt[2].width), &(cub->txt[2].height));
 	cub->txt[2].addr = mlx_get_data_addr(cub->txt[2].img, \
-	&(cub->txt[2].bpp), &(cub->txt[2].line_length), &i);
+	&(cub->txt[2].bpp), &(cub->txt[2].ll), &i);
 
 	cub->txt[3].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.east, \
 	&(cub->txt[3].width), &(cub->txt[3].height));
 	cub->txt[3].addr = mlx_get_data_addr(cub->txt[3].img, \
-	&(cub->txt[3].bpp), &(cub->txt[3].line_length), &i);
+	&(cub->txt[3].bpp), &(cub->txt[3].ll), &i);
 
 	cub->txt[4].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.sprite, \
 	&(cub->txt[4].width), &(cub->txt[4].height));
 	cub->txt[4].addr = mlx_get_data_addr(cub->txt[4].img, \
-	&(cub->txt[4].bpp), &(cub->txt[4].line_length), &i);
+	&(cub->txt[4].bpp), &(cub->txt[4].ll), &i);
 }
 
 int rendering(t_all *cub)
@@ -100,23 +100,13 @@ int rendering(t_all *cub)
 	cub->vars.mlx = mlx_init();
 	cub->vars.win = mlx_new_window(cub->vars.mlx, cub->s_width, cub->s_height, "cub3D");
 	cub->win.img = mlx_new_image(cub->vars.mlx, cub->s_width, cub->s_height);
-	cub->win.addr = mlx_get_data_addr(cub->win.img, &(cub->win.bpp), &(cub->win.line_length), \
+	cub->win.addr = mlx_get_data_addr(cub->win.img, &(cub->win.bpp), &(cub->win.ll), \
                                  &(cub->win.endian));
-
-		// cub->bmp.addr = mlx_get_data_addr(cub->bmp.img, &(cub->bmp.bpp), \
-		// &(cub->bmp.line_length), &e);
 	textures_init(cub);
 	key_null(cub);
 	frame_loop(cub);
 	if (cub->save)
-	{
-		int e;
-		cub->bmp.width = cub->s_width;
-		cub->bmp.height = cub->s_height;
-		cub->bmp.img = mlx_new_image(cub->vars.mlx, cub->s_width, cub->s_height);
-		cub->bmp.addr = mlx_get_data_addr(cub->bmp.img, &(cub->bmp.bpp), &(cub->s_width), &e);
 		save_bmp(cub);
-	}
 	mlx_loop_hook(cub->vars.mlx, event_loop, cub);
 	mlx_hook(cub->vars.win, 2, 1L<<0, key_press, cub);
 	mlx_hook(cub->vars.win, 3, 1L<<1, key_release, cub);

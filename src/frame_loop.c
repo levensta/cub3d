@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 22:39:44 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 20:15:13 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/08 20:55:47 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	frame_loop(t_all *cub)
 	int w = 0;
 	while (w < cub->num_spr)
 	{
-		draw_sprite(cub, cub->sprite[w], x1, y1);
+		draw_sprite(cub, cub->sprite[w]);
 		w++;
 	}
 	mlx_put_image_to_window(cub->vars.mlx, cub->vars.win, cub->win.img, 0, 0);

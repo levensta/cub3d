@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 22:09:30 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/08 21:44:28 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct  s_data {
     void        *img;
     char        *addr;
     int         bpp;
-    int         line_length;
+    int         ll;
     int         endian;
 }               t_data;
 
@@ -72,7 +72,7 @@ typedef struct  s_tex {
     char		*addr;
 	int			width;
 	int			height;
-	int			line_length;
+	int			ll;
 	int         bpp;
 }               t_tex;
 
@@ -107,7 +107,6 @@ typedef	struct	s_all {
 	t_player	plr;
 	t_map		scene;
 	t_tex		txt[5];
-	t_tex		bmp;
 	t_sprite	*sprite;
 	int			s_width;
 	int			s_height;
@@ -116,6 +115,7 @@ typedef	struct	s_all {
 	int			fd;
 	int			num_spr;
 	float		*dists;
+	float		view_dist;
 	int			x;
 	char		save;
 }                t_all;
@@ -135,8 +135,7 @@ int				count_column(float x, float y, t_all *cub);
 void			draw_ceil(t_all *cub, int column_h);
 void			draw_floor(t_all *cub, int column_h);
 void			draw_texture(t_all *cub, float hit, int size, int n);
-void			draw_sprite(t_all *cub, t_sprite sprite, float x1, float y1);
-void	ft_sprite(t_all *cub);
+void        draw_sprite(t_all *cub, t_sprite sprite);
 int				count_sprites(char *str);
 void			find_sprite(t_all *cub, int x1, int y1);
 void			find_dists(t_all *cub);

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 20:15:27 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/08 23:39:58 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int		checkers(t_all *cub, char **map, char **arr, int i)
 		return (1);
 	}
 	else
-		error("Check your RGB params");
+		error("Invalid map");
 	return (0);
 }
 
@@ -91,6 +91,7 @@ void	parser(t_all *cub, char **map)
 		}
 		i++;
 	}
+	cub->view_dist = (cub->s_width / 2) / tanf(((60.0f * M_PI / 180.0f) / 2));
 }
 
 //      111111111111

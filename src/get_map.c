@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 19:18:43 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/08 23:39:38 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,19 @@ static void	check_in_str(char **map, char const *s, int i, int j)
 	{
 		if (map[i][0] == '0' || map[i][0] == '2' || (map[i][j] == s[m] \
 		&& (map[i][j - 1] == ' ' || map[i][j + 1] == ' ' || !map[i][j + 1])))
-			error("Check your RGB params");
+			error("Invalid map");
 		if (i > 0)
 		{
 			if (map[i][j] == s[m] && (!map[i - 1][0] || \
 			(map[i - 1][j - 1] == ' ' || map[i - 1][j] == ' ' \
 			|| map[i - 1][j + 1] == ' ')))
-				error("Check your RGB params");
+				error("Invalid map");
 		}
 		else if (s[m] == map[i][j])
-			error("Check your RGB params");
+			error("Invalid map");
 		if (map[i][j] == s[m] && (!map[i + 1] || (map[i + 1][j - 1] == ' ' \
 		|| map[i + 1][j] == ' ' || map[i + 1][j + 1] == ' ')))
-			error("Check your RGB params");
+			error("Invalid map");
 		m++;
 	}
 }

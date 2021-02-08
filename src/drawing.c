@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:34:56 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 22:09:04 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/08 23:33:21 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	draw_texture(t_all *cub, float hit, int size, int n)
 	hit *= cub->txt[n].width;
 	while (i < max)
 	{
-		color = *(unsigned int*)(cub->txt[n].addr + ((int)j * cub->txt[n].line_length + (int)hit * (cub->txt[n].bpp / 8)));
+		color = *(unsigned int*)(cub->txt[n].addr + ((int)j * cub->txt[n].ll + (int)hit * (cub->txt[n].bpp / 8)));
 		if (color != 0 && color != 0xFF000000)
 			my_mlx_pixel_put(cub, cub->x, i, color);
 		i++;
@@ -63,30 +63,30 @@ void	draw_texture(t_all *cub, float hit, int size, int n)
 	}
 }
 
-void        draw_sprite(t_all *cub, t_sprite sprite, float x1, float y1)
+void        draw_sprite(t_all *cub, t_sprite sprite)
 {
     t_sprite ang;
-    t_sprite dist;
     t_sprite dt;
     float     tx;
     float     size;
-	x1 = y1;
 
     ang.x = cub->plr.route + 0.25f;
 	ray_correct(&ang.x);
     ang.x *= (2 * M_PI);
-    dist.y = (cub->s_width / 2) / tanf(((60.0f * M_PI / 180.0f) / 2)); 
-    dt.x = cub->plr.x0 - (sprite.x);
-    dt.y = cub->plr.y0 - (sprite.y);
+    dt.y = cub->plr.y0 - sprite.y;
+    dt.x = cub->plr.x0 - sprite.x;
     ang.y = atan2f(dt.y, dt.x) - ang.x; // абсолютное направление от игрока до спрайта // угол спрайта относительно угла обзора
-    size = dist.y / (cosf(ang.y) * sprite.distance); // ширина и высота спрайта (квадратный)
-    tx = cub->s_width / 2 + tanf(ang.y) * dist.y - size / 2; // точка пересечения луча со спрайтом
+    size = cub->view_dist / (cosf(ang.y) * sprite.distance); // ширина и высота спрайта (квадратный)
+    tx = cub->s_width / 2 + tanf(ang.y) * cub->view_dist - size / 4; // точка пересечения луча со спрайтом
+	// printf("tx: %f\n", tx);
+	// for(int i = 0; i < cub->s_height; i++)
+	// 	my_mlx_pixel_put(cub, tx, i, 0);
 	if (size <= 0 || tx > cub->s_width)
 		return ;
 	draw_sprite2(cub, size, tx, sprite.distance);
 }
 
-int			d_set(t_all *cub, int size, float *ty, t_sprite *d)
+int			y_set(t_all *cub, int size, float *ty, t_sprite *d)
 {
 	int			y;
 	y = (cub->s_height - size) / 2;
@@ -110,7 +110,7 @@ void		draw_sprite2(t_all *cub, int size, int x_start, float dist)
 	unsigned int	color;
 
 	int y_start, y, x;
-	y_start = d_set(cub, size, &ty, &d); 
+	y_start = y_set(cub, size, &ty, &d); 
 	y = -1;
 	while (++y < size && y + y_start < cub->s_height \
 	&& ty < cub->txt[4].height)
@@ -118,12 +118,15 @@ void		draw_sprite2(t_all *cub, int size, int x_start, float dist)
 		x = -1;
 		if (x_start < 0)
 			x += -x_start;
-		while (++x < size && x_start + x < cub->s_width)
+		// printf("x: %d size: %d\n", x, size);
+		// my_mlx_pixel_put(cub, x, 15, 0);
+		// my_mlx_pixel_put(cub, size, 15, 0);
+		while (++x < size && x_start + x <= cub->s_width)
 		{
-			color = *(unsigned int*)(cub->txt[4].addr + ((int)ty * cub->txt[4].line_length + (int)((float)x * d.x) * (cub->txt[4].bpp / 8)));
-			if (color != 0 \
-			 && cub->dists[x_start + x] >= dist - 0.5f
-			&& color != 0xFF000000)
+			color = *(unsigned int*)(cub->txt[4].addr + ((int)ty * \
+			cub->txt[4].ll + (int)((float)x * d.x) * (cub->txt[4].bpp / 8)));
+			if (color != 0 && color != 0xFF000000 && \
+			cub->dists[x_start + x] >= dist - 0.5f)
 				my_mlx_pixel_put(cub, x_start + x, y_start + y, color);
 		}
 		ty += d.y;
