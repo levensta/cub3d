@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:42:05 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 19:53:29 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/09 21:24:50 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,26 +72,43 @@ void		sort_sprites(t_all *cub)
 	t_sprite tmp;
 	int		i;
 	int		j;
-	char	flag;
+	// char	flag;
 
 	i = 0;
-	while (i < cub->num_spr)
+	// while (i < cub->num_spr)
+	// {
+	// 	flag = 1;
+	// 	j = 0;
+	// 	while (j < cub->num_spr - (i + 1))
+	// 	{
+	// 		if (cub->sprite[j].distance < cub->sprite[j + 1].distance)
+	// 		{
+	// 			flag = 0;
+	// 			tmp = cub->sprite[j];
+	// 			cub->sprite[j] = cub->sprite[j + 1];
+	// 			cub->sprite[j + 1] = tmp;
+	// 		}
+	// 		j++;
+	// 	}
+	// 	if (flag)
+	// 		break;
+	// 	i++;
+	// }
+	while (i < cub->num_spr - 1)
 	{
-		flag = 1;
-		j = 0;
-		while (j < cub->num_spr - (i + 1))
+		j = cub->num_spr - 1;
+		while (j > i) // для всех элементов после i-ого
 		{
-			if (cub->sprite[j].distance < cub->sprite[j + 1].distance)
+			if (cub->sprite[j - 1].distance < cub->sprite[j].distance) // если текущий элемент меньше предыдущего
 			{
-				flag = 0;
-				tmp = cub->sprite[j];
-				cub->sprite[j] = cub->sprite[j + 1];
-				cub->sprite[j + 1] = tmp;
+				tmp = cub->sprite[j - 1]; // меняем их местами
+				cub->sprite[j - 1] = cub->sprite[j];
+				cub->sprite[j] = tmp;
 			}
-			j++;
+			j--;
 		}
-		if (flag)
-			break;
 		i++;
 	}
+
+	
 }

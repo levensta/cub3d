@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:28:21 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/08 20:07:51 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/09 20:24:17 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color)
 void	ray_correct(float *ray)
 {
 	while (*ray < 0.0f)
-		*ray += 1;
+		*ray += 1.0f;
     while (*ray >= 1.0f)
-		*ray -= 1;
+		*ray -= 1.0f;
 }
 
 void	clear_image(t_all *cub)

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/08 21:44:37 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/09 23:28:58 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,15 @@ int             event_loop(t_all *cub)
 		ty = ty - cos(tmp * 2 * M_PI) / speed;
 		tx = tx + sin(tmp * 2 * M_PI) / speed;
 	}
-	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '1' )
-	// &&	cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '2')
+	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '1'
+	&& cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '2')
 		cub->plr.y0 = ty;
-	if (cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '1' )
-	// &&	cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '2')
+	if (cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '1'
+	&& cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '2')
 		cub->plr.x0 = tx;
 	ray_correct(&cub->plr.route);
-	if (cub->keys.key_a || cub->keys.key_d || cub->keys.key_s || cub->keys.key_w || \
-	cub->keys.key_left || cub->keys.key_right)
-		// mlx_do_sync(cub->vars.mlx);
+	if (cub->keys.key_a || cub->keys.key_d || cub->keys.key_s || \
+	cub->keys.key_w || cub->keys.key_left || cub->keys.key_right)
 		frame_loop(cub);
 	return(0);
 }
@@ -67,27 +66,23 @@ int             event_loop(t_all *cub)
 void	textures_init(t_all *cub)
 {
 	int i;
-
+	
 	cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.north, \
 	&(cub->txt[0].width), &(cub->txt[0].height));
 	cub->txt[0].addr = mlx_get_data_addr(cub->txt[0].img, \
 	&(cub->txt[0].bpp), &(cub->txt[0].ll), &i);
-
 	cub->txt[1].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.south, \
 	&(cub->txt[1].width), &(cub->txt[1].height));
 	cub->txt[1].addr = mlx_get_data_addr(cub->txt[1].img, \
 	&(cub->txt[1].bpp), &(cub->txt[1].ll), &i);
-
 	cub->txt[2].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.west, \
 	&(cub->txt[2].width), &(cub->txt[2].height));
 	cub->txt[2].addr = mlx_get_data_addr(cub->txt[2].img, \
 	&(cub->txt[2].bpp), &(cub->txt[2].ll), &i);
-
 	cub->txt[3].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.east, \
 	&(cub->txt[3].width), &(cub->txt[3].height));
 	cub->txt[3].addr = mlx_get_data_addr(cub->txt[3].img, \
 	&(cub->txt[3].bpp), &(cub->txt[3].ll), &i);
-
 	cub->txt[4].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.sprite, \
 	&(cub->txt[4].width), &(cub->txt[4].height));
 	cub->txt[4].addr = mlx_get_data_addr(cub->txt[4].img, \
@@ -98,10 +93,11 @@ int rendering(t_all *cub)
 {
 	cub->dists = malloc(sizeof(float) * cub->s_width);
 	cub->vars.mlx = mlx_init();
-	cub->vars.win = mlx_new_window(cub->vars.mlx, cub->s_width, cub->s_height, "cub3D");
+	cub->vars.win = mlx_new_window(cub->vars.mlx, cub->s_width, \
+	cub->s_height, "cub3D");
 	cub->win.img = mlx_new_image(cub->vars.mlx, cub->s_width, cub->s_height);
-	cub->win.addr = mlx_get_data_addr(cub->win.img, &(cub->win.bpp), &(cub->win.ll), \
-                                 &(cub->win.endian));
+	cub->win.addr = mlx_get_data_addr(cub->win.img, &(cub->win.bpp), \
+	&(cub->win.ll), &(cub->win.endian));
 	textures_init(cub);
 	key_null(cub);
 	frame_loop(cub);

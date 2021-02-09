@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:34:56 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/08 23:33:21 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/09 21:34:15 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,8 @@ void        draw_sprite(t_all *cub, t_sprite sprite)
     dt.x = cub->plr.x0 - sprite.x;
     ang.y = atan2f(dt.y, dt.x) - ang.x; // абсолютное направление от игрока до спрайта // угол спрайта относительно угла обзора
     size = cub->view_dist / (cosf(ang.y) * sprite.distance); // ширина и высота спрайта (квадратный)
-    tx = cub->s_width / 2 + tanf(ang.y) * cub->view_dist - size / 4; // точка пересечения луча со спрайтом
-	// printf("tx: %f\n", tx);
-	// for(int i = 0; i < cub->s_height; i++)
-	// 	my_mlx_pixel_put(cub, tx, i, 0);
-	if (size <= 0 || tx > cub->s_width)
+    tx = cub->s_width / 2 + (tanf(ang.y) * cub->view_dist) - size / 2; // точка пересечения луча со спрайто
+	if (size <= 0 || tx >= cub->s_width)
 		return ;
 	draw_sprite2(cub, size, tx, sprite.distance);
 }
@@ -118,15 +115,12 @@ void		draw_sprite2(t_all *cub, int size, int x_start, float dist)
 		x = -1;
 		if (x_start < 0)
 			x += -x_start;
-		// printf("x: %d size: %d\n", x, size);
-		// my_mlx_pixel_put(cub, x, 15, 0);
-		// my_mlx_pixel_put(cub, size, 15, 0);
 		while (++x < size && x_start + x <= cub->s_width)
 		{
 			color = *(unsigned int*)(cub->txt[4].addr + ((int)ty * \
 			cub->txt[4].ll + (int)((float)x * d.x) * (cub->txt[4].bpp / 8)));
 			if (color != 0 && color != 0xFF000000 && \
-			cub->dists[x_start + x] >= dist - 0.5f)
+			cub->dists[x_start + x] >= dist)
 				my_mlx_pixel_put(cub, x_start + x, y_start + y, color);
 		}
 		ty += d.y;

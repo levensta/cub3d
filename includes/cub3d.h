@@ -6,15 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/08 21:44:28 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/09 23:02:48 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 # define BONUS 0
-# define MAC_WIDTH 2560
-# define MAC_HEIGHT 1440
 # define EPS 0.000001
 # define FOV 60.0f/360.0f
 # define W 13
@@ -26,6 +24,7 @@
 # define ESC 53
 
 # include "mlx.h"
+# include "mlx_mms.h"
 # include "libft.h"
 # include <math.h>
 # include <fcntl.h>

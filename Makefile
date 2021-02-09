@@ -1,44 +1,57 @@
 NAME = cub3D
-SRCS = ./src/
-
-FUNC =	cub3d \
-		get_next_line \
-		get_next_line_utils \
-		ft_split_whitespaces \
-		clear \
-		error \
-		get_resolution \
-		get_color \
-		get_path \
-		get_map \
-		make_square \
-		color_utils \
-		image_utils \
-		sprite_utils \
-		frame_loop \
-		drawing \
-		keys \
-		parser \
-		save_bmp
-		
-SRC = $(addprefix $(SRCS), $(addsuffix .c, $(FUNC)))
-OBJ = $(addprefix $(SRCS), $(addsuffix .o, $(FUNC)))
-FLAGS = -g -Wall -Werror -Wextra
+SRC_DIR = src/
+OBJ_DIR = obj/
+LIBFT_DIR = libft/
+MLX_DIR = minilibx_opengl/
+MLX_MMS = minilibx_mms/
+INCLUDES = -I ./includes -I ./libft
+FLAGS = -Wall -Wextra -Werror
+MLX_FLAGS = -L $(MLX_DIR) -lmlx -framework OpenGL -framework AppKit libmlx.a
+MLX_FLAGS_MMS = -L $(MLX_MMS) -lmlx -framework OpenGL -framework AppKit libmlx.dylib
+LIBFT = libft.a
+SRCS = cub3d.c \
+		get_next_line.c \
+		get_next_line_utils.c \
+		ft_split_whitespaces.c \
+		clear.c \
+		error.c \
+		get_resolution.c \
+		get_color.c \
+		get_path.c \
+		get_map.c \
+		make_square.c \
+		color_utils.c \
+		image_utils.c \
+		sprite_utils.c \
+		frame_loop.c \
+		drawing.c \
+		keys.c \
+		parser.c \
+		save_bmp.c
+SRC = $(addprefix $(SRC_DIR), $(SRCS))
+OBJ = $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 all: $(NAME)
 $(NAME): $(OBJ)
-	$(MAKE) -C ./libft/
-	$(MAKE) bonus -C ./libft/
-	$(MAKE) -C ./minilibx_opengl
-	cp ./minilibx_opengl/libmlx.a .
-	cp ./libft/libft.a .
-	gcc libft.a libmlx.a -I ./includes -I ./libft -L ./ -lmlx -framework OpenGL -framework AppKit -lm $(OBJ) -o $(NAME)
-	mv $(OBJ) ./obj
-%.o: %.c
-	gcc $(FLAGS) -I ./includes -I ./libft -I ./minilibx_opengl -c $< -o $@
+	@make -C $(MLX_DIR)
+	@make -C $(MLX_MMS)
+	@make -C $(LIBFT_DIR) bonus
+	@make -C $(LIBFT_DIR)
+	@cp $(MLX_DIR)libmlx.a ./
+	@cp $(MLX_MMS)libmlx.dylib ./
+	@cp $(LIBFT_DIR)libft.a ./
+	gcc $(INCLUDES) $(OBJ) $(LIBFT) $(MLX_FLAGS) $(MLX_FLAGS_MMS) -o $(NAME)
+$(OBJ): $(OBJ_DIR)%.o : $(SRC_DIR)%.c
+	@mkdir -p $(OBJ_DIR)
+	@gcc $(FLAGS) $(INCLUDES) -I $(MLX_DIR) -I $(MLX_MMS) -c $< -o $@
 clean:
-	$(MAKE) clean -C ./libft/
-	rm -f $(OBJ)
+	@rm -rf $(OBJ)
+	@make -C $(LIBFT_DIR) clean
+	@rm -f *.bmp
 fclean: clean
-	rm -f $(NAME) libft.a libmlx.a
+	@rm -f $(NAME)
+	@make -C $(LIBFT_DIR) fclean
+	@rm -f libft.a
+	@rm -f libmlx.a
+	@rm -f libmlx.dylib
 re: fclean all
 .PHONY: all clean fclean re
