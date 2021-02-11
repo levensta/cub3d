@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:28:21 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/09 20:24:17 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/11 21:08:26 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color)
 	if (x < 0 || y < 0 || x >= cub->s_width || y >= cub->s_height)
 		return ;
 	dst = cub->win.addr + (y * cub->win.ll + x * (cub->win.bpp / 8));
-	// dst = cub->screen.data + (y * cub->s_width + x) * 4;
 	*(unsigned int*)dst = color;
 }
 

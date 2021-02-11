@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/09 23:02:48 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/11 22:36:04 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ typedef	struct	s_all {
 	t_map		scene;
 	t_tex		txt[5];
 	t_sprite	*sprite;
+	float		x1;
+	float		y1;
 	int			s_width;
 	int			s_height;
 	int			column_h;

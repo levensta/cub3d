@@ -50,3 +50,4 @@ dkms.conf
 cub_test.c
 *.out
 *.bmp
+tmp.c

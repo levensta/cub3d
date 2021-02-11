@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/09 23:28:58 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/11 23:26:41 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,59 +14,67 @@
 #include "get_next_line.h"
 #include <fcntl.h>
 
-int             event_loop(t_all *cub)
+void	move(t_all *cub, float tmp, float *tx, float *ty)
 {
-	float	tx = cub->plr.x0;
-	float	ty = cub->plr.y0;
-	float	tmp = cub->plr.route + 0.25f;
-	float	speed = 15.0f;
+	float	speed;
+
+	speed = 15.0f;
 	ray_correct(&tmp);
+	if ((cub->keys.key_w && cub->keys.key_a) || (cub->keys.key_w && \
+	cub->keys.key_d) || (cub->keys.key_s && cub->keys.key_a) \
+	|| (cub->keys.key_s && cub->keys.key_d))
+		speed *= 1.5f;
+	if (cub->keys.key_w)
+		*ty = *ty - cos(cub->plr.route * 2 * M_PI) / speed;
+	if (cub->keys.key_w)
+		*tx = *tx + sin(cub->plr.route * 2 * M_PI) / speed;
+	if (cub->keys.key_s)
+		*ty = *ty + cos(cub->plr.route * 2 * M_PI) / speed;
+	if (cub->keys.key_s)
+		*tx = *tx - sin(cub->plr.route * 2 * M_PI) / speed;
+	if (cub->keys.key_a)
+		*ty = *ty + cos(tmp * 2 * M_PI) / speed;
+	if (cub->keys.key_a)
+		*tx = *tx - sin(tmp * 2 * M_PI) / speed;
+	if (cub->keys.key_d)
+		*ty = *ty - cos(tmp * 2 * M_PI) / speed;
+	if (cub->keys.key_d)
+		*tx = *tx + sin(tmp * 2 * M_PI) / speed;
+}
+
+int	event_loop(t_all *cub)
+{
+	float	tx;
+	float	ty;
+	float	tmp;
+
+	tx = cub->plr.x0;
+	ty = cub->plr.y0;
+	tmp = cub->plr.route + 0.25f;
 	if (cub->keys.key_esc)
 		escape(cub);
 	if (cub->keys.key_left)
 		cub->plr.route -= 0.0050f;
 	if (cub->keys.key_right)
 		cub->plr.route += 0.0050f;
-	if ((cub->keys.key_w && cub->keys.key_a) || (cub->keys.key_w && cub->keys.key_d) \
-	||	(cub->keys.key_s && cub->keys.key_a) || (cub->keys.key_s && cub->keys.key_d))
-		speed *= 1.5f;
-	if (cub->keys.key_w)
-	{
-		ty = ty - cos(cub->plr.route * 2 * M_PI) / speed;
-		tx = tx + sin(cub->plr.route * 2 * M_PI) / speed;
-	}
-	if (cub->keys.key_s)
-	{
-		ty = ty + cos(cub->plr.route * 2 * M_PI) / speed;
-		tx = tx - sin(cub->plr.route * 2 * M_PI) / speed;
-	}
-	if (cub->keys.key_a)
-	{
-		ty = ty + cos(tmp * 2 * M_PI) / speed;
-		tx = tx - sin(tmp * 2 * M_PI) / speed;
-	}
-	if (cub->keys.key_d)
-	{
-		ty = ty - cos(tmp * 2 * M_PI) / speed;
-		tx = tx + sin(tmp * 2 * M_PI) / speed;
-	}
-	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '1'
-	&& cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '2')
+	move(cub, tmp, &tx, &ty);
+	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '1')
+	// && cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '2')
 		cub->plr.y0 = ty;
-	if (cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '1'
-	&& cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '2')
+	if (cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '1')
+	// && cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '2')
 		cub->plr.x0 = tx;
 	ray_correct(&cub->plr.route);
 	if (cub->keys.key_a || cub->keys.key_d || cub->keys.key_s || \
 	cub->keys.key_w || cub->keys.key_left || cub->keys.key_right)
 		frame_loop(cub);
-	return(0);
+	return (0);
 }
 
 void	textures_init(t_all *cub)
 {
 	int i;
-	
+
 	cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.north, \
 	&(cub->txt[0].width), &(cub->txt[0].height));
 	cub->txt[0].addr = mlx_get_data_addr(cub->txt[0].img, \
@@ -89,7 +97,7 @@ void	textures_init(t_all *cub)
 	&(cub->txt[4].bpp), &(cub->txt[4].ll), &i);
 }
 
-int rendering(t_all *cub)
+int			rendering(t_all *cub)
 {
 	cub->dists = malloc(sizeof(float) * cub->s_width);
 	cub->vars.mlx = mlx_init();
@@ -104,20 +112,22 @@ int rendering(t_all *cub)
 	if (cub->save)
 		save_bmp(cub);
 	mlx_loop_hook(cub->vars.mlx, event_loop, cub);
-	mlx_hook(cub->vars.win, 2, 1L<<0, key_press, cub);
-	mlx_hook(cub->vars.win, 3, 1L<<1, key_release, cub);
-	mlx_hook(cub->vars.win, 17, 1L<<17, escape, cub);
+	mlx_hook(cub->vars.win, 2, 1L << 0, key_press, cub);
+	mlx_hook(cub->vars.win, 3, 1L << 1, key_release, cub);
+	mlx_hook(cub->vars.win, 17, 1L << 17, escape, cub);
 	mlx_loop(cub->vars.mlx);
 	return (0);
 }
 
-int     main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	t_all	cub;
-	char	*line = NULL;
-	t_list	*head = NULL;
+	char	*line;
+	t_list	*head;
 	char	**map;
 
+	line = NULL;
+	head = NULL;
 	clear_scene(&cub);
 	if (argc > 1 && argc < 4)
 	{
@@ -135,13 +145,5 @@ int     main(int argc, char **argv)
 		parser(&cub, map);
 		check_all(&cub);
 		rendering(&cub);
-		
-		free_array(map);
-		free(line);
-		free(cub.vars.mlx);
-		free(head);
-		free(cub.sprite);
-		close(cub.fd);
 	}
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/09 23:33:06 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/10 22:30:27 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ void	parser(t_all *cub, char **map)
 				break;
 			free_array(arr);
 		}
+		else
+			free(arr);
 		i++;
 	}
 	cub->view_dist = (float)(cub->s_width / 2) / \
