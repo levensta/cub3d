@@ -24,7 +24,9 @@ SRCS = cub3d.c \
 		image_utils.c \
 		sprite_utils.c \
 		frame_loop.c \
+		raycasting.c \
 		drawing.c \
+		sprites.c \
 		keys.c \
 		parser.c \
 		save_bmp.c

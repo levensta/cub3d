@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:01:25 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 20:15:27 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/12 23:38:56 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	free_array(char **arr)
 void	clear_scene(t_all *cub)
 {
 	int i;
+
 	i = 0;
 	while (i < 3)
 	{

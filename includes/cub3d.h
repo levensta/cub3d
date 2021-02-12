@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/11 22:36:04 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/12 23:36:21 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,13 @@ void			my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color);
 void			ray_correct(float *ray);
 void			clear_image(t_all *cub);
 int				count_column(float x, float y, t_all *cub);
+void			raycasting(t_all *cub, char *is_x);
 void			draw_ceil(t_all *cub, int column_h);
 void			draw_floor(t_all *cub, int column_h);
 void			draw_texture(t_all *cub, float hit, int size, int n);
-void        draw_sprite(t_all *cub, t_sprite sprite);
+void			drawing_room(t_all *cub, char is_x);
+void			drawing_sprites(t_all *cub);
+void			draw_sprite(t_all *cub, int size, int start, float dist);
 int				count_sprites(char *str);
 void			find_sprite(t_all *cub, int x1, int y1);
 void			find_dists(t_all *cub);
@@ -146,7 +149,6 @@ void			key_null(t_all *cub);
 int             key_press(int keycode, t_all *cub);
 int             key_release(int keycode, t_all *cub);
 int				escape(t_all *cub);
-void		draw_sprite2(t_all *cub, int size, int start, float dist);
 int		save_bmp(t_all *cub);
 
 void	parser(t_all *cub, char **map);

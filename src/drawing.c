@@ -6,23 +6,36 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:34:56 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/11 23:44:23 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/12 23:41:29 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+int		count_column(float x, float y, t_all *cub)
+{
+	int		column_h;
+
+	cub->dists[cub->x] = sqrtf(powf(x, 2) + powf(y, 2));
+	cub->dists[cub->x] *= cosf(fabsf(cub->plr.route * 360.0f - cub->ray \
+	* 360.0f) * (M_PI / 180.0f));
+	column_h = cub->s_width / 2;
+	column_h = (float)column_h / tanf((FOV * 360.0f / 2.0f) * (M_PI / 180.0f));
+	column_h = (int)ceilf((float)column_h / cub->dists[cub->x]);
+	return (column_h);
+}
+
 void	draw_ceil(t_all *cub, int column_h)
 {
-		float	j;
-		int i;
+	int		i;
+	float	j;
 
-		if (column_h < 0)
-			column_h = 0;
-		i = (cub->s_height - column_h) / 2;
-		j = -1;
-		while (j++ < i)
-			my_mlx_pixel_put(cub, cub->x, j, cub->scene.ceiling);
+	if (column_h < 0)
+		column_h = 0;
+	i = (cub->s_height - column_h) / 2;
+	j = -1;
+	while (j++ < i)
+		my_mlx_pixel_put(cub, cub->x, j, cub->scene.ceiling);
 }
 
 void	draw_floor(t_all *cub, int column_h)
@@ -64,65 +77,24 @@ void	draw_texture(t_all *cub, float hit, int size, int n)
 	}
 }
 
-void        draw_sprite(t_all *cub, t_sprite sprite)
+void	drawing_room(t_all *cub, char is_x)
 {
-    t_sprite ang;
-    t_sprite dt;
-    int     tx;
-    int     size;
-
-    ang.x = cub->plr.route + 0.25f;
-	ray_correct(&ang.x);
-    ang.x *= (2 * M_PI);
-    dt.y = cub->plr.y0 - sprite.y;
-    dt.x = cub->plr.x0 - sprite.x;
-    ang.y = atan2f(dt.y, dt.x) - ang.x;
-    size = cub->view_dist / (cosf(ang.y) * sprite.distance);
-    tx = cub->s_width / 2 + (tanf(ang.y) * cub->view_dist) - size / 2;
-	if (size <= 0 || tx >= cub->s_width)
-		return ;
-	draw_sprite2(cub, size, tx, sprite.distance);
-}
-
-int			y_set(t_all *cub, int size, float *ty, t_sprite *d)
-{
-	int			y;
-	y = (cub->s_height - size) / 2;
-	y += (float)size / (float)cub->s_height;
-	*ty = 0.0f;
-	d->x = (float)cub->txt[4].width / (float)size;
-	d->y = (float)cub->txt[4].height / (float)size;
-	if (y < 0)
+	cub->column_h = count_column(cub->plr.x0 - cub->x1, \
+	cub->plr.y0 - cub->y1, cub);
+	if (is_x)
 	{
-		*ty = d->y * (float)(-y);
-		y = -1;
+		if (cub->ray >= 0 && cub->ray < 0.5f)
+			draw_texture(cub, cub->y1 - floorf(cub->y1), cub->column_h, 2);
+		else
+			draw_texture(cub, ceilf(cub->y1) - cub->y1, cub->column_h, 3);
 	}
-	return (y);
-}
-
-void		draw_sprite2(t_all *cub, int size, int x_start, float dist)
-{
-	t_sprite		d;
-	float			ty;
-	unsigned int	color;
-
-	int y_start, y, x;
-	x = -1;
-	if (x_start < 0)
-		x += -x_start;
-	while (++x < size && x_start + x <= cub->s_width)
+	else
 	{
-		y_start = y_set(cub, size, &ty, &d); 
-		y = -1;
-		while (++y < size && y + y_start < cub->s_height \
-		&& ty < cub->txt[4].height)
-		{
-			color = *(unsigned int*)(cub->txt[4].addr + ((int)ty * \
-			cub->txt[4].ll + (int)((float)x * d.x) * (cub->txt[4].bpp / 8)));
-			if (color !=0 && color != 0xFF000000 && \
-			cub->dists[x_start + x] >= dist - 0.5f)
-				my_mlx_pixel_put(cub, x_start + x, y_start + y, color);
-			ty += d.y;
-		}
+		if (cub->ray >= 0.25f && cub->ray < 0.75f)
+			draw_texture(cub, ceilf(cub->x1) - cub->x1, cub->column_h, 0);
+		else
+			draw_texture(cub, cub->x1 - floorf(cub->x1), cub->column_h, 1);
 	}
+	draw_ceil(cub, cub->column_h);
+	draw_floor(cub, cub->column_h);
 }
