@@ -6,13 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:34:56 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/12 23:41:29 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/13 21:18:54 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int		count_column(float x, float y, t_all *cub)
+static int	count_column(float x, float y, t_all *cub)
 {
 	int		column_h;
 
@@ -25,7 +25,7 @@ int		count_column(float x, float y, t_all *cub)
 	return (column_h);
 }
 
-void	draw_ceil(t_all *cub, int column_h)
+void		draw_ceil(t_all *cub, int column_h)
 {
 	int		i;
 	float	j;
@@ -38,7 +38,7 @@ void	draw_ceil(t_all *cub, int column_h)
 		my_mlx_pixel_put(cub, cub->x, j, cub->scene.ceiling);
 }
 
-void	draw_floor(t_all *cub, int column_h)
+void		draw_floor(t_all *cub, int column_h)
 {
 	int j;
 
@@ -49,7 +49,7 @@ void	draw_floor(t_all *cub, int column_h)
 		my_mlx_pixel_put(cub, cub->x, j, cub->scene.flooring);
 }
 
-void	draw_texture(t_all *cub, float hit, int size, int n)
+void		draw_texture(t_all *cub, float hit, int size, int n)
 {
 	unsigned int	color;
 	float			j;
@@ -77,7 +77,7 @@ void	draw_texture(t_all *cub, float hit, int size, int n)
 	}
 }
 
-void	drawing_room(t_all *cub, char is_x)
+void		drawing_room(t_all *cub, char is_x)
 {
 	cub->column_h = count_column(cub->plr.x0 - cub->x1, \
 	cub->plr.y0 - cub->y1, cub);

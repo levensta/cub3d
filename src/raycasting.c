@@ -6,13 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 23:31:59 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/12 23:37:53 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/13 21:16:48 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	check_hypot(t_all *cub, int flag, float a, float b)
+static void	check_hypot(t_all *cub, int flag, float a, float b)
 {
 	if (flag)
 	{
@@ -38,20 +38,20 @@ void	check_hypot(t_all *cub, int flag, float a, float b)
 	}
 }
 
-void	send_ray(t_all *cub)
+static void	send_ray(t_all *cub)
 {
-	float 	a;
+	float	a;
 	float	b;
 	float	dx;
 	float	dy;
-	
+
 	if (cub->ray <= 0.5)
 		dx = ceilf(cub->x1 + EPS) - cub->x1;
 	else
 		dx = cub->x1 - floorf(cub->x1 - EPS);
 	if (cub->ray >= 0.25 && cub->ray < 0.75)
 		dy = ceilf(cub->y1 + EPS) - cub->y1;
-	else   
+	else
 		dy = cub->y1 - floorf(cub->y1 - EPS);
 	if ((cub->ray >= 0.25 && cub->ray < 0.5) \
 	|| (cub->ray >= 0.75 && cub->ray < 1))
@@ -67,45 +67,45 @@ void	send_ray(t_all *cub)
 	check_hypot(cub, (hypotf(dy, b) < hypotf(dx, a)), a, b);
 }
 
-void	step_in_x(t_all *cub, char *wall, char *is_x)
+static void	step_in_x(t_all *cub, char *wall, char *is_x)
 {
-	if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)] \
+	if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)]\
 	[(int)floorf(cub->x1 + EPS)] == '1')
 		*wall = 1;
-	else if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)] \
+	else if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)]\
 	[(int)floorf(cub->x1 + EPS) - 1] == '1')
 		*wall = 1;
-	if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)] \
+	if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)]\
 	[(int)floorf(cub->x1 + EPS)] == '2')
 		find_sprite(cub, (int)floorf(cub->x1 + EPS), \
 		(int)floorf(cub->y1 + EPS));
-	else if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)] \
+	else if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)]\
 	[(int)floorf(cub->x1 + EPS) - 1] == '2')
 		find_sprite(cub, (int)floorf(cub->x1 + EPS) - 1, \
 		(int)floorf(cub->y1 + EPS));
 	*is_x = 1;
 }
 
-void	step_in_y(t_all *cub, char *wall, char *is_x)
+static void	step_in_y(t_all *cub, char *wall, char *is_x)
 {
-	if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)] \
+	if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)]\
 	[(int)floorf(cub->x1 + EPS)] == '1')
 		*wall = 1;
-	else if (cub->scene.world_map[(int)floorf(cub->y1 + EPS) - 1] \
+	else if (cub->scene.world_map[(int)floorf(cub->y1 + EPS) - 1]\
 	[(int)floorf(cub->x1 + EPS)] == '1')
 		*wall = 1;
-	if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)] \
+	if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)]\
 	[(int)floorf(cub->x1 + EPS)] == '2')
 		find_sprite(cub, (int)floorf(cub->x1 + EPS), \
 		(int)floorf(cub->y1 + EPS));
-	else if (cub->scene.world_map[(int)floorf(cub->y1 + EPS) - 1] \
+	else if (cub->scene.world_map[(int)floorf(cub->y1 + EPS) - 1]\
 	[(int)floorf(cub->x1 + EPS)] == '2')
 		find_sprite(cub, (int)floorf(cub->x1 + EPS), \
 		(int)floorf(cub->y1 + EPS) - 1);
 	*is_x = 0;
 }
 
-void	raycasting(t_all *cub, char *is_x)
+void		raycasting(t_all *cub, char *is_x)
 {
 	char	wall;
 

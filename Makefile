@@ -14,14 +14,13 @@ SRCS = cub3d.c \
 		get_next_line_utils.c \
 		ft_split_whitespaces.c \
 		clear.c \
-		error.c \
 		get_resolution.c \
 		get_color.c \
 		get_path.c \
 		get_map.c \
 		make_square.c \
 		color_utils.c \
-		image_utils.c \
+		utils.c \
 		sprite_utils.c \
 		frame_loop.c \
 		raycasting.c \

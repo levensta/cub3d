@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/11 23:26:41 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/13 21:28:01 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,33 @@
 #include "get_next_line.h"
 #include <fcntl.h>
 
-void	move(t_all *cub, float tmp, float *tx, float *ty)
+static void	textures_init(t_all *cub)
+{
+	int i;
+
+	cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.north, \
+	&(cub->txt[0].width), &(cub->txt[0].height));
+	cub->txt[0].addr = mlx_get_data_addr(cub->txt[0].img, \
+	&(cub->txt[0].bpp), &(cub->txt[0].ll), &i);
+	cub->txt[1].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.south, \
+	&(cub->txt[1].width), &(cub->txt[1].height));
+	cub->txt[1].addr = mlx_get_data_addr(cub->txt[1].img, \
+	&(cub->txt[1].bpp), &(cub->txt[1].ll), &i);
+	cub->txt[2].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.west, \
+	&(cub->txt[2].width), &(cub->txt[2].height));
+	cub->txt[2].addr = mlx_get_data_addr(cub->txt[2].img, \
+	&(cub->txt[2].bpp), &(cub->txt[2].ll), &i);
+	cub->txt[3].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.east, \
+	&(cub->txt[3].width), &(cub->txt[3].height));
+	cub->txt[3].addr = mlx_get_data_addr(cub->txt[3].img, \
+	&(cub->txt[3].bpp), &(cub->txt[3].ll), &i);
+	cub->txt[4].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.sprite, \
+	&(cub->txt[4].width), &(cub->txt[4].height));
+	cub->txt[4].addr = mlx_get_data_addr(cub->txt[4].img, \
+	&(cub->txt[4].bpp), &(cub->txt[4].ll), &i);
+}
+
+static void	move(t_all *cub, float tmp, float *tx, float *ty)
 {
 	float	speed;
 
@@ -42,7 +68,7 @@ void	move(t_all *cub, float tmp, float *tx, float *ty)
 		*tx = *tx + sin(tmp * 2 * M_PI) / speed;
 }
 
-int	event_loop(t_all *cub)
+int			event_loop(t_all *cub)
 {
 	float	tx;
 	float	ty;
@@ -71,32 +97,6 @@ int	event_loop(t_all *cub)
 	return (0);
 }
 
-void	textures_init(t_all *cub)
-{
-	int i;
-
-	cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.north, \
-	&(cub->txt[0].width), &(cub->txt[0].height));
-	cub->txt[0].addr = mlx_get_data_addr(cub->txt[0].img, \
-	&(cub->txt[0].bpp), &(cub->txt[0].ll), &i);
-	cub->txt[1].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.south, \
-	&(cub->txt[1].width), &(cub->txt[1].height));
-	cub->txt[1].addr = mlx_get_data_addr(cub->txt[1].img, \
-	&(cub->txt[1].bpp), &(cub->txt[1].ll), &i);
-	cub->txt[2].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.west, \
-	&(cub->txt[2].width), &(cub->txt[2].height));
-	cub->txt[2].addr = mlx_get_data_addr(cub->txt[2].img, \
-	&(cub->txt[2].bpp), &(cub->txt[2].ll), &i);
-	cub->txt[3].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.east, \
-	&(cub->txt[3].width), &(cub->txt[3].height));
-	cub->txt[3].addr = mlx_get_data_addr(cub->txt[3].img, \
-	&(cub->txt[3].bpp), &(cub->txt[3].ll), &i);
-	cub->txt[4].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.sprite, \
-	&(cub->txt[4].width), &(cub->txt[4].height));
-	cub->txt[4].addr = mlx_get_data_addr(cub->txt[4].img, \
-	&(cub->txt[4].bpp), &(cub->txt[4].ll), &i);
-}
-
 int			rendering(t_all *cub)
 {
 	cub->dists = malloc(sizeof(float) * cub->s_width);
@@ -119,7 +119,7 @@ int			rendering(t_all *cub)
 	return (0);
 }
 
-int			main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
 	t_all	cub;
 	char	*line;
@@ -143,7 +143,6 @@ int			main(int argc, char **argv)
 		ft_lstadd_back(&head, ft_lstnew(line));
 		map = make_map(&head, ft_lstsize(head));
 		parser(&cub, map);
-		check_all(&cub);
 		rendering(&cub);
 	}
 }

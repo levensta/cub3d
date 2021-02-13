@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/08 23:39:38 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/13 19:46:23 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,27 +69,16 @@ static void	check_outer_spaces(char **map)
 	}
 }
 
-void		set_route(float *route, char c)
-{
-	if (c == 'N')
-		*route = 0;
-	else if (c == 'E')
-		*route = 0.25f;
-	else if (c == 'S')
-		*route = 0.5f;
-	else if (c == 'W')
-		*route = 0.75f;
-}
 static void	check_player(char **map, t_all *cub)
 {
 	int i;
 	int j;
 
-	i = 0;
-	while (map[i])
+	i = -1;
+	while (map[++i])
 	{
-		j = 0;
-		while (map[i][j])
+		j = -1;
+		while (map[i][++j])
 		{
 			if ((map[i][j] == 'N' || map[i][j] == 'S' \
 			|| map[i][j] == 'W' || map[i][j] == 'E'))
@@ -102,9 +91,7 @@ static void	check_player(char **map, t_all *cub)
 				cub->plr.y0 = i + 0.5f;
 				set_route(&cub->plr.route, map[i][j]);
 			}
-			j++;
 		}
-		i++;
 		cub->scene.map_height = i;
 	}
 	if (cub->scene.is_only_plr == 0)

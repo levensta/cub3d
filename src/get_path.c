@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:13:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 19:16:37 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/13 19:47:10 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*get_path(char *path, char **arr)
 	int fd;
 
 	i = 0;
-	while(arr[++i])
+	while (arr[++i])
 	{
 		if (i >= 2 || path)
 			error("Check your paths of textures");

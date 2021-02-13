@@ -6,13 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/10 22:30:27 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/13 21:09:51 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	check_is_last(t_all *cub)
+static void	check_is_last(t_all *cub)
 {
 	if (cub->s_height && cub->s_width && \
 	cub->scene.north && cub->scene.south && cub->scene.east && \
@@ -21,7 +21,7 @@ void	check_is_last(t_all *cub)
 		cub->scene.is_last = 1;
 }
 
-void	check_all(t_all *cub)
+static void	check_all(t_all *cub)
 {
 	if (!cub->s_height || !cub->s_width || \
 	!cub->scene.north || !cub->scene.south || !cub->scene.east || \
@@ -30,21 +30,24 @@ void	check_all(t_all *cub)
 		error("Your map is incomplete");
 }
 
-char	**make_map(t_list **head, int size)
+char		**make_map(t_list **head, int size)
 {
-	char    **map = ft_calloc(size + 1, sizeof(char *));
-	int     i = -1;
-	t_list  *tmp = *head;
+	char	**map;
+	int		i;
+	t_list	*tmp;
 
+	i = -1;
+	tmp = *head;
+	map = ft_calloc(size + 1, sizeof(char *));
 	while (tmp)
 	{
 		map[++i] = tmp->content;
-		tmp= tmp->next;
+		tmp = tmp->next;
 	}
 	return (map);
 }
 
-int		checkers(t_all *cub, char **map, char **arr, int i)
+int			checkers(t_all *cub, char **map, char **arr, int i)
 {
 	if (!ft_strcmp("R", arr[0]))
 		get_resolution(cub, arr);
@@ -59,9 +62,9 @@ int		checkers(t_all *cub, char **map, char **arr, int i)
 	else if (!ft_strcmp("S", arr[0]))
 		cub->scene.sprite = get_path(cub->scene.sprite, arr);
 	else if (!ft_strcmp("F", arr[0]))
-		get_color(&cub->scene.flooring, map[i]);
+		get_color(&cub->scene.flooring, map[i], -1);
 	else if (!ft_strcmp("C", arr[0]))
-		get_color(&cub->scene.ceiling, map[i]);
+		get_color(&cub->scene.ceiling, map[i], -1);
 	else if (cub->scene.is_last)
 	{
 		if ((cub->scene.world_map = get_map(cub, &map[i])))
@@ -73,10 +76,10 @@ int		checkers(t_all *cub, char **map, char **arr, int i)
 	return (0);
 }
 
-void	parser(t_all *cub, char **map)
+void		parser(t_all *cub, char **map)
 {
-	int	i;
-	char **arr;
+	int		i;
+	char	**arr;
 
 	i = 0;
 	while (map[i])
@@ -86,7 +89,7 @@ void	parser(t_all *cub, char **map)
 		{
 			check_is_last(cub);
 			if (checkers(cub, map, arr, i))
-				break;
+				break ;
 			free_array(arr);
 		}
 		else
@@ -95,4 +98,5 @@ void	parser(t_all *cub, char **map)
 	}
 	cub->view_dist = (float)(cub->s_width / 2) / \
 	tanf(((60.0f * M_PI / 180.0f) / 2));
+	check_all(cub);
 }

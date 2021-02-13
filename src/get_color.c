@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:10:04 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 19:45:35 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/13 19:41:27 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,12 @@ static char		**ft_split_rgb(char const *s)
 	return (words);
 }
 
-void		get_color(int *rgb, char *color)
+void			get_color(int *rgb, char *color, int i)
 {
-	int		i;
 	int		tmp[3];
 	int		commas;
 	char	**arr;
-	
-	i = -1;
+
 	commas = 0;
 	while (color[++i])
 	{

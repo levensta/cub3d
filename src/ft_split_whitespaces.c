@@ -6,13 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 04:09:38 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/07 19:45:28 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/13 19:11:19 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t		read_word(char const *s)
+static size_t	read_word(char const *s)
 {
 	size_t	i;
 
@@ -22,7 +22,7 @@ static size_t		read_word(char const *s)
 	return (i);
 }
 
-static size_t		count_words(char const *s)
+static size_t	count_words(char const *s)
 {
 	size_t amount;
 	size_t i;
@@ -54,7 +54,7 @@ static void		*free_words(char **words)
 	return (NULL);
 }
 
-char		**ft_split_ws(char const *s)
+char			**ft_split_ws(char const *s)
 {
 	size_t	amount;
 	size_t	len;

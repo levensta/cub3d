@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:02:49 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/16 20:01:53 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/13 20:00:41 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void			make_square(char **map)
 {
 	int		i;
 	size_t	max;
-	
+
 	i = 0;
 	max = max_strlen(map);
 	while (map[i])

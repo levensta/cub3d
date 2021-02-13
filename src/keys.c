@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 23:04:27 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/29 23:09:25 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/13 19:59:59 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	key_null(t_all *cub)
 	cub->keys.key_esc = 0;
 }
 
-int             key_press(int keycode, t_all *cub)
+int		key_press(int keycode, t_all *cub)
 {
 	if (keycode == A)
 		cub->keys.key_a = 1;
@@ -42,7 +42,7 @@ int             key_press(int keycode, t_all *cub)
 	return (0);
 }
 
-int             key_release(int keycode, t_all *cub)
+int		key_release(int keycode, t_all *cub)
 {
 	if (keycode == A)
 		cub->keys.key_a = 0;
@@ -61,7 +61,7 @@ int             key_release(int keycode, t_all *cub)
 	return (0);
 }
 
-int				escape(t_all *cub)
+int		escape(t_all *cub)
 {
 	mlx_destroy_image(cub->vars.mlx, cub->txt[0].img);
 	mlx_destroy_image(cub->vars.mlx, cub->txt[1].img);
