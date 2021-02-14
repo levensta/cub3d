@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:34:56 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/13 21:18:54 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/14 18:19:33 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void		draw_ceil(t_all *cub, int column_h)
 	i = (cub->s_height - column_h) / 2;
 	j = -1;
 	while (j++ < i)
-		my_mlx_pixel_put(cub, cub->x, j, cub->scene.ceiling);
+		my_mlx_pixel_put(cub, cub->x, j, (unsigned int)cub->scene.ceiling);
 }
 
 void		draw_floor(t_all *cub, int column_h)
@@ -46,7 +46,7 @@ void		draw_floor(t_all *cub, int column_h)
 		column_h = 0;
 	j = (cub->s_height + column_h) / 2 - 1;
 	while (j++ < cub->s_height)
-		my_mlx_pixel_put(cub, cub->x, j, cub->scene.flooring);
+		my_mlx_pixel_put(cub, cub->x, j, (unsigned int)cub->scene.flooring);
 }
 
 void		draw_texture(t_all *cub, float hit, int size, int n)

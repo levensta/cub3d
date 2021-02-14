@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 23:31:59 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/13 21:16:48 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/14 16:39:42 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	step_in_x(t_all *cub, char *wall, char *is_x)
 	[(int)floorf(cub->x1 + EPS)] == '2')
 		find_sprite(cub, (int)floorf(cub->x1 + EPS), \
 		(int)floorf(cub->y1 + EPS));
-	else if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)]\
+	if (cub->scene.world_map[(int)floorf(cub->y1 + EPS)]\
 	[(int)floorf(cub->x1 + EPS) - 1] == '2')
 		find_sprite(cub, (int)floorf(cub->x1 + EPS) - 1, \
 		(int)floorf(cub->y1 + EPS));
@@ -98,7 +98,7 @@ static void	step_in_y(t_all *cub, char *wall, char *is_x)
 	[(int)floorf(cub->x1 + EPS)] == '2')
 		find_sprite(cub, (int)floorf(cub->x1 + EPS), \
 		(int)floorf(cub->y1 + EPS));
-	else if (cub->scene.world_map[(int)floorf(cub->y1 + EPS) - 1]\
+	if (cub->scene.world_map[(int)floorf(cub->y1 + EPS) - 1]\
 	[(int)floorf(cub->x1 + EPS)] == '2')
 		find_sprite(cub, (int)floorf(cub->x1 + EPS), \
 		(int)floorf(cub->y1 + EPS) - 1);
@@ -118,7 +118,7 @@ void		raycasting(t_all *cub, char *is_x)
 			wall = 1;
 		if (cub->x1 - floorf(cub->x1) < EPS)
 			step_in_x(cub, &wall, is_x);
-		else if (cub->y1 - floorf(cub->y1) < EPS)
+		if (cub->y1 - floorf(cub->y1) < EPS)
 			step_in_y(cub, &wall, is_x);
 	}
 }

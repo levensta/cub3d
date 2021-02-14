@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:01:25 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/12 23:38:56 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/14 18:08:59 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,8 @@ void	free_array(char **arr)
 
 void	clear_scene(t_all *cub)
 {
-	int i;
-
-	i = 0;
-	while (i < 3)
-	{
-		cub->scene.flooring = -1;
-		cub->scene.ceiling = -1;
-		i++;
-	}
+	cub->scene.flooring = -1;
+	cub->scene.ceiling = -1;
 	cub->s_width = 0;
 	cub->s_height = 0;
 	cub->scene.is_last = 0;

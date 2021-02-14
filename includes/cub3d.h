@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/13 21:27:08 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/14 18:18:35 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct	s_sprite {
 	float		y;
 	float		distance;
 	float		angle;
+	int			size;
 }				t_sprite;
 
 typedef struct	s_keys {
@@ -162,6 +163,6 @@ void			find_sprite(t_all *cub, int x1, int y1);
 void			find_dists(t_all *cub);
 void			sort_sprites(t_all *cub);
 void			drawing_sprites(t_all *cub);
-void			draw_sprite(t_all *cub, int size, int x_start, float dist);
+void			draw_sprite(t_all *cub, t_sprite sp, int x_start, int x);
 
 #endif

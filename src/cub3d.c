@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/13 21:28:01 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/14 17:11:13 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,11 @@ int			event_loop(t_all *cub)
 	if (cub->keys.key_right)
 		cub->plr.route += 0.0050f;
 	move(cub, tmp, &tx, &ty);
-	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '1')
-	// && cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '2')
+	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '1'
+	&& cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '2')
 		cub->plr.y0 = ty;
-	if (cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '1')
-	// && cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '2')
+	if (cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '1'
+	&& cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '2')
 		cub->plr.x0 = tx;
 	ray_correct(&cub->plr.route);
 	if (cub->keys.key_a || cub->keys.key_d || cub->keys.key_s || \
@@ -119,7 +119,7 @@ int			rendering(t_all *cub)
 	return (0);
 }
 
-int		main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	t_all	cub;
 	char	*line;
