@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/13 19:46:23 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/16 23:42:35 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@ static void	check_forbidden_chars(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (!ft_memchr("012NSWE \n", str[i], 9))
+		if (!ft_memchr("012NSWE \n\0", str[i], 10))
+		{
+			printf("|%s|\n", str);
+			printf("|%c|\n", str[i]);
 			error("Your map contains a forbidden characters");
+		}
 		i++;
 	}
 }
@@ -114,7 +118,8 @@ char		**get_map(t_all *cub, char **map)
 		cub->num_spr += count_sprites(map[i]);
 		i++;
 	}
-	cub->sprite = malloc(sizeof(t_sprite) * cub->num_spr);
+	if (!(cub->sprite = malloc(sizeof(t_sprite) * cub->num_spr)))
+		error(NULL);
 	check_player(map, cub);
 	cub->scene.is_world_map = 1;
 	return (map);

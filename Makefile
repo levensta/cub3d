@@ -5,7 +5,7 @@ LIBFT_DIR = libft/
 MLX_DIR = minilibx_opengl/
 MLX_MMS = minilibx_mms/
 INCLUDES = -I ./includes -I ./libft
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -g -Wall -Wextra -Werror
 MLX_FLAGS = -L $(MLX_DIR) -lmlx -framework OpenGL -framework AppKit libmlx.a
 MLX_FLAGS_MMS = -L $(MLX_MMS) -lmlx -framework OpenGL -framework AppKit libmlx.dylib
 LIBFT = libft.a
@@ -55,4 +55,5 @@ fclean: clean
 	@rm -f libmlx.a
 	@rm -f libmlx.dylib
 re: fclean all
+
 .PHONY: all clean fclean re

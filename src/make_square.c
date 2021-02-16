@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:02:49 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/13 20:00:41 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/16 22:27:20 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ static char		*set_spaces(char *str, size_t n)
 	char	*s;
 
 	i = 0;
-	s = malloc(n * sizeof(char *) + 1);
+	if (!(s = malloc(n * sizeof(char *) + 1)))
+		error(NULL);
 	ft_memset(s, ' ', n);
-	str = ft_strjoin(str, s);
+	if (!(str = ft_strjoin(str, s)))
+		error(NULL);
 	free(s);
 	return (str);
 }

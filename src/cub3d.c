@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/14 17:11:13 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/16 23:36:09 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,26 @@
 static void	textures_init(t_all *cub)
 {
 	int i;
-
-	cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.north, \
-	&(cub->txt[0].width), &(cub->txt[0].height));
+	
+	if (!(cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, \
+	cub->scene.north, &(cub->txt[0].width), &(cub->txt[0].height)))
+	|| !(cub->txt[1].img = mlx_xpm_file_to_image(cub->vars.mlx, \
+	cub->scene.south, &(cub->txt[1].width), &(cub->txt[1].height)))
+	|| !(cub->txt[2].img = mlx_xpm_file_to_image(cub->vars.mlx, \
+	cub->scene.west, &(cub->txt[2].width), &(cub->txt[2].height)))
+	|| !(cub->txt[3].img = mlx_xpm_file_to_image(cub->vars.mlx, \
+	cub->scene.east, &(cub->txt[3].width), &(cub->txt[3].height)))
+	|| !(cub->txt[4].img = mlx_xpm_file_to_image(cub->vars.mlx, \
+	cub->scene.sprite, &(cub->txt[4].width), &(cub->txt[4].height))))
+		error("Invalid .xpm");
 	cub->txt[0].addr = mlx_get_data_addr(cub->txt[0].img, \
 	&(cub->txt[0].bpp), &(cub->txt[0].ll), &i);
-	cub->txt[1].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.south, \
-	&(cub->txt[1].width), &(cub->txt[1].height));
 	cub->txt[1].addr = mlx_get_data_addr(cub->txt[1].img, \
 	&(cub->txt[1].bpp), &(cub->txt[1].ll), &i);
-	cub->txt[2].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.west, \
-	&(cub->txt[2].width), &(cub->txt[2].height));
 	cub->txt[2].addr = mlx_get_data_addr(cub->txt[2].img, \
 	&(cub->txt[2].bpp), &(cub->txt[2].ll), &i);
-	cub->txt[3].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.east, \
-	&(cub->txt[3].width), &(cub->txt[3].height));
 	cub->txt[3].addr = mlx_get_data_addr(cub->txt[3].img, \
 	&(cub->txt[3].bpp), &(cub->txt[3].ll), &i);
-	cub->txt[4].img = mlx_xpm_file_to_image(cub->vars.mlx, cub->scene.sprite, \
-	&(cub->txt[4].width), &(cub->txt[4].height));
 	cub->txt[4].addr = mlx_get_data_addr(cub->txt[4].img, \
 	&(cub->txt[4].bpp), &(cub->txt[4].ll), &i);
 }
@@ -133,16 +134,20 @@ int			main(int argc, char **argv)
 	{
 		if ((cub.fd = open(argv[1], O_RDONLY)) == -1)
 			error("Such file does not exist");
-		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1] - 4)]) \
+		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1]) - 4]) \
 			|| (argc == 3 && ft_strcmp("--save", argv[2])))
 			error("Invalid arguments");
 		if (argc == 3)
 			cub.save = 1;
 		while (get_next_line(cub.fd, &line) == 1)
 			ft_lstadd_back(&head, ft_lstnew(line));
+		if (get_next_line(cub.fd, &line) == -1)
+			error(NULL);
 		ft_lstadd_back(&head, ft_lstnew(line));
 		map = make_map(&head, ft_lstsize(head));
 		parser(&cub, map);
-		rendering(&cub);
+		// rendering(&cub);
 	}
+	else
+		error("Invalid number of arguments (argc)");
 }

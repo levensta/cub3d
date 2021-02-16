@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/13 23:34:27 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/16 23:41:22 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ char		**make_map(t_list **head, int size)
 
 	i = -1;
 	tmp = *head;
-	map = ft_calloc(size + 1, sizeof(char *));
+	if (!(map = malloc(sizeof(char *) * (size + 1))))
+		error(NULL);
 	while (tmp)
 	{
 		map[++i] = tmp->content;
@@ -52,15 +53,15 @@ int			checkers(t_all *cub, char **map, char **arr, int i)
 	if (!ft_strcmp("R", arr[0]))
 		get_resolution(cub, arr);
 	else if (!ft_strcmp("NO", arr[0]))
-		cub->scene.north = get_path(cub->scene.north, arr);
+		get_path(&(cub->scene.north), arr);
 	else if (!ft_strcmp("SO", arr[0]))
-		cub->scene.south = get_path(cub->scene.south, arr);
+		get_path(&(cub->scene.south), arr);
 	else if (!ft_strcmp("WE", arr[0]))
-		cub->scene.west = get_path(cub->scene.west, arr);
+		get_path(&(cub->scene.west), arr);
 	else if (!ft_strcmp("EA", arr[0]))
-		cub->scene.east = get_path(cub->scene.east, arr);
+		get_path(&(cub->scene.east), arr);
 	else if (!ft_strcmp("S", arr[0]))
-		cub->scene.sprite = get_path(cub->scene.sprite, arr);
+		get_path(&(cub->scene.sprite), arr);
 	else if (!ft_strcmp("F", arr[0]))
 		get_color(&cub->scene.flooring, map[i], -1);
 	else if (!ft_strcmp("C", arr[0]))
@@ -84,7 +85,8 @@ void		parser(t_all *cub, char **map)
 	i = 0;
 	while (map[i])
 	{
-		arr = ft_split_ws(map[i]);
+		if (!(arr = ft_split_ws(map[i])))
+			error(NULL);
 		if (arr[0])
 		{
 			check_is_last(cub);

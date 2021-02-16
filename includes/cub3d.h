@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/14 18:18:35 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/16 21:47:13 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void			parser(t_all *cub, char **map);
 int				checkers(t_all *cub, char **map, char **arr, int i);
 char			**ft_split_ws(char const *s);
 void			get_resolution(t_all *cub, char **arr);
-char			*get_path(char *path, char **arr);
+void			get_path(char **path, char **arr);
 void			get_color(int *rgb, char *color, int i);
 char			**get_map(t_all *cub, char **map);
 void			make_square(char **map);

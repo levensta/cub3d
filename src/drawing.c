@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:34:56 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/14 18:19:33 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/16 20:44:01 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,7 @@ void		draw_texture(t_all *cub, float hit, int size, int n)
 	{
 		color = *(unsigned int*)(cub->txt[n].addr + ((int)j * cub->txt[n].ll \
 		+ (int)hit * (cub->txt[n].bpp / 8)));
-		if (color != 0 && color != 0xFF000000)
-			my_mlx_pixel_put(cub, cub->x, i, color);
+		my_mlx_pixel_put(cub, cub->x, i, color);
 		i++;
 		j += (float)cub->txt[n].height / (float)size;
 	}
@@ -81,6 +80,8 @@ void		drawing_room(t_all *cub, char is_x)
 {
 	cub->column_h = count_column(cub->plr.x0 - cub->x1, \
 	cub->plr.y0 - cub->y1, cub);
+	draw_ceil(cub, cub->column_h);
+	draw_floor(cub, cub->column_h);
 	if (is_x)
 	{
 		if (cub->ray >= 0 && cub->ray < 0.5f)
@@ -95,6 +96,4 @@ void		drawing_room(t_all *cub, char is_x)
 		else
 			draw_texture(cub, cub->x1 - floorf(cub->x1), cub->column_h, 1);
 	}
-	draw_ceil(cub, cub->column_h);
-	draw_floor(cub, cub->column_h);
 }
