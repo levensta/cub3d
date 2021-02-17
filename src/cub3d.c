@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/16 23:36:09 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/17 22:56:34 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 static void	textures_init(t_all *cub)
 {
 	int i;
-	
+
 	if (!(cub->txt[0].img = mlx_xpm_file_to_image(cub->vars.mlx, \
 	cub->scene.north, &(cub->txt[0].width), &(cub->txt[0].height)))
 	|| !(cub->txt[1].img = mlx_xpm_file_to_image(cub->vars.mlx, \
@@ -130,24 +130,21 @@ int			main(int argc, char **argv)
 	line = NULL;
 	head = NULL;
 	clear_scene(&cub);
-	if (argc > 1 && argc < 4)
-	{
-		if ((cub.fd = open(argv[1], O_RDONLY)) == -1)
-			error("Such file does not exist");
-		if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1]) - 4]) \
-			|| (argc == 3 && ft_strcmp("--save", argv[2])))
-			error("Invalid arguments");
-		if (argc == 3)
-			cub.save = 1;
-		while (get_next_line(cub.fd, &line) == 1)
-			ft_lstadd_back(&head, ft_lstnew(line));
-		if (get_next_line(cub.fd, &line) == -1)
-			error(NULL);
-		ft_lstadd_back(&head, ft_lstnew(line));
-		map = make_map(&head, ft_lstsize(head));
-		parser(&cub, map);
-		// rendering(&cub);
-	}
-	else
+	if (!(argc > 1 && argc < 4))
 		error("Invalid number of arguments (argc)");
+	if ((cub.fd = open(argv[1], O_RDONLY)) == -1)
+		error("Such file does not exist");
+	if (ft_strcmp(".cub", &argv[1][ft_strlen(argv[1]) - 4]) \
+		|| (argc == 3 && ft_strcmp("--save", argv[2])))
+		error("Invalid arguments");
+	if (argc == 3)
+		cub.save = 1;
+	while (get_next_line(cub.fd, &line) == 1)
+		ft_lstadd_back(&head, ft_lstnew(line));
+	if (get_next_line(cub.fd, &line) == -1)
+		error(NULL);
+	ft_lstadd_back(&head, ft_lstnew(line));
+	map = make_map(&head, ft_lstsize(head));
+	parser(&cub, map);
+	rendering(&cub);
 }

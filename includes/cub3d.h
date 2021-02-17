@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/16 21:47:13 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/17 22:28:57 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,10 @@
 # define RIGHT 124
 # define ESC 53
 
-# include "mlx.h"
-# include "mlx_mms.h"
 # include "libft.h"
 # include <math.h>
 # include <fcntl.h>
+# include "mlx.h"
 # include <stdio.h>
 
 typedef struct	s_vars {

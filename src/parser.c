@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/16 23:41:22 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/17 21:00:21 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ char		**make_map(t_list **head, int size)
 		map[++i] = tmp->content;
 		tmp = tmp->next;
 	}
+	map[i] = NULL;
 	return (map);
 }
 

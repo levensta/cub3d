@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 22:58:33 by levensta          #+#    #+#             */
-/*   Updated: 2021/01/06 01:10:38 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/17 20:40:15 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include "libft.h"
 
 typedef struct	s_gnl
 {

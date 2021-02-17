@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:12:20 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/13 19:50:06 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/17 22:31:02 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	check_screen_size(t_all *cub)
 	int	real_width;
 	int	real_height;
 
-	mlx_get_screen_size(cub->vars.mlx, &real_width, &real_height);
+	mlx_get_screen_size(&real_width, &real_height);
 	if (cub->s_width > real_width)
 		cub->s_width = real_width;
 	if (cub->s_width < 1)
@@ -50,8 +50,8 @@ void		get_resolution(t_all *cub, char **arr)
 	if (!cub->save)
 	{
 		if (ft_strlen(arr[1]) > 9)
-			mlx_get_screen_size(cub->vars.mlx, &cub->s_width, &i);
+			mlx_get_screen_size(&cub->s_width, &i);
 		if (ft_strlen(arr[2]) > 9)
-			mlx_get_screen_size(cub->vars.mlx, &i, &cub->s_height);
+			mlx_get_screen_size(&i, &cub->s_height);
 	}
 }
