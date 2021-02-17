@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/17 22:28:57 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/17 23:31:43 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ typedef struct	s_data {
 }				t_data;
 
 typedef struct	s_player {
-	float		x0;
-	float		y0;
-	float		route;
+	double		x0;
+	double		y0;
+	double		route;
 }				t_player;
 
 typedef struct	s_map
@@ -74,10 +74,10 @@ typedef struct	s_tex {
 }				t_tex;
 
 typedef struct	s_sprite {
-	float		x;
-	float		y;
-	float		distance;
-	float		angle;
+	double		x;
+	double		y;
+	double		distance;
+	double		angle;
 	int			size;
 }				t_sprite;
 
@@ -106,16 +106,16 @@ typedef	struct	s_all {
 	t_map		scene;
 	t_tex		txt[5];
 	t_sprite	*sprite;
-	float		x1;
-	float		y1;
+	double		x1;
+	double		y1;
 	int			s_width;
 	int			s_height;
 	int			column_h;
-	float		ray;
+	double		ray;
 	int			fd;
 	int			num_spr;
-	float		*dists;
-	float		view_dist;
+	double		*dists;
+	double		view_dist;
 	int			x;
 	char		save;
 }				t_all;
@@ -133,8 +133,8 @@ void			clear_image(t_all *cub);
 void			free_array(char **arr);
 void			free_path(t_all *cub);
 void			error(char *str);
-void			ray_correct(float *ray);
-void			set_route(float *route, char c);
+void			ray_correct(double *ray);
+void			set_route(double *route, char c);
 char			**make_map(t_list **head, int size);
 void			parser(t_all *cub, char **map);
 int				checkers(t_all *cub, char **map, char **arr, int i);
@@ -154,7 +154,7 @@ int				save_bmp(t_all *cub);
 int				frame_loop(t_all *cub);
 void			raycasting(t_all *cub, char *is_x);
 void			drawing_room(t_all *cub, char is_x);
-void			draw_texture(t_all *cub, float hit, int size, int n);
+void			draw_texture(t_all *cub, double hit, int size, int n);
 void			draw_floor(t_all *cub, int column_h);
 void			draw_ceil(t_all *cub, int column_h);
 int				count_sprites(char *str);

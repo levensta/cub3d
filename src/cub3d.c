@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/17 22:56:34 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/17 23:32:58 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ static void	textures_init(t_all *cub)
 	&(cub->txt[4].bpp), &(cub->txt[4].ll), &i);
 }
 
-static void	move(t_all *cub, float tmp, float *tx, float *ty)
+static void	move(t_all *cub, double tmp, double *tx, double *ty)
 {
-	float	speed;
+	double	speed;
 
 	speed = 15.0f;
 	ray_correct(&tmp);
@@ -71,9 +71,9 @@ static void	move(t_all *cub, float tmp, float *tx, float *ty)
 
 int			event_loop(t_all *cub)
 {
-	float	tx;
-	float	ty;
-	float	tmp;
+	double	tx;
+	double	ty;
+	double	tmp;
 
 	tx = cub->plr.x0;
 	ty = cub->plr.y0;
@@ -85,11 +85,11 @@ int			event_loop(t_all *cub)
 	if (cub->keys.key_right)
 		cub->plr.route += 0.0050f;
 	move(cub, tmp, &tx, &ty);
-	if (cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '1'
-	&& cub->scene.world_map[(int)floorf(ty)][(int)floorf(cub->plr.x0)] != '2')
+	if (cub->scene.world_map[(int)floor(ty)][(int)floor(cub->plr.x0)] != '1'
+	&& cub->scene.world_map[(int)floor(ty)][(int)floor(cub->plr.x0)] != '2')
 		cub->plr.y0 = ty;
-	if (cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '1'
-	&& cub->scene.world_map[(int)floorf(cub->plr.y0)][(int)floorf(tx)] != '2')
+	if (cub->scene.world_map[(int)floor(cub->plr.y0)][(int)floor(tx)] != '1'
+	&& cub->scene.world_map[(int)floor(cub->plr.y0)][(int)floor(tx)] != '2')
 		cub->plr.x0 = tx;
 	ray_correct(&cub->plr.route);
 	if (cub->keys.key_a || cub->keys.key_d || cub->keys.key_s || \
@@ -100,7 +100,7 @@ int			event_loop(t_all *cub)
 
 int			rendering(t_all *cub)
 {
-	cub->dists = malloc(sizeof(float) * cub->s_width);
+	cub->dists = malloc(sizeof(double) * cub->s_width);
 	cub->vars.mlx = mlx_init();
 	cub->vars.win = mlx_new_window(cub->vars.mlx, cub->s_width, \
 	cub->s_height, "cub3D");
