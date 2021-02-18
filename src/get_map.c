@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/17 22:40:55 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/18 21:10:31 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	check_forbidden_chars(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (!ft_memchr("012NSWE \n\0", str[i], 10))
+		if (!ft_memchr("012NSWE \n", str[i], 9))
 			error("Your map contains a forbidden characters");
 		i++;
 	}
@@ -34,19 +34,19 @@ static void	check_in_str(char **map, char const *s, int i, int j)
 	{
 		if (map[i][0] == '0' || map[i][0] == '2' || (map[i][j] == s[m] \
 		&& (map[i][j - 1] == ' ' || map[i][j + 1] == ' ' || !map[i][j + 1])))
-			error("Invalid map");
+			error("Invalid map. CODE 1");
 		if (i > 0)
 		{
 			if (map[i][j] == s[m] && (!map[i - 1][0] || \
 			(map[i - 1][j - 1] == ' ' || map[i - 1][j] == ' ' \
 			|| map[i - 1][j + 1] == ' ')))
-				error("Invalid map");
+				error("Invalid map. CODE 2");
 		}
 		else if (s[m] == map[i][j])
-			error("Invalid map");
+			error("Invalid map. CODE 3");
 		if (map[i][j] == s[m] && (!map[i + 1] || (map[i + 1][j - 1] == ' ' \
 		|| map[i + 1][j] == ' ' || map[i + 1][j + 1] == ' ')))
-			error("Invalid map");
+			error("Invalid map. CODE 4");
 		m++;
 	}
 }

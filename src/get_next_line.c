@@ -6,11 +6,12 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 18:42:43 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/17 20:57:59 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/18 21:10:09 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 int		add_rest(char **rest, char **line)
 {

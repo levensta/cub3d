@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 19:36:29 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/17 23:31:43 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/18 21:16:58 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ typedef	struct	s_all {
 	double		view_dist;
 	int			x;
 	char		save;
+	int			rest;
 }				t_all;
 
 void			my_mlx_pixel_put(t_all *cub, int x, int y, unsigned int color);

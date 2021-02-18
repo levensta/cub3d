@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 17:45:09 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/17 23:32:58 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/18 21:17:21 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,9 @@ int			main(int argc, char **argv)
 		error("Invalid arguments");
 	if (argc == 3)
 		cub.save = 1;
-	while (get_next_line(cub.fd, &line) == 1)
+	while ((cub.rest = get_next_line(cub.fd, &line)) == 1)
 		ft_lstadd_back(&head, ft_lstnew(line));
-	if (get_next_line(cub.fd, &line) == -1)
+	if (cub.rest == -1)
 		error(NULL);
 	ft_lstadd_back(&head, ft_lstnew(line));
 	map = make_map(&head, ft_lstsize(head));
