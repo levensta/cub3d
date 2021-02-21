@@ -6,14 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 23:16:52 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/17 20:58:05 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/21 21:20:23 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
-size_t	ft_strlen(const char *str)
+size_t	gnl_strlen(const char *str)
 {
 	int i;
 
@@ -45,7 +44,7 @@ char	*gnl_strdup(const char *s1, char *rest)
 	char	*s2;
 
 	i = 0;
-	if (!s1 || !(s2 = malloc((ft_strlen(s1) + 1) * sizeof(char))))
+	if (!s1 || !(s2 = malloc((gnl_strlen(s1) + 1) * sizeof(char))))
 		return (NULL);
 	while (s1[i] != '\0')
 	{
@@ -70,7 +69,7 @@ char	*gnl_strjoin(char *s1, char *s2)
 		s2 = gnl_strdup("", s2);
 	i = 0;
 	j = 0;
-	if (!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
+	if (!(str = malloc((gnl_strlen(s1) + gnl_strlen(s2) + 1) * sizeof(char))))
 		return (NULL);
 	while (s1[i])
 	{
@@ -84,7 +83,7 @@ char	*gnl_strjoin(char *s1, char *s2)
 	return (str);
 }
 
-void	*ft_memset(void *dest, int c, size_t n)
+void	*gnl_memset(void *dest, int c, size_t n)
 {
 	size_t	i;
 	char	*str;

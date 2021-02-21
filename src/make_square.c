@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:02:49 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/16 22:27:20 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/21 21:59:20 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@ static char		*set_spaces(char *str, size_t n)
 	char	*s;
 
 	i = 0;
-	if (!(s = malloc(n * sizeof(char *) + 1)))
+	if (!(s = malloc(sizeof(char) * (n))))
 		error(NULL);
-	ft_memset(s, ' ', n);
+	s = ft_memset(s, ' ', n);
+	s[n] = '\0';
 	if (!(str = ft_strjoin(str, s)))
 		error(NULL);
 	free(s);
@@ -52,6 +53,8 @@ void			make_square(char **map)
 	max = max_strlen(map);
 	while (map[i])
 	{
+		if (!map[i][0])
+			error("Empty line in the map");
 		if (ft_strlen(map[i]) < max)
 			map[i] = set_spaces(map[i], max - ft_strlen(map[i]));
 		i++;

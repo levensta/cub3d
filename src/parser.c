@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 02:38:03 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/18 21:10:48 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/21 21:59:37 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,17 @@ char		**make_map(t_list **head, int size)
 	int		i;
 	t_list	*tmp;
 
-	i = -1;
+	i = 0;
 	tmp = *head;
 	if (!(map = malloc(sizeof(char *) * (size + 1))))
 		error(NULL);
 	while (tmp)
 	{
-		map[++i] = tmp->content;
+		map[i] = tmp->content;
 		tmp = tmp->next;
+		i++;
 	}
-	map[++i] = NULL;
+	map[i] = NULL;
 	return (map);
 }
 

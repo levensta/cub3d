@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 18:42:43 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/18 21:10:09 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/21 21:20:40 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		cursus(t_gnl *gnl, char **line, char **rest, int fd)
 		gnl->q = add_rest(rest, line);
 	while (!gnl->q && gnl->count > 0)
 	{
-		ft_memset(gnl->buff, '\0', gnl->size + 1);
+		gnl_memset(gnl->buff, '\0', gnl->size + 1);
 		if ((gnl->count = read(fd, gnl->buff, gnl->size)) <= 0)
 			break ;
 		if ((gnl->n = tofind_c(gnl->buff)) > -1)
@@ -70,7 +70,7 @@ int		get_next_line(int fd, char **line)
 	cursus(&gnl, line, &rest, fd);
 	if (gnl.count == -1)
 		return (-1);
-	gnl.count = gnl.count || ft_strlen(rest);
+	gnl.count = gnl.count || gnl_strlen(rest);
 	if (gnl.count)
 		return (1);
 	if (rest)

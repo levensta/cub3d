@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/18 21:10:31 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/21 21:59:08 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	check_forbidden_chars(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (!ft_memchr("012NSWE \n", str[i], 9))
+		if (!ft_memchr("012NSWE ", str[i], 9))
 			error("Your map contains a forbidden characters");
 		i++;
 	}
