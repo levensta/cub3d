@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:02:49 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/21 21:59:20 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/24 21:20:07 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,8 @@ static size_t	max_strlen(char **map)
 
 static char		*set_spaces(char *str, size_t n)
 {
-	int		i;
 	char	*s;
 
-	i = 0;
 	if (!(s = malloc(sizeof(char) * (n))))
 		error(NULL);
 	s = ft_memset(s, ' ', n);

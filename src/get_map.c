@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 23:04:26 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/21 21:59:08 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/24 21:19:50 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,8 @@ static void	check_player(char **map, t_all *cub)
 char		**get_map(t_all *cub, char **map)
 {
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
 	cub->num_spr = 0;
 	make_square(map);
 	while (map[i])

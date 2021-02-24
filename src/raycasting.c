@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 23:31:59 by levensta          #+#    #+#             */
-/*   Updated: 2021/02/17 23:34:00 by levensta         ###   ########.fr       */
+/*   Updated: 2021/02/24 21:20:21 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,8 @@ static void	step_in_y(t_all *cub, char *wall, char *is_x)
 void		raycasting(t_all *cub, char *is_x)
 {
 	char	wall;
-	int		i;
 
 	wall = 0;
-	i = 0;
 	while (!wall)
 	{
 		send_ray(cub);

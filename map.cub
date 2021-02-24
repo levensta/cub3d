@@ -5,8 +5,8 @@ WE ./textures/green.xpm
 EA          ./textures/gray.xpm
 
 S ./textures/barrel.xpm
-F     174,   118,    166
-C  16, 152,      247
+F  174,118,166
+C  16,152,247
 
 
      111111111111
